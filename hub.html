@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Daily Chronicle · Kelly's Profile</title>
+  <!-- vintage newspaper typography -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --paper-cream: #f4ebe1;
+      --ink-dark: #1a1410;
+      --sepia-brown: #6b5840;
+      --aged-tan: #d4c5b0;
+      --dark-accent: #2a2318;
+      --border-brown: rgba(106, 88, 64, 0.5);
+      --shadow-paper: rgba(42, 31, 26, 0.2);
+    }
+
+    body {
+      font-family: 'Old Standard TT', 'Libre Baskerville', serif;
+      background: #3d3530;
+      color: var(--ink-dark);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      padding: 2rem 1rem;
+    }
+
+    /* aged paper background with stronger texture */
+    .newspaper-page {
+      position: relative;
+      max-width: 1200px;
+      margin: 0 auto;
+      background: var(--paper-cream);
+      box-shadow: 
+        0 12px 60px rgba(0,0,0,0.7),
+        inset 0 0 200px rgba(106, 88, 64, 0.08),
+        0 0 0 1px rgba(106, 88, 64, 0.6);
+      padding: 3rem 2.5rem;
+      border: 3px solid rgba(106, 88, 64, 0.7);
+    }
+
+    /* enhanced paper texture overlay */
+    .newspaper-page::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: 
+        repeating-linear-gradient(0deg, rgba(106, 88, 64, 0.05) 0px, transparent 1px, transparent 2px, rgba(106, 88, 64, 0.05) 3px),
+        repeating-linear-gradient(90deg, rgba(106, 88, 64, 0.04) 0px, transparent 1px, transparent 2px, rgba(106, 88, 64, 0.04) 3px);
+      pointer-events: none;
+      opacity: 0.8;
+    }
+
+    /* aged stains effect */
+    .newspaper-page::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: 
+        radial-gradient(ellipse at 15% 25%, rgba(106, 88, 64, 0.12) 0%, transparent 45%),
+        radial-gradient(ellipse at 85% 75%, rgba(106, 88, 64, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 90%, rgba(106, 88, 64, 0.06) 0%, transparent 40%);
+      pointer-events: none;
+    }
+
+    .content-wrapper {
+      position: relative;
+      z-index: 2;
+    }
+
+    /* BREAKING NEWS TICKER */
+    .breaking-ticker {
+      background: var(--ink-dark);
+      color: var(--paper-cream);
+      padding: 0.6rem 1rem;
+      margin: -3rem -2.5rem 2rem -2.5rem;
+      overflow: hidden;
+      border-bottom: 4px solid var(--dark-accent);
+      position: relative;
+    }
+
+    .ticker-label {
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      display: inline-block;
+      margin-right: 1rem;
+      background: var(--dark-accent);
+      padding: 0.3rem 0.8rem;
+      border: 2px solid var(--paper-cream);
+    }
+
+    .ticker-content {
+      display: inline-block;
+      white-space: nowrap;
+      animation: scroll-left 30s linear infinite;
+      font-size: 0.85rem;
+    }
+
+    @keyframes scroll-left {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* sharper masthead header */
+    .masthead {
+      text-align: center;
+      border-bottom: 6px double var(--ink-dark);
+      padding-bottom: 1.5rem;
+      margin-bottom: 1rem;
+      position: relative;
+    }
+
+    .masthead::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 3px;
+      background: var(--ink-dark);
+    }
+
+    .masthead-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 4.2rem;
+      font-weight: 900;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.3rem;
+      text-transform: uppercase;
+      color: var(--ink-dark);
+      text-shadow: 
+        4px 4px 0px rgba(106, 88, 64, 0.25),
+        2px 2px 0px rgba(0, 0, 0, 0.15);
+      line-height: 0.9;
+    }
+
+    .masthead-subtitle {
+      font-size: 0.7rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--sepia-brown);
+      margin-bottom: 0.8rem;
+      font-weight: 600;
+      border-top: 2px solid var(--border-brown);
+      border-bottom: 2px solid var(--border-brown);
+      padding: 0.6rem 0;
+    }
+
+    .masthead-details {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.65rem;
+      color: var(--sepia-brown);
+      padding-top: 1rem;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+
+    /* sharper ornamental divider */
+    .ornament {
+      text-align: center;
+      font-size: 1.8rem;
+      color: var(--ink-dark);
+      margin: 1.5rem 0;
+      letter-spacing: 1rem;
+      font-weight: 700;
+    }
+
+    /* EDITOR'S NOTE */
+    .editors-note {
+      border: 4px double var(--ink-dark);
+      background: rgba(106, 88, 64, 0.08);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      font-style: italic;
+      font-size: 0.85rem;
+      text-align: center;
+      position: relative;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.05);
+    }
+
+    .editors-note::before {
+      content: '✦ EDITOR\'S NOTE ✦';
+      position: absolute;
+      top: -0.8rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--paper-cream);
+      padding: 0 1rem;
+      font-weight: 700;
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-style: normal;
+    }
+
+    /* THREE COLUMN LAYOUT - CENTERED BIO */
+    .columns-layout {
+      display: grid;
+      grid-template-columns: 1fr 2.2fr 1fr;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    /* Left sidebar */
+    .left-sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    /* Right sidebar */
+    .right-sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    /* Sidebar boxes */
+    .sidebar-box {
+      border: 4px solid var(--ink-dark);
+      padding: 1.2rem;
+      background: rgba(255, 255, 255, 0.5);
+      box-shadow: 5px 5px 0px rgba(106, 88, 64, 0.25);
+      position: relative;
+    }
+
+    .sidebar-box::before {
+      content: '';
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      right: 6px;
+      bottom: 6px;
+      border: 2px solid rgba(26, 20, 16, 0.12);
+      pointer-events: none;
+    }
+
+    .sidebar-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 1rem;
+      text-align: center;
+      border-bottom: 3px solid var(--ink-dark);
+      padding-bottom: 0.6rem;
+      background: rgba(106, 88, 64, 0.1);
+      margin: -1.2rem -1.2rem 1rem -1.2rem;
+      padding: 0.8rem;
+    }
+
+    .sidebar-item {
+      margin-bottom: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px dashed var(--border-brown);
+      font-size: 0.8rem;
+    }
+
+    .sidebar-item:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .sidebar-label {
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      color: var(--dark-accent);
+      margin-bottom: 0.3rem;
+    }
+
+    .sidebar-value {
+      font-size: 0.85rem;
+      color: var(--ink-dark);
+      line-height: 1.5;
+    }
+
+    /* ACHIEVEMENTS */
+    .achievement-item {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 0.8rem;
+      padding-bottom: 0.8rem;
+      border-bottom: 2px dashed var(--border-brown);
+    }
+
+    .achievement-item:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .achievement-icon {
+      font-size: 1.6rem;
+      flex-shrink: 0;
+    }
+
+    .achievement-text {
+      font-size: 0.75rem;
+      line-height: 1.5;
+    }
+
+    /* featured profile center - sharper borders */
+    .feature-article {
+      border: 4px solid var(--ink-dark);
+      padding: 2rem;
+      background: rgba(255, 255, 255, 0.5);
+      box-shadow: 
+        inset 0 0 50px rgba(106, 88, 64, 0.08),
+        6px 6px 0px rgba(106, 88, 64, 0.2);
+      position: relative;
+    }
+
+    .feature-article::before {
+      content: '';
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      right: 8px;
+      bottom: 8px;
+      border: 2px solid rgba(26, 20, 16, 0.15);
+      pointer-events: none;
+    }
+
+    .feature-headline {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 0.5rem;
+      line-height: 1.1;
+      border-bottom: 4px solid var(--ink-dark);
+      padding-bottom: 1rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .feature-byline {
+      text-align: center;
+      font-size: 0.7rem;
+      font-style: italic;
+      color: var(--sepia-brown);
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      font-weight: 600;
+    }
+
+    /* photo frame - sharper vintage style */
+    .photo-frame {
+      width: 100%;
+      max-width: 320px;
+      height: 400px;
+      margin: 0 auto 1.8rem auto;
+      border: 5px solid var(--ink-dark);
+      box-shadow: 
+        inset 0 0 0 12px var(--paper-cream),
+        inset 0 0 0 16px var(--sepia-brown),
+        inset 0 0 0 18px var(--ink-dark),
+        10px 10px 0px rgba(106, 88, 64, 0.35),
+        0 12px 35px rgba(0,0,0,0.5);
+      overflow: hidden;
+      background: #e8dcc8;
+      position: relative;
+    }
+
+    .photo-frame::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 0%, rgba(42, 31, 26, 0.15) 100%);
+      pointer-events: none;
+      mix-blend-mode: multiply;
+    }
+
+    .photo-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #c8b8a0;
+      color: var(--sepia-brown);
+      font-size: 0.85rem;
+    }
+
+    .photo-placeholder img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: sepia(0.2) contrast(1.2) brightness(1.05);
+    }
+
+    /* article-style about section */
+    .article-about {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 3px solid var(--ink-dark);
+    }
+
+    .article-header {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--ink-dark);
+      border-left: 5px solid var(--ink-dark);
+      padding-left: 0.8rem;
+    }
+
+    .article-subheader {
+      font-size: 0.85rem;
+      font-style: italic;
+      color: var(--sepia-brown);
+      margin-bottom: 1rem;
+      padding-left: 1.2rem;
+    }
+
+    .article-body {
+      font-size: 0.95rem;
+      line-height: 1.9;
+      text-align: justify;
+      color: var(--ink-dark);
+      column-count: 2;
+      column-gap: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .article-body p {
+      margin-bottom: 1rem;
+    }
+
+    .article-body p:first-of-type:first-letter {
+      font-size: 3.5em;
+      font-weight: 700;
+      float: left;
+      line-height: 0.8;
+      margin: 0.1em 0.1em 0 0;
+      font-family: 'Playfair Display', serif;
+    }
+
+    .article-pullquote {
+      border-left: 4px solid var(--ink-dark);
+      border-right: 4px solid var(--ink-dark);
+      padding: 1.2rem 1.5rem;
+      margin: 1.5rem 0;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      font-style: italic;
+      text-align: center;
+      color: var(--ink-dark);
+      background: rgba(106, 88, 64, 0.08);
+      column-span: all;
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.05);
+    }
+
+    .feature-meta {
+      display: flex;
+      justify-content: center;
+      gap: 2.5rem;
+      font-size: 0.75rem;
+      color: var(--ink-dark);
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 3px dashed var(--border-brown);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      flex-wrap: wrap;
+    }
+
+    .feature-meta span::before {
+      content: '◆ ';
+      color: var(--ink-dark);
+      margin-right: 0.3rem;
+    }
+
+    /* tabs - sharper newspaper sections style */
+    .sections-bar {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 1.2rem;
+      margin: 2.5rem 0;
+      border-top: 5px double var(--ink-dark);
+      border-bottom: 5px double var(--ink-dark);
+      padding: 1.8rem 0;
+      background: rgba(106, 88, 64, 0.05);
+    }
+
+    .section-tab {
+      text-decoration: none;
+      color: var(--ink-dark);
+      text-align: center;
+      padding: 1.2rem 0.8rem;
+      border: 4px solid var(--ink-dark);
+      background: rgba(255, 255, 255, 0.7);
+      transition: all 0.2s;
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      align-items: center;
+      box-shadow: 4px 4px 0px rgba(106, 88, 64, 0.25);
+      position: relative;
+    }
+
+    .section-tab::before {
+      content: '';
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      right: 5px;
+      bottom: 5px;
+      border: 1px solid rgba(26, 20, 16, 0.2);
+      pointer-events: none;
+    }
+
+    .section-tab:hover {
+      background: var(--ink-dark);
+      color: var(--paper-cream);
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0px rgba(106, 88, 64, 0.35);
+    }
+
+    .section-icon {
+      font-size: 2rem;
+    }
+
+    /* RECENT HIGHLIGHTS */
+    .highlights-section {
+      border-top: 4px solid var(--ink-dark);
+      padding-top: 2rem;
+      margin-top: 2rem;
+    }
+
+    .highlights-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin-top: 1.5rem;
+    }
+
+    .highlight-card {
+      border: 4px solid var(--ink-dark);
+      padding: 1.5rem;
+      background: rgba(255, 255, 255, 0.5);
+      box-shadow: 4px 4px 0px rgba(106, 88, 64, 0.25);
+      position: relative;
+    }
+
+    .highlight-card::before {
+      content: '';
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      right: 6px;
+      bottom: 6px;
+      border: 1px solid rgba(26, 20, 16, 0.12);
+      pointer-events: none;
+    }
+
+    .highlight-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+      text-transform: uppercase;
+      border-bottom: 3px solid var(--ink-dark);
+      padding-bottom: 0.5rem;
+      letter-spacing: 0.05em;
+    }
+
+    .highlight-desc {
+      font-size: 0.8rem;
+      line-height: 1.7;
+      color: var(--ink-dark);
+    }
+
+    .highlight-date {
+      font-size: 0.65rem;
+      color: var(--sepia-brown);
+      font-style: italic;
+      margin-top: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 600;
+    }
+
+    /* bottom utilities */
+    .bottom-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin-top: 2.5rem;
+      padding-top: 2.5rem;
+      border-top: 5px double var(--ink-dark);
+    }
+
+    .util-box {
+      border: 4px solid var(--ink-dark);
+      padding: 1.5rem;
+      background: rgba(255, 255, 255, 0.5);
+      font-size: 0.8rem;
+      box-shadow: 5px 5px 0px rgba(106, 88, 64, 0.25);
+      position: relative;
+    }
+
+    .util-box::before {
+      content: '';
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      right: 6px;
+      bottom: 6px;
+      border: 1px solid rgba(26, 20, 16, 0.12);
+      pointer-events: none;
+    }
+
+    .util-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+      text-align: center;
+      letter-spacing: 0.15em;
+      padding-bottom: 0.6rem;
+      border-bottom: 3px solid var(--ink-dark);
+    }
+
+    .weather-display {
+      text-align: center;
+    }
+
+    .weather-temp {
+      font-size: 3.2rem;
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+    }
+
+    .weather-details {
+      font-size: 0.75rem;
+      color: var(--sepia-brown);
+      margin-top: 0.5rem;
+    }
+
+    .cal-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 0.3rem;
+      font-size: 0.7rem;
+      text-align: center;
+      margin-top: 0.5rem;
+    }
+
+    .cal-day {
+      padding: 0.5rem 0.2rem;
+      border: 2px solid var(--border-brown);
+      background: rgba(255, 255, 255, 0.4);
+    }
+
+    .cal-day.today {
+      background: var(--ink-dark);
+      color: var(--paper-cream);
+      font-weight: 700;
+      border: 2px solid var(--ink-dark);
+    }
+
+    .reminder-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.6rem;
+      padding: 0.6rem 0;
+      font-size: 0.75rem;
+      border-bottom: 2px dashed var(--border-brown);
+    }
+
+    .reminder-check {
+      width: 15px;
+      height: 15px;
+      border: 2px solid var(--ink-dark);
+      background: transparent;
+      cursor: pointer;
+      flex-shrink: 0;
+      margin-top: 0.2rem;
+    }
+
+    .reminder-check.done {
+      background: var(--ink-dark);
+      position: relative;
+    }
+
+    .reminder-check.done::after {
+      content: '✓';
+      position: absolute;
+      top: -3px;
+      left: 1px;
+      color: var(--paper-cream);
+      font-size: 0.7rem;
+      font-weight: 700;
+    }
+
+    .reminder-text.done {
+      text-decoration: line-through;
+      color: var(--sepia-brown);
+    }
+
+    .add-reminder {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    .add-reminder input {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.7);
+      border: 2px solid var(--ink-dark);
+      padding: 0.5rem 0.8rem;
+      font-size: 0.7rem;
+      font-family: 'Old Standard TT', serif;
+      color: var(--ink-dark);
+    }
+
+    .add-reminder input:focus {
+      outline: none;
+      background: rgba(255, 255, 255, 0.9);
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .add-reminder button {
+      background: var(--ink-dark);
+      border: 2px solid var(--ink-dark);
+      color: var(--paper-cream);
+      padding: 0.5rem 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      text-transform: uppercase;
+      font-size: 0.65rem;
+      letter-spacing: 0.05em;
+      transition: all 0.2s;
+    }
+
+    .add-reminder button:hover {
+      background: var(--dark-accent);
+      border-color: var(--dark-accent);
+    }
+
+    /* FOOTER */
+    .newspaper-footer {
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 4px double var(--ink-dark);
+      text-align: center;
+      font-size: 0.7rem;
+      color: var(--sepia-brown);
+    }
+
+    .footer-motto {
+      font-style: italic;
+      margin-bottom: 0.5rem;
+      font-size: 0.75rem;
+    }
+
+    /* hidden music player */
+    audio {
+      display: none;
+    }
+
+    @media (max-width: 900px) {
+      .columns-layout {
+        grid-template-columns: 1fr;
+      }
+      .article-body {
+        column-count: 1;
+      }
+      .sections-bar {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .bottom-grid, .highlights-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .masthead-title {
+        font-size: 2.5rem;
+      }
+      .sections-bar {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .newspaper-page {
+        padding: 2rem 1.5rem;
+      }
+      .breaking-ticker {
+        margin: -2rem -1.5rem 1.5rem -1.5rem;
+      }
+    }
+
+    /* editable styling */
+    [contenteditable="true"]:focus {
+      outline: 3px dashed var(--dark-accent);
+      outline-offset: 4px;
+      background: rgba(106, 88, 64, 0.08);
+    }
+  </style>
+</head>
+<body>
+<div class="newspaper-page">
+  <div class="content-wrapper">
+    
+    <!-- Breaking News Ticker -->
+    <div class="breaking-ticker">
+      <span class="ticker-label">Latest Updates</span>
+      <span class="ticker-content">
+        New profile feature live now ✦ Kelly's exclusive interview coming soon ✦ Stay tuned for updates ✦ Special edition release tomorrow ✦ 
+        New profile feature live now ✦ Kelly's exclusive interview coming soon ✦ Stay tuned for updates ✦ Special edition release tomorrow ✦
+      </span>
+    </div>
+
+    <!-- Masthead -->
+    <div class="masthead">
+      <div class="masthead-title">The Daily Chronicle</div>
+      <div class="masthead-subtitle">World News · Global Headlines · Society & Culture</div>
+      <div class="masthead-details">
+        <span>Vol. MMXXV · No. 47</span>
+        <span>Japan Edition</span>
+        <span id="liveDate">February 16, 2026</span>
+        <span id="liveClock">20:43</span>
+      </div>
+    </div>
+
+    <!-- Editor's Note -->
+    <div class="editors-note">
+      "This special edition celebrates a certain special someone who embody grace, creativity, and authenticity in everything they do. 
+      Today's featured profile showcases a remarkable journey of self-discovery and artistic expression."
+    </div>
+
+    <div class="ornament">❖ ❖ ❖</div>
+
+    <!-- Three Column Layout - Centered Bio -->
+    <div class="columns-layout">
+      
+      <!-- Left Sidebar -->
+      <div class="left-sidebar">
+        <div class="sidebar-box">
+          <div class="sidebar-title">Weather</div>
+          <div class="sidebar-item">
+            <div class="sidebar-label">Location</div>
+            <div class="sidebar-value">Fujimoto, Japan</div>
+          </div>
+          <div class="sidebar-item">
+            <div class="sidebar-label">Current</div>
+            <div class="sidebar-value">14° · Light Mist</div>
+          </div>
+          <div class="sidebar-item">
+            <div class="sidebar-label">Forecast</div>
+            <div class="sidebar-value">Fri 14° · Sat 12° · Sun 15°</div>
+          </div>
+        </div>
+
+        <div class="sidebar-box">
+          <div class="sidebar-title">Status</div>
+          <div class="sidebar-item">
+            <div class="sidebar-label">⚫ Do Not Disturb</div>
+            <div class="sidebar-value" style="font-size:0.75rem; font-style:italic;">
+              Currently unavailable
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Center Column - Featured Profile -->
+      <div class="feature-article">
+        <div class="feature-headline" contenteditable="true">Madamè Kelly</div>
+        <div class="feature-byline">Featured Profile · No. 1 · Fujimoto District</div>
+        
+        <div class="photo-frame">
+          <div class="photo-placeholder">
+            <img src="IMG-20250209-WA0051.jpg" alt="profile">
+          </div>
+        </div>
+
+        <!-- Article-style About Section -->
+        <div class="article-about">
+          <div class="article-header">About the Subject</div>
+          <div class="article-subheader">A portrait of modern elegance and artistic pursuit</div>
+          
+          <div class="article-body">
+            <p contenteditable="true">
+              Living life with intention, breathing air with gratitude. She represents a new generation of individuals who seek meaning in every moment, finding beauty in the ordinary and extraordinary alike. Her journey through the Fujimoto district has been marked by an unwavering commitment to personal growth and artistic expression.
+            </p>
+            
+            <div class="article-pullquote" contenteditable="true">
+              "Always in search of golden light. Glad to be alive and witnessing the beauty of each passing moment."
+            </div>
+            
+            <p contenteditable="true">
+              Born and raised with an appreciation for both traditional and contemporary culture, she has cultivated a unique perspective that bridges generations. Her interests span from culinary arts to cinema, from music to the simple pleasures of daily life. Those who know her describe her as someone who brings warmth and authenticity to every interaction, never afraid to be vulnerable or genuine.
+            </p>
+            
+            <p contenteditable="true">
+              At twenty years old, Kelly has already established herself as someone worth watching. Her dedication to her craft, whatever form it may take on any given day, is matched only by her kindness and her ability to see the world through fresh eyes. She remains committed to living fully, exploring deeply, and sharing generously with those around her.
+            </p>
+          </div>
+        </div>
+
+        <div class="feature-meta">
+          <span contenteditable="true">Age: 20</span>
+          <span contenteditable="true">Location: Fujimoto</span>
+          <span contenteditable="true">Est. 2005</span>
+        </div>
+      </div>
+
+      <!-- Right Sidebar -->
+      <div class="right-sidebar">
+        <div class="sidebar-box">
+          <div class="sidebar-title">Achievements</div>
+          <div class="achievement-item">
+            <span class="achievement-icon"></span>
+            <div class="achievement-text" contenteditable="true">Featured Profile of the Week</div>
+          </div>
+          <div class="achievement-item">
+            <span class="achievement-icon"></span>
+            <div class="achievement-text" contenteditable="true">5-Star Community Rating</div>
+          </div>
+          <div class="achievement-item">
+            <span class="achievement-icon"></span>
+            <div class="achievement-text" contenteditable="true">Premium Member Since 2024</div>
+          </div>
+        </div>
+
+        <div class="sidebar-box">
+          <div class="sidebar-title">Quick Info</div>
+          <div class="sidebar-item">
+            <div class="sidebar-label">Joined</div>
+            <div class="sidebar-value">January 2024</div>
+          </div>
+          <div class="sidebar-item">
+            <div class="sidebar-label">Activity</div>
+            <div class="sidebar-value">Very Active</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sections Bar (Tabs) -->
+    <div class="sections-bar">
+      <a class="section-tab" href="food.html" target="_blank">
+        <span class="section-icon">🍜</span>
+        <span>Food</span>
+      </a>
+      <a class="section-tab" href="music.html" target="_blank">
+        <span class="section-icon">🎵</span>
+        <span>Music</span>
+      </a>
+      <a class="section-tab" href="k-drama.html" target="_blank">
+        <span class="section-icon">🎬</span>
+        <span>K-Drama</span>
+      </a>
+      <a class="section-tab" href="hobbies.html" target="_blank">
+        <span class="section-icon">✿</span>
+        <span>Hobbies</span>
+      </a>
+      <a class="section-tab" href="tiktokio.com1771221834_kS7o1vSAHjOwwod3kbUz.mp4" target="_blank">
+        <span class="section-icon">🌀</span>
+        <span>Random</span>
+      </a>
+    </div>
+
+    <!-- Recent Highlights Section -->
+    <div class="highlights-section">
+      <div class="article-header" style="border-left: none; padding-left: 0; text-align: center;">Recent Highlights</div>
+      <div class="highlights-grid">
+        <div class="highlight-card">
+          <div class="highlight-title" contenteditable="true">Culinary Journey</div>
+          <div class="highlight-desc" contenteditable="true">
+            Explored authentic Japanese cuisine across Tokyo's hidden gems, documenting flavors and stories along the way.
+          </div>
+          <div class="highlight-date">January 2026</div>
+        </div>
+        <div class="highlight-card">
+          <div class="highlight-title" contenteditable="true">K-Drama Marathon</div>
+          <div class="highlight-desc" contenteditable="true">
+            Completed an epic series binge featuring classic and modern Korean dramas. Reviews coming soon!
+          </div>
+          <div class="highlight-date">December 2025</div>
+        </div>
+        <div class="highlight-card">
+          <div class="highlight-title" contenteditable="true">Creative Projects</div>
+          <div class="highlight-desc" contenteditable="true">
+            Launched several personal creative endeavors including coding and the subtle art of crochet.
+          </div>
+          <div class="highlight-date">November 2025</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Grid -->
+    <div class="bottom-grid">
+      <div class="util-box">
+        <div class="util-title">Temperature</div>
+        <div class="weather-display">
+          <div class="weather-temp">14°</div>
+          <div class="weather-details">Tokyo · Light Mist</div>
+        </div>
+      </div>
+
+      <div class="util-box">
+        <div class="util-title">Calendar</div>
+        <div class="cal-grid" id="calendarSmall"></div>
+      </div>
+
+      <div class="util-box">
+        <div class="util-title">Reminders</div>
+        <div id="reminderList"></div>
+        <div class="add-reminder">
+          <input id="reminderInput" placeholder="New reminder..." />
+          <button onclick="addReminder()">Add</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="newspaper-footer">
+      <div class="footer-motto">"All the news that's fit to print"</div>
+      <div>The Daily Chronicle · Est. 1895 · Printed in Fujimoto, Japan</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Hidden background music -->
+<audio src="audio.mp3" autoplay loop></audio>
+
+<script>
+  // Live clock
+  function updateTime() {
+    const d = new Date();
+    document.getElementById('liveClock').innerText = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  }
+  setInterval(updateTime, 1000);
+  updateTime();
+
+  // Calendar rendering
+  function renderCalendar(elementId) {
+    const now = new Date();
+    const month = now.getMonth();
+    const year = now.getFullYear();
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    let html = '';
+    const weekdays = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+    weekdays.forEach(d => html += `<div style="font-weight:700; opacity:0.6;">${d}</div>`);
+    for (let i = 0; i < firstDay; i++) html += '<div></div>';
+    for (let d = 1; d <= daysInMonth; d++) {
+      let cls = (d === now.getDate()) ? 'cal-day today' : 'cal-day';
+      html += `<div class="${cls}">${d}</div>`;
+    }
+    const el = document.getElementById(elementId);
+    if (el) el.innerHTML = html;
+  }
+  renderCalendar('calendarSmall');
+
+  // Reminders
+  let reminders = [
+    { text: 'Call agency re: showroom', done: false },
+    { text: 'Send polaroids to stylist', done: false },
+    { text: 'Pack for Milano trip', done: false }
+  ];
+
+  function renderReminders() {
+    const container = document.getElementById('reminderList');
+    if (!container) return;
+    container.innerHTML = reminders.map((r, idx) => `
+      <div class="reminder-item">
+        <span class="reminder-check ${r.done ? 'done' : ''}" onclick="toggleReminder(${idx})"></span>
+        <span class="reminder-text ${r.done ? 'done' : ''}" onclick="toggleReminder(${idx})">${r.text}</span>
+      </div>
+    `).join('');
+  }
+
+  window.toggleReminder = (idx) => {
+    reminders[idx].done = !reminders[idx].done;
+    renderReminders();
+  };
+
+  window.addReminder = () => {
+    const inp = document.getElementById('reminderInput');
+    if (inp.value.trim()) {
+      reminders.push({ text: inp.value.trim(), done: false });
+      inp.value = '';
+      renderReminders();
+    }
+  };
+
+  renderReminders();
+</script>
+</body>
+</html>

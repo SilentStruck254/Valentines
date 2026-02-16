@@ -1,0 +1,1508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <title>loop · loading screens · netflix games · real terminal</title>
+  <!-- Google Fonts & Font Awesome 6 -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', 'Space Grotesk', sans-serif;
+      background: #0a0a0c;
+      color: #fff;
+      overflow-x: hidden;
+      transition: background 0.45s ease;
+    }
+
+    .body-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+      background: radial-gradient(circle at 40% 50%, rgba(20,20,35,0.8), #050505 95%);
+      transition: background 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .hobby-bg-layer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      opacity: 0;
+      transition: opacity 0.8s cubic-bezier(0.19, 1, 0.22, 1);
+      background-size: cover;
+      background-position: center 30%;
+      background-repeat: no-repeat;
+      filter: saturate(1.2) brightness(0.4) contrast(1.3);
+      mix-blend-mode: overlay;
+    }
+
+    .hobby-bg-layer.active {
+      opacity: 0.7;
+    }
+
+    /* ========== COOL LOADING SCREENS ========== */
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.6s cubic-bezier(0.23, 1, 0.32, 1), visibility 0.6s;
+      background: #0a0a0c;
+      pointer-events: none;
+      opacity: 0;
+      visibility: hidden;
+    }
+    
+    .loading-overlay.active {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: all;
+    }
+
+    /* crochet loading - yarn ball spinner */
+    .loading-crotchet {
+      background: radial-gradient(circle at 30% 30%, #2a1a30, #0f0b15);
+    }
+    .yarn-spinner {
+      position: relative;
+      width: 120px;
+      height: 120px;
+    }
+    .yarn-ball {
+      position: absolute;
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(145deg, #d9b4ff, #b066e5);
+      border-radius: 50%;
+      top: 20px;
+      left: 20px;
+      box-shadow: 0 0 30px #bf7aff;
+      animation: yarnPulse 1.5s ease-in-out infinite;
+    }
+    .yarn-needle {
+      position: absolute;
+      width: 60px;
+      height: 8px;
+      background: linear-gradient(90deg, #c0c0c0, #f0f0f0);
+      border-radius: 20px;
+      transform-origin: 0% 50%;
+      top: 50px;
+      left: 70px;
+      animation: needleStitch 1.2s ease-in-out infinite;
+    }
+    .yarn-needle::after {
+      content: '';
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      background: #ffd966;
+      border-radius: 50%;
+      right: -6px;
+      top: -2px;
+      box-shadow: 0 0 15px #ffb347;
+    }
+    @keyframes yarnPulse {
+      0%, 100% { transform: scale(1); filter: brightness(1); }
+      50% { transform: scale(1.1); filter: brightness(1.3); }
+    }
+    @keyframes needleStitch {
+      0%, 100% { transform: rotate(10deg) translateX(0); }
+      50% { transform: rotate(-10deg) translateX(10px); }
+    }
+    .loading-text-crotchet {
+      margin-top: 30px;
+      font-size: 1.5rem;
+      font-weight: 600;
+      background: linear-gradient(145deg, #e5c3ff, #c58aff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 4px;
+    }
+
+    /* coding loading - matrix rain + terminal */
+    .loading-coding {
+      background: #0c0f14;
+    }
+    .matrix-rain {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: repeating-linear-gradient(0deg, 
+        rgba(0,255,0,0.03) 0px, 
+        rgba(0,255,0,0) 2px,
+        rgba(0,255,100,0.02) 4px);
+      animation: matrixScroll 8s linear infinite;
+      pointer-events: none;
+    }
+    @keyframes matrixScroll {
+      0% { background-position: 0 0; }
+      100% { background-position: 0 30px; }
+    }
+    .terminal-loader {
+      background: #1a1e2a;
+      border-radius: 16px;
+      padding: 2rem;
+      border: 1px solid #00ff9d;
+      box-shadow: 0 0 50px #00cc8840;
+      font-family: 'Fira Code', monospace;
+      z-index: 10;
+    }
+    .loader-line {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #00ffaa;
+      font-size: 1.2rem;
+      margin: 10px 0;
+    }
+    .loader-cursor {
+      width: 12px;
+      height: 24px;
+      background: #00ffaa;
+      animation: blinkGreen 1s step-end infinite;
+    }
+    @keyframes blinkGreen { 0%,100%{opacity:1;} 50%{opacity:0;} }
+    .loader-dots {
+      display: flex;
+      gap: 8px;
+      margin-left: 10px;
+    }
+    .loader-dot {
+      width: 8px;
+      height: 8px;
+      background: #00ffaa;
+      border-radius: 50%;
+      animation: dotPulse 1.4s infinite;
+    }
+    .loader-dot:nth-child(2) { animation-delay: 0.2s; }
+    .loader-dot:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes dotPulse { 0%,100%{ opacity:0.3; transform:scale(1); } 50%{ opacity:1; transform:scale(1.3); } }
+
+    /* gaming loading - ps5 style spinner */
+    .loading-gaming {
+      background: #0f1222;
+    }
+    .ps5-loader {
+      position: relative;
+      width: 150px;
+      height: 150px;
+    }
+    .ps5-ring {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border: 4px solid transparent;
+      border-top: 4px solid #0066ff;
+      border-right: 4px solid #00ccff;
+      border-radius: 50%;
+      animation: ps5Spin 1.2s cubic-bezier(0.65, 0, 0.35, 1) infinite;
+      box-shadow: 0 0 30px #0044ff80;
+    }
+    .ps5-ring::before {
+      content: '';
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      right: 20px;
+      bottom: 20px;
+      border: 4px solid transparent;
+      border-bottom: 4px solid #ff0066;
+      border-left: 4px solid #ff66cc;
+      border-radius: 50%;
+      animation: ps5SpinReverse 1.8s ease-in-out infinite;
+    }
+    .ps5-core {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 30px;
+      height: 30px;
+      background: #ffffff;
+      border-radius: 50%;
+      box-shadow: 0 0 40px #66aaff;
+      animation: corePulse 1.5s ease-in-out infinite;
+    }
+    @keyframes ps5Spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    @keyframes ps5SpinReverse { 0% { transform: rotate(360deg); } 100% { transform: rotate(0deg); } }
+    @keyframes corePulse { 0%,100% { opacity: 0.8; transform: translate(-50%, -50%) scale(1); } 50% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); } }
+    .ps5-loader-text {
+      margin-top: 30px;
+      font-size: 1.8rem;
+      font-weight: 700;
+      background: linear-gradient(145deg, #66aaff, #aa66ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* ----- slick header ----- */
+    .nav-header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      padding: 1.4rem 4%;
+      z-index: 100;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.94) 0%, rgba(0,0,0,0.6) 70%, transparent 100%);
+      backdrop-filter: blur(16px);
+      transition: padding 0.3s, background 0.3s;
+    }
+
+    .logo {
+      font-size: 2.1rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(145deg, #ffffff, #cfcfef);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-right: 3rem;
+      text-shadow: 0 0 20px rgba(120,180,255,0.3);
+      display: flex;
+      align-items: center;
+    }
+
+    .hobby-tabs {
+      display: flex;
+      gap: 2.4rem;
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      color: rgba(255,255,255,0.7);
+      font-size: 1.3rem;
+      font-weight: 600;
+      padding: 0.5rem 0.2rem;
+      cursor: pointer;
+      position: relative;
+      transition: color 0.25s, transform 0.2s;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .tab-btn i {
+      transition: transform 0.2s;
+    }
+
+    .tab-btn::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0%;
+      height: 3px;
+      background: white;
+      transition: width 0.3s cubic-bezier(0.65, 0, 0.35, 1);
+      box-shadow: 0 0 12px currentColor;
+    }
+
+    .tab-btn:hover {
+      color: #fff;
+      transform: translateY(-2px);
+    }
+
+    .tab-btn:hover i {
+      transform: scale(1.2);
+    }
+
+    .tab-btn.active {
+      color: white;
+    }
+
+    .tab-btn.active::after {
+      width: 100%;
+    }
+
+    /* ----- panels with smoother animation ----- */
+    .hobby-panel {
+      position: relative;
+      width: 100%;
+      min-height: 100vh;
+      padding: 9rem 4% 5rem 4%;
+      display: none;
+      opacity: 0;
+      animation: fadePanel 0.7s forwards cubic-bezier(0.2, 0.9, 0.4, 1);
+    }
+
+    .hobby-panel.active-panel {
+      display: block;
+    }
+
+    @keyframes fadePanel {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ---------- CROCHET cards ---------- */
+    .technique-card {
+      cursor: pointer;
+      transition: all 0.25s;
+      border: 2px solid transparent;
+      position: relative;
+    }
+    .technique-card:hover {
+      border: 2px solid #d9b4ff;
+      box-shadow: 0 0 25px #b87ae6;
+      transform: scale(1.02);
+    }
+    .youtube-icon {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(0,0,0,0.75);
+      color: #ff1e1e;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      z-index: 10;
+      opacity: 0;
+      transition: opacity 0.2s, transform 0.15s;
+      border: 1px solid #ffa0a0;
+      box-shadow: 0 0 12px rgba(255,70,70,0.6);
+    }
+    .technique-card:hover .youtube-icon {
+      opacity: 1;
+      transform: scale(1.05);
+    }
+    .youtube-icon:hover {
+      background: #990000;
+      color: white;
+    }
+
+    /* technique modal */
+    .technique-modal {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 350px;
+      background: rgba(22, 18, 28, 0.97);
+      backdrop-filter: blur(20px);
+      border-radius: 32px;
+      padding: 2rem;
+      border: 1px solid rgba(255,215,245,0.5);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+      transform: translateX(420px);
+      opacity: 0;
+      transition: transform 0.4s cubic-bezier(0.17, 0.85, 0.45, 1), opacity 0.3s;
+      z-index: 999;
+      color: #f0e6ff;
+    }
+    .technique-modal.show {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    .modal-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 0.7rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .modal-desc {
+      line-height: 1.6;
+      color: #ddd;
+      margin-bottom: 1.2rem;
+    }
+    .modal-close {
+      background: rgba(255,255,255,0.1);
+      border: none;
+      color: white;
+      padding: 0.5rem 1.4rem;
+      border-radius: 40px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.15s;
+    }
+    .modal-close:hover {
+      background: #3d2b4b;
+    }
+
+    /* ========== CODING STUDIO (unchanged) ========== */
+    .coding-studio {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+    .dev-profile {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(12, 18, 26, 0.7);
+      backdrop-filter: blur(14px);
+      border: 1px solid #2b3850;
+      border-radius: 60px;
+      padding: 0.8rem 1.8rem 0.8rem 1.2rem;
+      margin-bottom: 2.8rem;
+    }
+    .dev-avatar {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+    }
+    .dev-icon {
+      background: #1f2b3c;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      color: #8cb3ff;
+      border: 2px solid #3e5a7c;
+    }
+    .dev-info h3 {
+      font-size: 1.6rem;
+      font-weight: 600;
+      background: linear-gradient(145deg, #ffffff, #b4d0ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .dev-info .dev-title {
+      color: #7f99c0;
+      font-size: 0.85rem;
+      letter-spacing: 1px;
+    }
+    .dev-stats {
+      display: flex;
+      gap: 2.2rem;
+    }
+    .dev-stat {
+      text-align: center;
+    }
+    .dev-stat-value {
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: #f0f3ff;
+    }
+    .dev-stat-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      color: #829bc0;
+    }
+    .dev-status {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #162330;
+      padding: 0.4rem 1.5rem;
+      border-radius: 40px;
+      border: 1px solid #3f5680;
+    }
+    .online-dot {
+      width: 10px;
+      height: 10px;
+      background: #2eff8c;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #0f0;
+    }
+    .real-terminal {
+      background: #0c0f14;
+      border-radius: 16px;
+      margin: 2rem 0 2.5rem 0;
+      border: 1px solid #2a3a4a;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.8), 0 0 0 1px #1e2a36 inset;
+      font-family: 'Fira Code', 'Cascadia Code', monospace;
+      overflow: hidden;
+    }
+    .terminal-header-real {
+      background: #1e262f;
+      padding: 0.8rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid #2f3e4f;
+    }
+    .terminal-dots-real {
+      display: flex;
+      gap: 8px;
+    }
+    .dot-real {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+    }
+    .dot-real.red { background: #ff5f56; border: 1px solid #bf403a; }
+    .dot-real.yellow { background: #ffbd2e; border: 1px solid #bf8f20; }
+    .dot-real.green { background: #27c93f; border: 1px solid #1b9f2d; }
+    .terminal-title-real {
+      color: #a0b8cc;
+      font-size: 0.9rem;
+      margin-left: 4px;
+      font-weight: 500;
+    }
+    .terminal-body-real {
+      background: #0b1017;
+      padding: 1.8rem;
+      color: #e1f0e6;
+      font-size: 1rem;
+      line-height: 1.7;
+      min-height: 280px;
+    }
+    .terminal-line-real {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 0.5rem;
+    }
+    .prompt-real {
+      color: #00e6b0;
+      font-weight: 600;
+      font-size: 1.1rem;
+      text-shadow: 0 0 8px #2affb0;
+    }
+    .path-real {
+      color: #6ba0ff;
+    }
+    .git-branch-real {
+      background: #2a3a4a;
+      padding: 0.2rem 0.6rem;
+      border-radius: 30px;
+      font-size: 0.7rem;
+      color: #bbd9ff;
+    }
+    .terminal-input-line {
+      display: flex;
+      align-items: center;
+      margin: 1rem 0 1.2rem 0;
+      background: #0d141f;
+      border-radius: 10px;
+      padding: 0.5rem 1rem;
+      border-left: 4px solid #00e6b0;
+    }
+    .input-prompt {
+      color: #00e6b0;
+      font-weight: 600;
+      margin-right: 12px;
+      font-size: 1.1rem;
+    }
+    .terminal-input-real {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #f0f9ff;
+      font-family: 'Fira Code', monospace;
+      width: 100%;
+      font-size: 1rem;
+    }
+    .cursor-real {
+      width: 12px;
+      height: 1.4rem;
+      background: #b0e6ff;
+      animation: blinkReal 1s step-end infinite;
+      margin-left: 4px;
+    }
+    @keyframes blinkReal { 0%,100%{opacity:1;} 50%{opacity:0;} }
+    .terminal-output-real {
+      background: #0a101a;
+      border-radius: 12px;
+      padding: 1.2rem;
+      border: 1px solid #1f3142;
+      color: #b4d5ff;
+      white-space: pre-wrap;
+      font-size: 0.95rem;
+      margin-top: 1rem;
+      border-left: 3px solid #5f9eff;
+      min-height: 80px;
+    }
+    .garden-real {
+      font-family: monospace;
+      color: #fca5c7;
+      line-height: 1.2;
+      margin-top: 1rem;
+      background: #0b0e14;
+      padding: 1rem;
+      border-radius: 12px;
+      border: 1px dashed #3a5270;
+    }
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+      margin: 2rem 0 2.5rem;
+    }
+    .project-card {
+      background: #101725;
+      border: 1px solid #25344f;
+      border-radius: 28px;
+      padding: 1.2rem;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+    .project-card:hover {
+      transform: translateY(-6px);
+      border-color: #4f7eb3;
+      background: #162134;
+    }
+    .project-icon {
+      font-size: 2.2rem;
+      margin-bottom: 1rem;
+      color: #6d9eff;
+    }
+    .project-name {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+    }
+    .project-desc {
+      color: #95a9cf;
+      font-size: 0.85rem;
+      margin-bottom: 1rem;
+    }
+    .project-tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .tag {
+      background: #1e2b40;
+      padding: 0.2rem 1rem;
+      border-radius: 40px;
+      font-size: 0.7rem;
+      color: #b3ceff;
+      border: 1px solid #37537c;
+    }
+    .live-badge {
+      background: #1e4a3b;
+      color: #9effcf;
+      font-size: 0.7rem;
+      padding: 0.2rem 1rem;
+      border-radius: 40px;
+      display: inline-block;
+      margin-left: 8px;
+    }
+    .lang-row {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+      background: rgba(0,0,0,0.2);
+      border-radius: 60px;
+      padding: 0.8rem 1.8rem;
+      border: 1px solid #253f5a;
+    }
+    .lang-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #b3cef0;
+    }
+
+    /* ========== NETFLIX GAMING (unchanged) ========== */
+    .netflix-container {
+      max-width: 1600px;
+      margin: 0 auto;
+    }
+    .netflix-hero {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 2.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .hero-left {
+      display: flex;
+      align-items: center;
+      gap: 1.8rem;
+    }
+    .hero-avatar {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(145deg, #2f354a, #1b1f2e);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      color: #b3c6ff;
+      border: 2px solid #5f73b0;
+      box-shadow: 0 10px 20px #00000060;
+    }
+    .hero-titles h1 {
+      font-size: 3.2rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, #ffffff, #b8cbff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1.1;
+    }
+    .hero-titles .hero-sub {
+      color: #8f9ed0;
+      font-size: 1rem;
+      letter-spacing: 2px;
+      margin-top: 5px;
+    }
+    .hero-stats {
+      display: flex;
+      gap: 2.5rem;
+      background: rgba(10, 12, 22, 0.7);
+      backdrop-filter: blur(10px);
+      padding: 1rem 2.2rem;
+      border-radius: 60px;
+      border: 1px solid #303754;
+    }
+    .hero-stat-item {
+      text-align: center;
+    }
+    .hero-stat-value {
+      font-size: 2rem;
+      font-weight: 600;
+      color: white;
+    }
+    .hero-stat-label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #8895c0;
+    }
+    .live-activity {
+      background: rgba(0,0,0,0.3);
+      backdrop-filter: blur(8px);
+      border-radius: 60px;
+      padding: 0.8rem 1.8rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 2.5rem;
+      border: 1px solid #414b70;
+      margin-bottom: 2rem;
+    }
+    .live-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #d2dcff;
+      font-size: 0.9rem;
+    }
+    .live-dot {
+      width: 10px;
+      height: 10px;
+      background: #2eff8c;
+      border-radius: 50%;
+      box-shadow: 0 0 10px #00f569;
+      animation: pulse 1.8s infinite;
+    }
+    .featured-hero {
+      margin: 2.5rem 0 3rem 0;
+      border-radius: 28px;
+      overflow: hidden;
+      position: relative;
+      background: linear-gradient(90deg, #0f121f 0%, #1a1f32 100%);
+      border: 1px solid #3e4570;
+      display: flex;
+      align-items: center;
+      padding: 1.5rem 2.5rem;
+      box-shadow: 0 25px 35px -10px black;
+    }
+    .featured-img {
+      width: 180px;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 24px;
+      border: 2px solid #e50914;
+      margin-right: 2.5rem;
+    }
+    .featured-info h3 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 0.3rem;
+    }
+    .featured-info .featured-desc {
+      color: #b0beea;
+      max-width: 600px;
+      margin: 0.5rem 0 1.2rem;
+    }
+    .featured-btn {
+      background: #e50914;
+      border: none;
+      color: white;
+      padding: 0.8rem 2.2rem;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 1.1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .featured-btn:hover {
+      background: #f6121d;
+      transform: scale(1.02);
+    }
+    .netflix-row {
+      margin-bottom: 3rem;
+    }
+    .row-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 0.8rem;
+      padding-left: 10px;
+    }
+    .row-header h2 {
+      font-size: 1.6rem;
+      font-weight: 500;
+      color: #e5e5e5;
+    }
+    .row-header i {
+      color: #e50914;
+      font-size: 1.4rem;
+    }
+    .card-row {
+      display: flex;
+      gap: 1.2rem;
+      overflow-x: auto;
+      padding: 0.8rem 0.5rem 1.5rem 0.5rem;
+      scrollbar-width: thin;
+      scrollbar-color: #4a5070 #1a1d2b;
+    }
+    .card-row::-webkit-scrollbar { height: 6px; }
+    .card-row::-webkit-scrollbar-track { background: #1a1d2b; border-radius: 10px; }
+    .card-row::-webkit-scrollbar-thumb { background: #4a5070; border-radius: 10px; }
+    .netflix-card {
+      flex: 0 0 auto;
+      width: 260px;
+      background: #141824;
+      border-radius: 12px;
+      overflow: hidden;
+      transition: transform 0.25s ease, box-shadow 0.25s;
+      border: 1px solid #2c314a;
+    }
+    .netflix-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 20px 30px #000000d0;
+      border-color: #e50914;
+    }
+    .netflix-card-img {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+    }
+    .netflix-card-body { padding: 1rem 0.8rem 0.9rem; }
+    .netflix-card-title { font-weight: 600; font-size: 1.1rem; color: #fff; }
+    .netflix-card-meta { display: flex; gap: 10px; font-size: 0.8rem; color: #8d99c9; }
+    .netflix-badge {
+      background: #e50914;
+      padding: 0.2rem 0.6rem;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: white;
+    }
+
+    /* global */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 2rem;
+    }
+    .hobby-card {
+      background: rgba(18, 18, 26, 0.8);
+      backdrop-filter: blur(14px);
+      border-radius: 24px;
+      overflow: hidden;
+      transition: transform 0.2s, border 0.2s;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .hobby-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(255,215,255,0.3);
+    }
+    .card-img {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+    }
+    .card-body { padding: 1.2rem; }
+    .stitch-icon-bg {
+      background-color: #2a1e30;
+      width: 100%;
+      height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      color: #deb5ff;
+    }
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.9s, transform 0.9s cubic-bezier(0.17, 0.85, 0.45, 1);
+    }
+    .reveal.active-reveal {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .scrollmagic {
+      margin-top: 3rem;
+      padding: 2rem;
+      text-align: center;
+      color: rgba(255,255,255,0.3);
+      letter-spacing: 6px;
+    }
+    .badge {
+      background: #5d4b6e;
+      padding: 2px 10px;
+      border-radius: 40px;
+      font-size: 0.7rem;
+      margin-left: 8px;
+    }
+    .category-title {
+      font-size: 2rem;
+      font-weight: 600;
+      border-left: 6px solid;
+      padding-left: 20px;
+      margin-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- background layers -->
+  <div class="hobby-bg-layer" id="bgCrotchet" style="background-image: url('https://images.pexels.com/photos/11285648/pexels-photo-11285648.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');"></div>
+  <div class="hobby-bg-layer" id="bgCoding" style="background-image: url('https://images.pexels.com/photos/177598/pexels-photo-177598.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');"></div>
+  <div class="hobby-bg-layer" id="bgGaming" style="background-image: url('https://images.pexels.com/photos/3945667/pexels-photo-3945667.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');"></div>
+  <div class="body-bg" id="dynamicBgOverlay"></div>
+  <audio src = "audio.mp3" autoplay loop></audio>
+
+  <!-- ===== COOL LOADING SCREENS ===== -->
+  <!-- crochet loading -->
+  <div id="loading-crotchet" class="loading-overlay loading-crotchet">
+    <div style="text-align: center;">
+      <div class="yarn-spinner">
+        <div class="yarn-ball"></div>
+        <div class="yarn-needle"></div>
+      </div>
+      <div class="loading-text-crotchet">stitching...</div>
+    </div>
+  </div>
+
+  <!-- coding loading (matrix + terminal) -->
+  <div id="loading-coding" class="loading-overlay loading-coding">
+    <div class="matrix-rain"></div>
+    <div class="terminal-loader">
+      <div class="loader-line">
+        <span style="color:#00ffaa;">$</span>
+        <span>initializing dev environment</span>
+        <div class="loader-dots">
+          <span class="loader-dot"></span>
+          <span class="loader-dot"></span>
+          <span class="loader-dot"></span>
+        </div>
+      </div>
+      <div class="loader-line">
+        <span style="color:#00ffaa;">></span>
+        <span>loading modules...</span>
+      </div>
+      <div class="loader-line">
+        <span style="color:#00ffaa;">></span>
+        <span>connecting to github</span>
+        <span class="loader-cursor"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- gaming loading (ps5 style) -->
+  <div id="loading-gaming" class="loading-overlay loading-gaming">
+    <div style="text-align: center;">
+      <div class="ps5-loader">
+        <div class="ps5-ring"></div>
+        <div class="ps5-core"></div>
+      </div>
+      <div class="ps5-loader-text">LOADING...</div>
+    </div>
+  </div>
+
+  <div class="nav-header">
+    <span class="logo"><i class="fas fa-code-branch" style="margin-right: 12px;"></i> Hobbies</span>
+    <div class="hobby-tabs">
+      <button class="tab-btn active" data-hobby="crotchet"><i class="fas fa-rainbow"></i> Crochet</button>
+      <button class="tab-btn" data-hobby="coding"><i class="fas fa-terminal"></i> Coding</button>
+      <button class="tab-btn" data-hobby="gaming"><i class="fas fa-gamepad"></i> Gaming</button>
+    </div>
+  </div>
+
+  <!-- ===== CROCHET PANEL ===== -->
+  <div id="panel-crotchet" class="hobby-panel active-panel">
+    <div class="category-row reveal">
+      <div class="category-title" style="border-color: #dab6ff; color: #f0e2ff;"><i class="fas fa-rainbow"></i> The Art of Crochet</div>
+
+    </div>
+    <div class="card-grid">
+      <!-- Magic Ring - Insert YouTube link in data-video attribute -->
+      <div class="hobby-card technique-card" data-technique="Magic Ring" data-desc="The magic ring (adjustable loop) is essential for amigurumi. Yarn over, pull up a loop, work stitches into the ring, then pull tail to close tightly. No hole!" data-video="https://youtu.be/Ik-GSXWoSak?si=63NoCj6wM_1MLhUM">
+        <img class="card-img" src="download (36).jpg" alt="magic ring">
+        <div class="youtube-icon"><i class="fab fa-youtube"></i></div>
+        <div class="card-body"><div class="card-title">Single Crochet<span class="badge">Foundation</span></div><div class="card-desc">Basis for many designs.</div></div>
+      </div>
+      <!-- FPdc - Insert YouTube link in data-video attribute -->
+      <div class="hobby-card technique-card" data-technique="Front Post Double Crochet" data-desc="FPdc creates texture & cables. Yo, insert hook from front to back around post of stitch below, complete dc. Used for ribbing, baskets." data-video="https://youtu.be/f9C1C21MNiM?si=8ar5fDCpMPrZd03T">
+        <img class="card-img" src="download (37).jpg" alt="fpdc">
+        <div class="youtube-icon"><i class="fab fa-youtube"></i></div>
+        <div class="card-body"><div class="card-title">Half Double Crochet<span class="badge">Texture</span></div><div class="card-desc">Makes for softer Airy fabric (Use for blankets)</div></div>
+      </div>
+      <!-- Kamel stitch - Insert YouTube link in data-video attribute -->
+ 
+      <div class="hobby-card technique-card" data-technique="Front Post Double Crochet" data-desc="FPdc creates texture & cables. Yo, insert hook from front to back around post of stitch below, complete dc. Used for ribbing, baskets." data-video="https://youtu.be/5xKssKskNzo?si=XL0XlnFLR0VOCWm-">
+        <img class="card-img" src="download (38).jpg" alt="fpdc">
+        <div class="youtube-icon"><i class="fab fa-youtube"></i></div>
+        <div class="card-body"><div class="card-title">Double Crochet<span class="badge">Flexible</span></div><div class="card-desc">For quick easy projects🥰</div></div>
+      </div>
+      <!-- Invisible dec - Insert YouTube link in data-video attribute -->
+      <div class="hobby-card technique-card" data-technique="Invisible Decrease" data-desc="Instead of sc2tog, insert hook into front loop only of two sts, yo, pull through, yo, pull through both. Nearly invisible for amigurumi." data-video="https://youtu.be/3KtzjAAZHVY?si=xKDf_tTSh8ujOBLl">
+        <img class="card-img" src="download (39).jpg" alt="decrease">
+        <div class="youtube-icon"><i class="fab fa-youtube"></i></div>
+        <div class="card-body"><div class="card-title">Treble Crochet <span class="badge">Pro</span></div><div class="card-desc">Is the tallest and creates the most open fabric.</div></div>
+      </div>
+      <!-- Blocking - Insert YouTube link in data-video attribute -->
+      <div class="hobby-card technique-card" data-technique="Blocking" data-desc="Wet or steam block to even out stitches and set dimensions. Pin to shape, let dry. Essential for lace and garments." data-video="https://youtu.be/8ir3v31G0sg?si=1YleoLrwGMdw0CQE">
+        <img class="card-img" src="download (40).jpg" alt="blocking">
+        <div class="youtube-icon"><i class="fab fa-youtube"></i></div>
+        <div class="card-body"><div class="card-title">Slip Stitch<span class="badge">Yarn transfer</span></div><div class="card-desc">Mostly for shaping and joining rounds</div></div>
+      </div>
+      <!-- JAYG - Insert YouTube link in data-video attribute -->
+      <div class="hobby-card technique-card" data-technique="Join-as-you-go" data-desc="Join granny squares while crocheting the last round. No sewing! Attach via slip stitch or chain spaces." data-video="https://youtu.be/o-Il8OcNAZA?si=zVTn4jgYxc7GBtLS">
+        <img class="card-img" src="download (41).jpg" alt="jayg">
+        <div class="youtube-icon"><i class="fab fa-youtube"></i></div>
+        <div class="card-body"><div class="card-title">Chain Stitch <span class="badge">Basics</span></div><div class="card-desc">Make a basic chain where you can add other stitches.</div></div>
+      </div>
+      <div class="hobby-card technique-card" data-technique="Join-as-you-go" data-desc="Join granny squares while crocheting the last round. No sewing! Attach via slip stitch or chain spaces." data-video="https://youtu.be/gl7Sz0Ug1FM?si=TNiNUUWLJDR3GkRN">
+        <img class="card-img" src="download (42).jpg" alt="jayg">
+        <div class="youtube-icon"><i class="fab fa-youtube"></i></div>
+        <div class="card-body"><div class="card-title">Granny Square <span class="badge">Popular</span></div><div class="card-desc">Great for colour switching.</div></div>
+      </div>
+      <div class="hobby-card technique-card" data-technique="Join-as-you-go" data-desc="Join granny squares while crocheting the last round. No sewing! Attach via slip stitch or chain spaces." data-video="https://youtu.be/_S4E8g52U0w?si=9lcSV_BVQ2HBPPWT">
+        <img class="card-img" src="download (43).jpg" alt="jayg">
+        <div class="youtube-icon"><i class="fab fa-youtube"></i></div>
+        <div class="card-body"><div class="card-title">Shell Stitch <span class="badge">Decorative</span></div><div class="card-desc">Mostly for edges.</div></div>
+      </div>
+      <div class="hobby-card technique-card" data-technique="Join-as-you-go" data-desc="Join granny squares while crocheting the last round. No sewing! Attach via slip stitch or chain spaces." data-video="https://youtu.be/GdWsmdzCyJQ?si=1-S5wX97nglGAVn6">
+        <img class="card-img" src="download (44).jpg" alt="jayg">
+        <div class="youtube-icon"><i class="fab fa-youtube"></i></div>
+        <div class="card-body"><div class="card-title">V-Stitch <span class="badge">Texture</span></div><div class="card-desc">Simple V-Shaped pattern.</div></div>
+      </div>
+      <div class="hobby-card technique-card" data-technique="Join-as-you-go" data-desc="Join granny squares while crocheting the last round. No sewing! Attach via slip stitch or chain spaces." data-video="https://youtu.be/GpV3SRogDPs?si=14by1IvCImdcMNPZ">
+        <img class="card-img" src="download (45).jpg" alt="jayg">
+        <div class="youtube-icon"><i class="fab fa-youtube"></i></div>
+        <div class="card-body"><div class="card-title">Bobble Stitch<span class="badge">Texture</span></div><div class="card-desc">For hats and scarves.</div></div>
+      </div>
+    </div>
+    <!-- extra inspo row -->
+    <div class="category-row reveal" style="margin-top: 40px;">
+      <div class="category-title" style="border-color: #d9b4ff;">🧶 Crocheting Project Ideas</div>
+      <div class="card-grid" style="grid-template-columns: repeat(3,1fr);">
+        <div class="hobby-card"><img src="download (46).jpg" class="card-img"><div class="card-body"><div class="card-title">Crochet Dishcloths</div></div></div>
+        <div class="hobby-card"><img src="download (47).jpg" class="card-img"><div class="card-body"><div class="card-title">Crochet Chunky Infinity Scarf</div></div></div>
+         <div class="hobby-card"><img src="download (48).jpg" class="card-img"><div class="card-body"><div class="card-title">Bobble Headband</div></div></div>
+          <div class="hobby-card"><img src="download (49).jpg" class="card-img"><div class="card-body"><div class="card-title">Granny Squares extended</div></div></div>
+           <div class="hobby-card"><img src="download (50).jpg" class="card-img"><div class="card-body"><div class="card-title">"1-hour" Beanie</div></div></div>
+        <div class="hobby-card technique-card" data-technique="Join-as-you-go" data-desc="Join granny squares while crocheting the last round. No sewing! Attach via slip stitch or chain spaces." data-video="https://youtu.be/_ZkhD3c_sac?si=5WuA4syq-YTgSo0x">
+            <img class="card-img" src="download (51).jpg" alt="jayg">
+            <div class="youtube-icon"><i class="fab fa-youtube"></i></div>
+        <div class="card-body"><div class="card-title">Full Project<span class="badge">Fun</span></div><div class="card-desc">Full crocheting project from start to finish step by step.</div></div>
+      </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- technique modal -->
+  <div id="techniqueModal" class="technique-modal">
+    <div class="modal-title"><i class="fas fa-hook" style="color: #d9b4ff;"></i> <span id="modalTechniqueName">Magic Ring</span></div>
+    <div class="modal-desc" id="modalTechniqueDesc"></div>
+    <button class="modal-close" id="closeModalBtn"><i class="fas fa-times"></i> close</button>
+  </div>
+
+  <!-- ===== CODING HUB ===== -->
+  <div id="panel-coding" class="hobby-panel">
+    <div class="coding-studio reveal">
+      <div class="dev-profile">
+        <div class="dev-avatar">
+          <div class="dev-icon"><i class="fas fa-laptop-code"></i></div>
+          <div class="dev-info">
+            <h3>Kelly</h3>
+            <div class="dev-title">Chief engineer · fullstack</div>
+          </div>
+        </div>
+        <div class="dev-stats">
+          <div class="dev-stat"><span class="dev-stat-value">14</span><div class="dev-stat-label">repos</div></div>
+          <div class="dev-stat"><span class="dev-stat-value">3.2k</span><div class="dev-stat-label">commits</div></div>
+          <div class="dev-stat"><span class="dev-stat-value">9</span><div class="dev-stat-label">languages</div></div>
+        </div>
+        <div class="dev-status">
+          <span class="online-dot"></span>
+          <span>online · focus mode</span>
+        </div>
+      </div>
+
+      <div class="real-terminal">
+        <div class="terminal-header-real">
+          <div class="terminal-dots-real">
+            <span class="dot-real red"></span>
+            <span class="dot-real yellow"></span>
+            <span class="dot-real green"></span>
+          </div>
+          <div class="terminal-title-real">lockdown@loop:~/dev</div>
+        </div>
+        <div class="terminal-body-real">
+          <div class="terminal-line-real">
+            <span class="prompt-real">➜</span>
+            <span class="path-real">~/workspace</span>
+            <span class="git-branch-real">main</span>
+          </div>
+          <div class="terminal-input-line">
+            <span class="input-prompt">$</span>
+            <input type="text" id="terminalInput" class="terminal-input-real" placeholder="type 'help' or 'valentine'" autocomplete="off">
+            <span class="cursor-real"></span>
+          </div>
+          <div id="terminalOutput" class="terminal-output-real">
+            <span style="color:#96c0ff;">[lockdown@dev] ~$ </span>system ready · 0 errors
+          </div>
+          <div id="pixelGarden" class="garden-real"></div>
+        </div>
+      </div>
+
+      <div class="project-grid">
+        <div class="project-card">
+          <div class="project-icon"><i class="fab fa-react"></i></div>
+          <div class="project-name">MyPlanner</div>
+          <div class="project-desc">real-time calendar tracking · 4.2k stars</div>
+          <div class="project-tags"><span class="tag">React 19</span><span class="tag">Vite</span><span class="live-badge">hot</span></div>
+        </div>
+        <div class="project-card">
+          <div class="project-icon"><i class="fab fa-react"></i></div>
+          <div class="project-name">NeXus</div>
+          <div class="project-desc">real-time dashboard design· 1.2k stars</div>
+          <div class="project-tags"><span class="tag">React 19</span><span class="tag">Vite</span><span class="live-badge">hot</span></div>
+        </div>
+        <div class="project-card">
+          <div class="project-icon"><i class="fab fa-react"></i></div>
+          <div class="project-name">StudyHub</div>
+          <div class="project-desc">Modern Study Management Tool</div>
+          <div class="project-tags"><span class="tag">React 19</span><span class="tag">Python</span><span class="live-badge">hot</span></div>
+        </div>
+        <div class="project-card">
+          <div class="project-icon"><i class="fab fa-react"></i></div>
+          <div class="project-name">AlgoBot</div>
+          <div class="project-desc">Sorting mechanism that determines best search for the job</div>
+          <div class="project-tags"><span class="tag">React 19</span><span class="tag">Vite</span><span class="live-badge">hot</span></div>
+        </div>
+        <div class="project-card">
+          <div class="project-icon"><i class="fab fa-react"></i></div>
+          <div class="project-name">The Hub</div>
+          <div class="project-desc">Seamless management of a website's pages</div>
+          <div class="project-tags"><span class="tag">React 19</span><span class="tag">Vite</span><span class="live-badge">hot</span></div>
+        </div>
+        <div class="project-card">
+          <div class="project-icon"><i class="fas fa-terminal"></i></div>
+          <div class="project-name">AI Terminal Assistant</div>
+          <div class="project-desc">nvim + zsh + wezterm</div>
+          <div class="project-tags"><span class="tag">lua</span><span class="tag">bash</span></div>
+        </div>
+        <div class="project-card">
+          <div class="project-icon"><i class="fab fa-python"></i></div>
+          <div class="project-name">Market Indices Converter</div>
+          <div class="project-desc">Real time monitoring of financial markets</div>
+          <div class="project-tags"><span class="tag">pytorch</span><span class="tag">3.13</span></div>
+        </div>
+        <div class="project-card">
+          <div class="project-icon"><i class="fas fa-cloud"></i></div>
+          <div class="project-name">ShuleConnect</div>
+          <div class="project-desc">Modern School management System</div>
+          <div class="project-tags"><span class="tag">MySQL</span><span class="tag">FullStack</span></div>
+        </div>
+      </div>
+
+      <div class="lang-row">
+        <span class="lang-item"><i class="fab fa-js" style="color: #f7df1e;"></i> JavaScript</span>
+        <span class="lang-item"><i class="fab fa-python" style="color: #3776ab;"></i> Python</span>
+        <span class="lang-item"><i class="fab fa-java" style="color: #dea584;"></i> Java</span>
+        <span class="lang-item"><i class="fas fa-database" style="color: #00ed64;"></i> MongoDB</span>
+        <span class="lang-item"><i class="fab fa-docker" style="color: #2496ed;"></i> Docker</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== NETFLIX GAMING PANEL ===== -->
+  <div id="panel-gaming" class="hobby-panel">
+    <div class="netflix-container reveal">
+      <div class="netflix-hero">
+        <div class="hero-left">
+          <div class="hero-avatar"><i class="fas fa-user-astronaut"></i></div>
+          <div class="hero-titles">
+            <h1>LOCKDOWN's Hub</h1>
+            <div class="hero-sub">ACE DOMINATOR · LVL 47 · 14 ACHIEVEMENTS</div>
+          </div>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat-item"><span class="hero-stat-value" id="statSR">5431</span><div class="hero-stat-label">SR</div></div>
+          <div class="hero-stat-item"><span class="hero-stat-value" id="statWin">68.8%</span><div class="hero-stat-label">WIN</div></div>
+          <div class="hero-stat-item"><span class="hero-stat-value" id="statKD">5.44</span><div class="hero-stat-label">K/D</div></div>
+          <div class="hero-stat-item"><span class="hero-stat-value" id="statHrs">246</span><div class="hero-stat-label">HRS</div></div>
+        </div>
+      </div>
+      <div class="live-activity">
+        <span class="live-item"><span class="live-dot"></span> 3 friends online</span>
+        <span class="live-item"><i class="fas fa-clock"></i> session: 2h 34m</span>
+        <span class="live-item"><i class="fas fa-download"></i> 34 Mbps</span>
+        <span class="live-item"><i class="fas fa-trophy" style="color: gold;"></i> next reward: 2hrs</span>
+      </div>
+      <div class="featured-hero">
+        <img src="pub.jpg" class="featured-img" alt="horizon">
+        <div class="featured-info">
+          <h3>PUBG Mobile</h3>
+          <div class="featured-desc">· last played 1w ago</div>
+          <button class="featured-btn"><i class="fas fa-play"></i> RESUME</button>
+        </div>
+      </div>
+      <div class="netflix-row">
+        <div class="row-header"><i class="fas fa-fire-flame"></i><h2>Popular on your feed</h2></div>
+        <div class="card-row">
+          <div class="netflix-card"><img src="pub.jpg" class="netflix-card-img"><div class="netflix-card-body"><div class="netflix-card-title">Pubg</div><div class="netflix-card-meta"><span>Season 3</span><span class="netflix-badge">new</span></div></div></div>
+          <div class="netflix-card"><img src="candy.jpg" class="netflix-card-img"><div class="netflix-card-body"><div class="netflix-card-title">Candy Crush</div><div class="netflix-card-meta"><span>year 4</span></div></div></div>
+          <div class="netflix-card"><img src="two.jpg" class="netflix-card-img"><div class="netflix-card-body"><div class="netflix-card-title">It takes Two</div><div class="netflix-card-meta"><span>phantom liberty</span></div></div></div>
+          <div class="netflix-card"><img src="download (29).jpg" class="netflix-card-img"><div class="netflix-card-body"><div class="netflix-card-title">Split Fiction</div><div class="netflix-card-meta"><span>DLC ready</span><span class="netflix-badge">hot</span></div></div></div>
+          <div class="netflix-card"><img src="download (30).jpg" class="netflix-card-img"><div class="netflix-card-body"><div class="netflix-card-title">Little Nightmares 3</div><div class="netflix-card-meta"><span>next-gen</span></div></div></div>
+          <div class="netflix-card"><img src="download (31).jpg" class="netflix-card-img"><div class="netflix-card-body"><div class="netflix-card-title">Magic sort</div><div class="netflix-card-meta"><span>chapter 5</span></div></div></div>
+        </div>
+      </div>
+      <div class="netflix-row">
+        <div class="row-header"><i class="fas fa-clock-rotate-left"></i><h2>Recently played</h2></div>
+        <div class="card-row">
+          <div class="netflix-card"><img src="download (32).jpg" class="netflix-card-img"><div class="netflix-card-body"><div class="netflix-card-title">Where Winds Meet</div><div class="netflix-card-meta"><span>Open World</span></div></div></div>
+          <div class="netflix-card"><img src="download (33).jpg" class="netflix-card-img"><div class="netflix-card-body"><div class="netflix-card-title">Call of Duty : MWII </div><div class="netflix-card-meta"><span>s2019</span><span class="netflix-badge">+</span></div></div></div>
+          <div class="netflix-card"><img src="download (34).jpg" class="netflix-card-img"><div class="netflix-card-body"><div class="netflix-card-title">GTA V</div><div class="netflix-card-meta"><span>online</span></div></div></div>
+          <div class="netflix-card"><img src="download (35).jpg" class="netflix-card-img"><div class="netflix-card-body"><div class="netflix-card-title">Sky : Children of the light</div><div class="netflix-card-meta"><span>DLC's added</span></div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      // ---- TAB SWITCHING WITH LOADING SCREENS ----
+      const bgOverlay = document.getElementById('dynamicBgOverlay');
+      const bgLayers = { 
+        crotchet: document.getElementById('bgCrotchet'), 
+        coding: document.getElementById('bgCoding'), 
+        gaming: document.getElementById('bgGaming') 
+      };
+      const panels = { 
+        crotchet: document.getElementById('panel-crotchet'), 
+        coding: document.getElementById('panel-coding'), 
+        gaming: document.getElementById('panel-gaming') 
+      };
+      const tabs = { 
+        crotchet: document.querySelector('[data-hobby="crotchet"]'), 
+        coding: document.querySelector('[data-hobby="coding"]'), 
+        gaming: document.querySelector('[data-hobby="gaming"]') 
+      };
+
+      // loading overlays
+      const loadingScreens = {
+        crotchet: document.getElementById('loading-crotchet'),
+        coding: document.getElementById('loading-coding'),
+        gaming: document.getElementById('loading-gaming')
+      };
+
+      function showLoading(hobbyId) {
+        // hide all loading screens
+        Object.values(loadingScreens).forEach(l => l.classList.remove('active'));
+        // show selected loading screen
+        loadingScreens[hobbyId].classList.add('active');
+      }
+
+      function hideLoading(hobbyId) {
+        loadingScreens[hobbyId].classList.remove('active');
+      }
+
+      function activateHobby(hobbyId) {
+        // show loading screen
+        showLoading(hobbyId);
+        
+        // simulate loading time (300ms feels snappy but visible)
+        setTimeout(() => {
+          // switch panel
+          Object.values(panels).forEach(p => p.classList.remove('active-panel'));
+          panels[hobbyId].classList.add('active-panel');
+          
+          // update tabs
+          Object.values(tabs).forEach(t => t.classList.remove('active'));
+          tabs[hobbyId].classList.add('active');
+          
+          // update background layers
+          Object.values(bgLayers).forEach(l => l.classList.remove('active'));
+          bgLayers[hobbyId].classList.add('active');
+          
+          // update bg overlay color
+          if (hobbyId === 'crotchet') bgOverlay.style.background = 'radial-gradient(circle at 25% 35%, rgba(130,70,150,0.7), #0a070e 95%)';
+          else if (hobbyId === 'coding') bgOverlay.style.background = 'radial-gradient(circle at 70% 40%, rgba(30,80,130,0.8), #080c12 95%)';
+          else if (hobbyId === 'gaming') bgOverlay.style.background = 'radial-gradient(circle at 45% 60%, rgba(80,90,140,0.7), #0c0a12 95%)';
+          
+          // hide loading screen
+          hideLoading(hobbyId);
+        }, 400); // quick but noticeable
+      }
+
+      tabs.crotchet.addEventListener('click', () => activateHobby('crotchet'));
+      tabs.coding.addEventListener('click', () => activateHobby('coding'));
+      tabs.gaming.addEventListener('click', () => activateHobby('gaming'));
+
+      // ---- CROCHET: modal + youtube ----
+      const modal = document.getElementById('techniqueModal');
+      const modalName = document.getElementById('modalTechniqueName');
+      const modalDesc = document.getElementById('modalTechniqueDesc');
+      const closeBtn = document.getElementById('closeModalBtn');
+
+      document.querySelectorAll('.technique-card').forEach(card => {
+        const youtubeIcon = card.querySelector('.youtube-icon');
+        if (youtubeIcon) {
+          youtubeIcon.addEventListener('click', (e) => {
+            e.stopPropagation();  
+            const videoUrl = card.dataset.video;
+            if (videoUrl) window.open(videoUrl, '_blank');
+          });
+        }
+        card.addEventListener('click', function(e) {
+          if (e.target.closest('.youtube-icon')) return; 
+          const tech = this.dataset.technique || 'technique';
+          const desc = this.dataset.desc || '';
+          modalName.innerText = tech;
+          modalDesc.innerText = desc;
+          modal.classList.add('show');
+        });
+      });
+
+      closeBtn.addEventListener('click', () => modal.classList.remove('show'));
+      window.addEventListener('click', (e) => {
+        if (!modal.contains(e.target) && !e.target.closest('.technique-card')) {
+          modal.classList.remove('show');
+        }
+      });
+
+      // ---- REALISTIC TERMINAL INTERACTION ----
+      const terminalInput = document.getElementById('terminalInput');
+      const terminalOutput = document.getElementById('terminalOutput');
+      const pixelGarden = document.getElementById('pixelGarden');
+
+      function getDotGarden() {
+        return `
+   . . . . . . . . . . 
+ .   .       .       .   .
+.   .   .   .   .   .   .   .
+ .   .       .       .       .
+  . . . . . . . . . . . . . . 
+   .   .   .   .   .   .   .
+    .       .       .       .
+     .   .   .   .   .   .
+      .       .       .
+       .   .   .   .
+        .       .
+         .   .
+          .
+        `;
+      }
+
+      if (terminalInput) {
+        terminalInput.addEventListener('keydown', function(e) {
+          if (e.key === 'Enter') {
+            const cmd = this.value.trim().toLowerCase();
+            let response = '';
+            let garden = '';
+
+            if (cmd === 'help') response = 'available: skills · projects · whoami · valentine · clear · github';
+            else if (cmd === 'skills') response = '▶︎ React · Python · Go · Rust · Kubernetes · Neovim . MYSQL. Java';
+            else if (cmd === 'projects') response = '▶︎ neXus (dashboard) · crochet-ml · dotfiles · k3s-cluster';
+            else if (cmd === 'whoami') response = '▶︎ lockdown · creative technologist · 9 yrs exp';
+            else if (cmd === 'github') response = '▶︎ github.com/lockdown-dev · 1.2k stars';
+            else if (cmd === 'valentine') {
+              response = '❤️ \n  "To you I owe the world, thank you for being in it😭. \n Behold a verse. \n Roses are red,\n Violets are blue.\n To me you are special, \n I\'m undeserving of you too😔  "  ❤️';
+              garden = getDotGarden();
+            }
+            else if (cmd === 'clear') { 
+              terminalOutput.innerHTML = '<span style="color:#96c0ff;">[lockdown@dev] ~$ </span>system ready · 0 errors'; 
+              pixelGarden.innerHTML = ''; 
+              this.value = ''; 
+              return; 
+            }
+            else response = `⛔ unknown: '${cmd}'. type 'help'`;
+
+            terminalOutput.innerHTML = `<span style="color:#96c0ff;">[lockdown@dev] ~$ </span>${response}`;
+            if (garden) {
+              pixelGarden.innerHTML = garden;
+            } else {
+              pixelGarden.innerHTML = '';
+            }
+            this.value = '';
+          }
+        });
+      }
+
+      // ---- GAMING dynamic stats ----
+      const srEl = document.getElementById('statSR');
+      const winEl = document.getElementById('statWin');
+      const kdEl = document.getElementById('statKD');
+      const hrsEl = document.getElementById('statHrs');
+      let baseSR = 4720, baseWin = 68, baseKD = 1.94, baseHrs = 246;
+      function updateStats() {
+        baseSR += Math.floor(Math.random() * 8) - 2;
+        baseWin = Math.min(85, Math.max(55, baseWin + (Math.random() > 0.7 ? 1 : -1)));
+        baseKD = Math.round((baseKD + (Math.random() * 0.06 - 0.03)) * 100) / 100;
+        baseHrs += Math.round((Math.random() * 2)) / 10;
+        srEl.textContent = baseSR;
+        winEl.textContent = baseWin + '%';
+        kdEl.textContent = baseKD.toFixed(2);
+        hrsEl.textContent = Math.round(baseHrs * 10) / 10;
+        [srEl, winEl, kdEl, hrsEl].forEach(el => {
+          el.style.transition = 'color 0.2s';
+          el.style.color = '#ffe5b0';
+          setTimeout(() => el.style.color = 'white', 200);
+        });
+      }
+      setInterval(updateStats, 8000);
+
+      // reveal observer
+      const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(e => e.isIntersecting ? e.target.classList.add('active-reveal') : e.target.classList.remove('active-reveal'));
+      }, { threshold: 0.2 });
+      document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+      window.addEventListener('scroll', () => {
+        document.querySelector('.nav-header').style.padding = window.scrollY > 50 ? '0.8rem 4%' : '1.4rem 4%';
+      });
+
+      // initial active (crotchet) - no loading on first load
+      setTimeout(() => {
+        // ensure first panel is visible without loading
+        Object.values(loadingScreens).forEach(l => l.classList.remove('active'));
+      }, 100);
+    })();
+  </script>
+</body>
+</html>

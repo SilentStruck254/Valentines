@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>한식 · KOREAN TABLE · NETFLIX STYLE</title>
+  <!-- Google Fonts & Font Awesome 6 -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0f0f0f;
+      color: #1a1a1a;
+      overflow-x: hidden;
+    }
+
+    /* ===== NETFLIX WHITE & GOLD THEME ===== */
+    .bg-layer {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: -2;
+      background-size: cover !important;
+      background-position: center !important;
+      opacity: 0.25;
+      filter: brightness(1.2) contrast(1.1);
+      transition: background 0.4s ease;
+    }
+    .gold-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: -1;
+      background: radial-gradient(circle at 30% 30%, rgba(212, 175, 55, 0.15), rgba(255,255,255,0.05) 70%);
+      pointer-events: none;
+    }
+
+    /* ===== HEADER (WHITE & GOLD) ===== */
+    .nav-header {
+      position: fixed;
+      top: 0; width: 100%;
+      display: flex; align-items: center;
+      padding: 1.2rem 5%;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 2px solid #d4af37;
+      box-shadow: 0 2px 20px rgba(212, 175, 55, 0.2);
+    }
+    .logo {
+      font-size: 1.8rem; font-weight: 700;
+      color: #1a1a1a;
+      margin-right: 3rem;
+      display: flex; align-items: center; gap: 0.5rem;
+    }
+    .logo i { color: #d4af37; }
+    .music-tabs { display: flex; gap: 2.5rem; flex-wrap: wrap; }
+    .tab-btn {
+      background: transparent; border: none;
+      color: #333; font-size: 1rem; font-weight: 600;
+      padding: 0.5rem 0; cursor: pointer;
+      text-transform: uppercase; letter-spacing: 0.05em;
+      display: flex; align-items: center; gap: 6px;
+      transition: color 0.2s;
+      position: relative;
+    }
+    .tab-btn i { color: #d4af37; }
+    .tab-btn::after {
+      content: ''; position: absolute; bottom: 0; left: 0;
+      width: 0; height: 2px; background: #d4af37;
+      transition: width 0.2s;
+    }
+    .tab-btn:hover { color: #d4af37; }
+    .tab-btn.active { color: #d4af37; font-weight: 700; }
+    .tab-btn.active::after { width: 100%; }
+
+    /* ===== PANELS ===== */
+    .food-panel {
+      position: relative;
+      width: 100%; min-height: 100vh;
+      padding: 7rem 5% 4rem;
+      display: none;
+      opacity: 0;
+      background: rgba(255,255,255,0.97);
+    }
+    .food-panel.active-panel {
+      display: block;
+      animation: fadeWhite 0.5s ease forwards;
+    }
+    @keyframes fadeWhite {
+      0% { opacity: 0; background: white; }
+      100% { opacity: 1; background: rgba(255,255,255,0.97); }
+    }
+
+    /* ===== CATEGORY HEADER ===== */
+    .category-header {
+      margin-bottom: 2rem;
+      border-bottom: 2px solid #d4af37;
+      padding-bottom: 0.8rem;
+      display: flex; align-items: center; gap: 1rem;
+    }
+    .category-header h1 {
+      font-size: 2.8rem; font-weight: 600;
+      color: #1a1a1a;
+      letter-spacing: -0.02em;
+    }
+    .category-header i {
+      color: #d4af37; font-size: 2.5rem;
+    }
+
+    /* ===== FOOD GRID ===== */
+    .food-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.8rem;
+      margin: 2rem 0 3rem;
+    }
+    .food-card {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      transition: all 0.25s;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.02);
+      position: relative;
+    }
+    .food-card:hover {
+      transform: translateY(-6px);
+      border-color: #d4af37;
+      box-shadow: 0 20px 30px rgba(212, 175, 55, 0.15);
+    }
+    .card-img-container {
+      width: 100%; aspect-ratio: 1/1; overflow: hidden;
+    }
+    .card-img-container img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.4s;
+    }
+    .food-card:hover .card-img-container img { transform: scale(1.05); }
+    .card-body {
+      padding: 1.2rem;
+      border-top: 2px solid #d4af37;
+      background: white;
+    }
+    .food-name {
+      font-size: 1.2rem; font-weight: 700;
+      color: #1a1a1a; margin-bottom: 0.2rem;
+    }
+    .food-name i { color: #d4af37; margin-right: 0.3rem; }
+
+    /* ===== RECIPE MODAL / EXPANDED CARD ===== */
+    .recipe-expand {
+      grid-column: 1 / -1;
+      background: white;
+      border-radius: 20px;
+      padding: 2rem;
+      margin: 1rem 0;
+      border: 2px solid #d4af37;
+      box-shadow: 0 25px 40px rgba(212, 175, 55, 0.2);
+      animation: slideDown 0.3s ease;
+    }
+    @keyframes slideDown {
+      0% { opacity: 0; transform: translateY(-20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    .recipe-content {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+    .recipe-left img {
+      width: 100%; border-radius: 16px;
+      border: 2px solid #d4af37;
+    }
+    .recipe-right h3 {
+      font-size: 2rem; color: #1a1a1a;
+      border-left: 6px solid #d4af37;
+      padding-left: 1rem; margin-bottom: 1rem;
+    }
+    .ingredients {
+      background: #fafafa;
+      padding: 1.2rem; border-radius: 16px;
+      margin-bottom: 1.5rem;
+    }
+    .ingredients h4 { color: #d4af37; margin-bottom: 0.5rem; }
+    .ingredients ul { list-style: none; }
+    .ingredients li { padding: 0.3rem 0; border-bottom: 1px dashed #eee; }
+    .steps { margin-bottom: 1.5rem; }
+    .steps h4 { color: #d4af37; margin-bottom: 0.5rem; }
+    .steps p { line-height: 1.6; color: #444; }
+    .video-link {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: #d4af37; color: white; font-weight: 600;
+      padding: 0.8rem 1.8rem; border-radius: 40px;
+      text-decoration: none; transition: 0.2s;
+      border: none; cursor: pointer;
+    }
+    .video-link:hover { background: #b8960f; }
+
+    /* ===== LOADING SCREENS (GOLD THEMED) ===== */
+    .loading-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      z-index: 1000; display: flex; align-items: center; justify-content: center;
+      background: white; opacity: 0; visibility: hidden;
+      transition: 0.3s;
+    }
+    .loading-overlay.active { opacity: 1; visibility: visible; }
+    .loading-content { text-align: center; }
+    .gold-spinner {
+      width: 60px; height: 60px;
+      border: 4px solid rgba(212, 175, 55, 0.2);
+      border-top-color: #d4af37;
+      border-radius: 50%;
+      animation: spin 1s infinite;
+      margin: 0 auto 1rem;
+    }
+    .loading-content h2 {
+      color: #1a1a1a; font-size: 1.5rem;
+      letter-spacing: 0.1em;
+    }
+    .loading-content i { color: #d4af37; font-size: 2rem; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* category-specific loading icons */
+    .loading-starters .gold-spinner { border-top-color: #d4af37; }
+    .loading-mains .gold-spinner { border-top-color: #d4af37; }
+    .loading-desserts .gold-spinner { border-top-color: #d4af37; }
+    .loading-comfort .gold-spinner { border-top-color: #d4af37; }
+
+    .reveal { opacity: 0; transform: translateY(15px); transition: 0.5s; }
+    .reveal.active-reveal { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 700px) {
+      .recipe-content { grid-template-columns: 1fr; }
+      .category-header h1 { font-size: 2rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-layer" id="bgLayer" style="background-image: url('https://images.pexels.com/photos/699539/pexels-photo-699539.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');"></div>
+  <div class="gold-overlay"></div>
+
+  <!-- LOADING SCREENS (each category) -->
+  <div class="loading-overlay loading-starters" id="loadingStarters"><div class="loading-content"><div class="gold-spinner"></div><h2>APPETIZERS <i class="fas fa-utensils"></i></h2></div></div>
+  <div class="loading-overlay loading-mains" id="loadingMains"><div class="loading-content"><div class="gold-spinner"></div><h2>MAIN COURSES <i class="fas fa-drumstick-bite"></i></h2></div></div>
+  <div class="loading-overlay loading-desserts" id="loadingDesserts"><div class="loading-content"><div class="gold-spinner"></div><h2>DESSERTS <i class="fas fa-cake"></i></h2></div></div>
+  <div class="loading-overlay loading-comfort" id="loadingComfort"><div class="loading-content"><div class="gold-spinner"></div><h2>COMFORT FOOD <i class="fas fa-heart"></i></h2></div></div>
+
+  <div class="nav-header">
+    <span class="logo"><i class="fas fa-utensil-spoon"></i> 한식TABLE</span>
+    <div class="music-tabs">
+      <button class="tab-btn active" data-cat="starters"><i class="fas fa-carrot"></i>STARTERS</button>
+      <button class="tab-btn" data-cat="mains"><i class="fas fa-drumstick-bite"></i>MAINS</button>
+      <button class="tab-btn" data-cat="desserts"><i class="fas fa-cake"></i>DESSERTS</button>
+      <button class="tab-btn" data-cat="comfort"><i class="fas fa-heart"></i>COMFORT</button>
+    </div>
+  </div>
+
+  <!-- STARTERS PANEL (10+ items) -->
+  <div id="panel-starters" class="food-panel active-panel">
+    <div class="category-header reveal">
+      <i class="fas fa-carrot"></i>
+      <h1>STARTERS · 전 & 반찬</h1>
+    </div>
+    <div class="food-grid" id="starters-grid">
+      <!-- filled by javascript with 10+ cards -->
+    </div>
+  </div>
+
+  <!-- MAINS PANEL -->
+  <div id="panel-mains" class="food-panel">
+    <div class="category-header reveal">
+      <i class="fas fa-drumstick-bite"></i>
+      <h1>MAIN COURSES · 메인 요리</h1>
+    </div>
+    <div class="food-grid" id="mains-grid"></div>
+  </div>
+
+  <!-- DESSERTS PANEL -->
+  <div id="panel-desserts" class="food-panel">
+    <div class="category-header reveal">
+      <i class="fas fa-cake"></i>
+      <h1>DESSERTS · 디저트</h1>
+    </div>
+    <div class="food-grid" id="desserts-grid"></div>
+  </div>
+
+  <!-- COMFORT PANEL -->
+  <div id="panel-comfort" class="food-panel">
+    <div class="category-header reveal">
+      <i class="fas fa-heart"></i>
+      <h1>COMFORT FOOD · 위로 음식</h1>
+    </div>
+    <div class="food-grid" id="comfort-grid"></div>
+  </div>
+
+  <script>
+    (function() {
+      // ---------- KOREAN FOOD DATABASE (10+ each) ----------
+      const foods = {
+        starters: [
+          { name: 'Kimchi Jeon (김치전)', desc: 'Savory kimchi pancake', img: 'kimchiJeon.jpg', ingredients: ['Kimchi', 'Flour', 'Water', 'Green onion', 'Gochugaru'], steps: 'Mix batter, pan-fry until golden. Serve with soy dipping sauce.', video: 'https://youtu.be/05SSlcjIsWM?si=a2JWM3DXY-FR8nwz' },
+          { name: 'Pajeon (파전)', desc: 'Green onion pancake', img: 'pajeon.jpg', ingredients: ['Green onions', 'Batter', 'Seafood optional'], steps: 'Make batter, add scallions, fry crisp.', video: 'https://youtu.be/bnYr77vOyM0?si=psUF8P470F7Lllqp' },
+          { name: 'Mandu (만두)', desc: 'Korean dumplings', img: 'mandu.jpg', ingredients: ['Dumpling wrappers', 'Ground pork', 'Tofu', 'Garlic', 'Kimchi'], steps: 'Fill and steam or pan-fry.', video: 'https://youtu.be/T-QjisxwM90?si=WQury_0Y_ftXwQ0gs' },
+          { name: 'Yachaejeon (야채전)', desc: 'Vegetable pancake', img: 'yachajeon.jpg', ingredients: ['Zucchini', 'Carrot', 'Onion', 'Batter'], steps: 'Slice veg, coat in batter, pan-fry.', video: 'https://youtu.be/knxgR5esJu4?si=uLL5yIjDWpW3LoSy' },
+          { name: 'Kongnamul Muchim (콩나물무침)', desc: 'Seasoned bean sprouts', img: 'muchim.jpg', ingredients: ['Bean sprouts', 'Sesame oil', 'Garlic', 'Green onion'], steps: 'Blanch sprouts, mix with seasoning.', video: 'https://youtu.be/lDVgo2A1YmU?si=dsVAsNSlxvYprwqk' },
+          { name: 'Oi Muchim (오이무침)', desc: 'Spicy cucumber salad', img: 'oi.jpg', ingredients: ['Cucumber', 'Gochugaru', 'Vinegar', 'Sesame'], steps: 'Slice cucumber, toss with spicy dressing.', video: 'https://youtu.be/zau-F0L_hrY?si=xWlEbkznzRpmrodS' },
+          { name: 'Gyeran Jjim (계란찜)', desc: 'Steamed egg', img: 'egg.jpg', ingredients: ['Eggs', 'Water', 'Green onion', 'Salt'], steps: 'Whisk eggs with water, steam until fluffy.', video: 'https://youtu.be/6lHDIHCCJ0I?si=LFTaF1phpQpWvjPx' },
+          { name: 'Sigeumchi Namul (시금치나물)', desc: 'Spinach side dish', img: 'spinach.jpg', ingredients: ['Spinach', 'Sesame oil', 'Garlic', 'Soy sauce'], steps: 'Blanch spinach, season.', video: 'https://youtu.be/P4JgJec4QQI?si=rBstJ7QMFcRr-dQO' },
+          { name: 'Tteokgalbi (떡갈비)', desc: 'Grilled short rib patties', img: 'weirdMeat.jpg', ingredients: ['Beef short rib', 'Soy sauce', 'Garlic', 'Sugar'], steps: 'Grind meat, season, grill.', video: 'https://youtu.be/mF7r0yrejNo?si=vqlO0CnwAz5TyItq' },
+          { name: 'Hobak Jeon (호박전)', desc: 'Zucchini fritters', img: 'jeon.jpg', ingredients: ['Zucchini', 'Flour', 'Egg', 'Salt'], steps: 'Slice, coat in flour+egg, pan-fry.', video: 'https://youtu.be/vx9uL2zvzEA?si=wlTjAlOdzfRds9H8' },
+          { name: 'Musaengchae (무생채)', desc: 'Radish salad', img: 'spicy.jpg', ingredients: ['Korean radish', 'Gochugaru', 'Vinegar', 'Garlic'], steps: 'Julienne radish, mix with spices.', video: 'https://youtu.be/Tp1Bbva-o8s?si=cqvItEGrZ8HcRUkm' }
+        ],
+        mains: [
+          { name: 'Bulgogi (불고기)', desc: 'Marinated beef BBQ', img: 'bulgogi.jpg', ingredients: ['Beef', 'Soy sauce', 'Pear', 'Garlic', 'Sesame oil'], steps: 'Marinate beef overnight, grill.', video: 'https://youtu.be/djM3z5VHSAY?si=gTgOdx6vjOCXxPyX' },
+          { name: 'Japchae (잡채)', desc: 'Glass noodle stir-fry', img: 'japchae.jpg', ingredients: ['Sweet potato noodles', 'Spinach', 'Carrot', 'Soy sauce', 'Sesame oil'], steps: 'Boil noodles, stir-fry with veg.', video: 'https://youtu.be/q6Of4d-Keks?si=ZtJuF9J4SmRzFnLK' },
+          { name: 'Samgyeopsal (삼겹살)', desc: 'Pork belly BBQ', img: 'pork.jpg', ingredients: ['Pork belly', 'Ssamjang', 'Lettuce', 'Garlic'], steps: 'Grill pork, wrap in lettuce.', video: 'https://youtu.be/AB9VEyEPkyM?si=RHWwNhCAGLs5l_kB' },
+          { name: 'Kimchi Jjigae (김치찌개)', desc: 'Kimchi stew', img: 'kimchiStew.jpg', ingredients: ['Kimchi', 'Pork', 'Tofu', 'Gochujang'], steps: 'Simmer kimchi with pork and tofu.', video: 'https://youtu.be/jvJJq0kRvks?si=Bckxpt1YlugXnqEw' },
+          { name: 'Bibimbap (비빔밥)', desc: 'Mixed rice bowl', img: 'rice.jpg', ingredients: ['Rice', 'Vegetables', 'Beef', 'Gochujang', 'Egg'], steps: 'Arrange veg on rice, add sauce, mix.', video: 'https://youtu.be/lqUtV6lT1n4?si=dFewV6Souxil1TFW' },
+          { name: 'Doenjang Jjigae (된장찌개)', desc: 'Soybean paste stew', img: 'soy.jpg', ingredients: ['Doenjang', 'Tofu', 'Zucchini', 'Mushrooms'], steps: 'Boil anchovy stock, add paste and veg.', video: 'https://youtu.be/Slj_fM1jQVo?si=NreyTSMRvuZiUEcV' },
+          { name: 'Dak Galbi (닭갈비)', desc: 'Spicy stir-fried chicken', img: 'spicyChicken.jpg', ingredients: ['Chicken', 'Gochujang', 'Cabbage', 'Sweet potato'], steps: 'Stir-fry chicken with spicy sauce.', video: 'https://youtu.be/JWccdweoVQg?si=89GUbWB0Bg8QEzD9' },
+          { name: 'Sundubu Jjigae (순두부찌개)', desc: 'Soft tofu stew', img: 'spicyTofu.jpg', ingredients: ['Soft tofu', 'Seafood', 'Egg', 'Gochugaru'], steps: 'Simmer spicy broth, add tofu and egg.', video: '' },
+          { name: 'Galbi Jjim (갈비찜)', desc: 'Braised short ribs', img: 'ribs.jpg', ingredients: ['Beef ribs', 'Soy sauce', 'Garlic', 'Chestnuts'], steps: 'Braise ribs until tender.', video: '' },
+          { name: 'Naengmyeon (냉면)', desc: 'Cold noodles', img: 'noodlesCold.jpg', ingredients: ['Buckwheat noodles', 'Beef broth', 'Pear', 'Egg'], steps: 'Serve noodles in icy broth.', video: 'https://youtu.be/QIgLSko7Kmc?si=nc9i6ELuNtXiUTBg' }
+        ],
+        desserts: [
+          { name: 'Hotteok (호떡)', desc: 'Sweet filled pancake', img: 'pancake.jpg', ingredients: ['Flour', 'Brown sugar', 'Cinnamon', 'Nuts'], steps: 'Fill dough with sugar, pan-fry.', video: 'https://youtu.be/3U-g3P3Zqrs' },
+          { name: 'Bungeoppang (붕어빵)', desc: 'Fish-shaped pastry', img: 'fish.jpg', ingredients: ['Flour', 'Red bean paste', 'Sugar'], steps: 'Pour batter into fish mold, add filling.', video: 'https://youtu.be/5p5bE7T_qZg' },
+          { name: 'Patbingsu (팥빙수)', desc: 'Shaved ice with red bean', img: 'ice.jpg', ingredients: ['Shaved ice', 'Red bean', 'Fruit', 'Mochi'], steps: 'Top ice with sweet toppings.', video: 'https://youtu.be/4uLZUZAuR2E' },
+          { name: 'Yakgwa (약과)', desc: 'Honey cookies', img: 'coockie.jpg', ingredients: ['Flour', 'Honey', 'Sesame oil', 'Ginger'], steps: 'Deep-fry dough, soak in honey.', video: 'https://youtu.be/k8U3m-JjLrA' },
+          { name: 'Dasik (다식)', desc: 'Traditional tea cookies', img: 'dasik.jpg', ingredients: ['Rice flour', 'Honey', 'Sesame'], steps: 'Press patterned cookies.', video: 'https://youtu.be/6D_FhLg7mH8' },
+          { name: 'Hobak Tteok (호박떡)', desc: 'Pumpkin rice cake', img: 'riceCake.jpg', ingredients: ['Pumpkin', 'Glutinous rice flour', 'Sugar'], steps: 'Steam pumpkin-rice cake.', video: 'https://youtu.be/L1J7H1YJwvM' },
+          { name: 'Gyeongdan (경단)', desc: 'Sweet rice balls', img: 'rockRice.jpg', ingredients: ['Rice flour', 'Red bean', 'Sesame'], steps: 'Boil rice balls, coat with bean powder.', video: 'https://youtu.be/ZS_e1JqEPE4' },
+          { name: 'Yaksik (약식)', desc: 'Sweet rice with nuts', img: 'simsim.jpg', ingredients: ['Glutinous rice', 'Chestnuts', 'Jujubes', 'Honey'], steps: 'Steam rice with nuts and honey.', video: 'https://youtu.be/0C1E8kX0aHs' },
+          { name: 'Sikhye (식혜)', desc: 'Sweet rice punch', img: 'riceTea.jpg', ingredients: ['Malted barley', 'Rice', 'Sugar'], steps: 'Ferment rice, serve chilled.', video: 'https://youtu.be/8j2E2g6z5oY' },
+          { name: 'Songpyeon (송편)', desc: 'Half-moon rice cake', img: 'yeah.jpg', ingredients: ['Rice flour', 'Sesame', 'Honey'], steps: 'Shape with filling, steam on pine needles.', video: 'https://youtu.be/8G0QnLf7Y_I' }
+        ],
+        comfort: [
+          { name: 'Tteokbokki (떡볶이)', desc: 'Spicy rice cakes', img: 'thing.jpg', ingredients: ['Rice cakes', 'Gochujang', 'Fish cakes', 'Garlic'], steps: 'Simmer in spicy sauce.', video: 'https://youtu.be/6e6gG_gS-pQ' },
+          { name: 'Ramyun (라면)', desc: 'Instant noodle upgrade', img: 'raymun.jpg', ingredients: ['Ramen', 'Egg', 'Green onion', 'Kimchi'], steps: 'Boil noodles, add toppings.', video: 'https://youtu.be/4uLZUZAuR2E' },
+          { name: 'Gimbap (김밥)', desc: 'Seaweed rice rolls', img: 'gimbap.jpg', ingredients: ['Rice', 'Seaweed', 'Egg', 'Veg', 'Ham'], steps: 'Roll and slice.', video: 'https://youtu.be/3U-g3P3Zqrs' },
+          { name: 'Jjajangmyeon (짜장면)', desc: 'Black bean noodles', img: 'blackbean.jpg', ingredients: ['Noodles', 'Black bean paste', 'Beef', 'Onion'], steps: 'Stir-fry sauce, mix with noodles.', video: 'https://youtu.be/5p5bE7T_qZg' },
+          { name: 'Sundae (순대)', desc: 'Korean blood sausage', img: 'blood.jpg', ingredients: ['(Any meat) intestine', 'Glass noodles', 'Barley', 'Beef kidney'], steps: 'Steam stuffed sausage.', video: 'https://youtu.be/k8U3m-JjLrA' },
+          { name: 'Eomuk Tang (어묵탕)', desc: 'Korean cake soup', img: 'fishCake.jpg', ingredients: ['Fish cakes', 'Radish', 'Onion', 'Soup soy sauce'], steps: 'Simmer fish cakes in broth.', video: 'https://youtu.be/6D_FhLg7mH8' },
+          { name: 'Dak Bokkeumtang (닭볶음탕)', desc: 'Spicy chicken stew', img: 'spicyChicken1.jpg', ingredients: ['Chicken', 'Potato', 'Carrot', 'Gochujang'], steps: 'Braise chicken with veg.', video: 'https://youtu.be/L1J7H1YJwvM' },
+          { name: 'Soondae Gukbap (순대국밥)', desc: 'Sundae soup with rice', img: 'thing1.jpg', ingredients: ['Sundae', 'Beef broth', 'Rice', 'Perilla seeds'], steps: 'Soup with sundae and rice.', video: 'https://youtu.be/ZS_e1JqEPE4' },
+          { name: 'Kongguksu (콩국수)', desc: 'Cold soybean noodles', img: 'thing3.jpg', ingredients: ['Soy milk', 'Noodles', 'Salt', 'Cucumber'], steps: 'Chilled soy milk broth with noodles.', video: 'https://youtu.be/0C1E8kX0aHs' },
+          { name: 'Yukgaejang (육개장)', desc: 'Spicy beef soup', img: 'thing4.jpg', ingredients: ['Beef', 'Bean sprouts', 'Bracken', 'Gochugaru'], steps: 'Boil shredded beef with veg.', video: 'https://youtu.be/8j2E2g6z5oY' }
+        ]
+      };
+
+      // Expand/collapse state
+      let expandedId = null;
+
+      function renderGrid(category, gridId) {
+        const grid = document.getElementById(gridId);
+        grid.innerHTML = '';
+        foods[category].forEach((item, index) => {
+          const card = document.createElement('div');
+          card.className = 'food-card';
+          card.dataset.id = `${category}-${index}`;
+          card.dataset.category = category;
+          card.innerHTML = `
+            <div class="card-img-container">
+              <img src="${item.img}" alt="${item.name}">
+            </div>
+            <div class="card-body">
+              <div class="food-name"><i class="fas fa-utensils"></i> ${item.name}</div>
+              <div style="color:#666; font-size:0.9rem;">${item.desc}</div>
+            </div>
+          `;
+          grid.appendChild(card);
+        });
+      }
+
+      // Render all grids
+      renderGrid('starters', 'starters-grid');
+      renderGrid('mains', 'mains-grid');
+      renderGrid('desserts', 'desserts-grid');
+      renderGrid('comfort', 'comfort-grid');
+
+      // CLICK TO EXPAND RECIPE
+      document.querySelectorAll('.food-grid').forEach(grid => {
+        grid.addEventListener('click', (e) => {
+          const card = e.target.closest('.food-card');
+          if (!card) return;
+          const [category, idx] = card.dataset.id.split('-');
+          const item = foods[category][idx];
+          const cardId = card.dataset.id;
+
+          // If same card, collapse
+          if (expandedId === cardId) {
+            const expanded = document.querySelector('.recipe-expand');
+            if (expanded) expanded.remove();
+            expandedId = null;
+            return;
+          }
+
+          // Remove any existing expanded
+          const existing = document.querySelector('.recipe-expand');
+          if (existing) existing.remove();
+
+          // Create expanded recipe
+          const expandedDiv = document.createElement('div');
+          expandedDiv.className = 'recipe-expand';
+          expandedDiv.innerHTML = `
+            <div class="recipe-content">
+              <div class="recipe-left">
+                <img src="${item.img}" alt="${item.name}">
+              </div>
+              <div class="recipe-right">
+                <h3>${item.name}</h3>
+                <div class="ingredients">
+                  <h4><i class="fas fa-carrot"></i> INGREDIENTS</h4>
+                  <ul>${item.ingredients.map(i => `<li>✓ ${i}</li>`).join('')}</ul>
+                </div>
+                <div class="steps">
+                  <h4><i class="fas fa-kitchen-set"></i> STEPS</h4>
+                  <p>${item.steps}</p>
+                </div>
+                <a href="${item.video}" target="_blank" class="video-link"><i class="fab fa-youtube"></i> WATCH RECIPE</a>
+              </div>
+            </div>
+          `;
+          card.parentNode.insertBefore(expandedDiv, card.nextSibling);
+          expandedId = cardId;
+        });
+      });
+
+      // Category switching with loading
+      const panels = {
+        starters: document.getElementById('panel-starters'),
+        mains: document.getElementById('panel-mains'),
+        desserts: document.getElementById('panel-desserts'),
+        comfort: document.getElementById('panel-comfort')
+      };
+      const tabs = {
+        starters: document.querySelector('[data-cat="starters"]'),
+        mains: document.querySelector('[data-cat="mains"]'),
+        desserts: document.querySelector('[data-cat="desserts"]'),
+        comfort: document.querySelector('[data-cat="comfort"]')
+      };
+      const loadings = {
+        starters: document.getElementById('loadingStarters'),
+        mains: document.getElementById('loadingMains'),
+        desserts: document.getElementById('loadingDesserts'),
+        comfort: document.getElementById('loadingComfort')
+      };
+      const bgLayer = document.getElementById('bgLayer');
+
+      const bgImages = {
+        starters: 'https://images.pexels.com/photos/699539/pexels-photo-699539.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+        mains: 'https://images.pexels.com/photos/1251204/pexels-photo-1251204.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+        desserts: 'https://images.pexels.com/photos/4916347/pexels-photo-4916347.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
+        comfort: 'https://images.pexels.com/photos/2347311/pexels-photo-2347311.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2'
+      };
+
+      function showLoading(cat) {
+        loadings[cat].classList.add('active');
+      }
+      function hideLoading(cat) {
+        loadings[cat].classList.remove('active');
+      }
+
+      function activateCategory(cat) {
+        showLoading(cat);
+        setTimeout(() => {
+          Object.values(panels).forEach(p => p.classList.remove('active-panel'));
+          panels[cat].classList.add('active-panel');
+          Object.values(tabs).forEach(t => t.classList.remove('active'));
+          tabs[cat].classList.add('active');
+          bgLayer.style.backgroundImage = `url('${bgImages[cat]}')`;
+          // Remove expanded card on switch
+          const expanded = document.querySelector('.recipe-expand');
+          if (expanded) expanded.remove();
+          expandedId = null;
+          hideLoading(cat);
+        }, 500);
+      }
+
+      tabs.starters.addEventListener('click', () => activateCategory('starters'));
+      tabs.mains.addEventListener('click', () => activateCategory('mains'));
+      tabs.desserts.addEventListener('click', () => activateCategory('desserts'));
+      tabs.comfort.addEventListener('click', () => activateCategory('comfort'));
+
+      // Reveal observer
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(e => e.isIntersecting ? e.target.classList.add('active-reveal') : e.target.classList.remove('active-reveal'));
+      }, { threshold: 0.2 });
+      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+      // initial
+      bgLayer.style.backgroundImage = `url('${bgImages.starters}')`;
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,1837 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>K-DRAMA HUB · Premium Collection</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #141414;
+      color: #fff;
+      overflow-x: hidden;
+      line-height: 1.4;
+    }
+
+    /* ===== NETFLIX STYLE HEADER ===== */
+    .main-header {
+      position: fixed;
+      top: 0; width: 100%;
+      padding: 1rem 4%;
+      z-index: 1000;
+      background: linear-gradient(180deg, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0) 100%);
+      transition: background 0.3s ease;
+    }
+    
+    .main-header.scrolled {
+      background: #141414;
+    }
+    
+    .header-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      max-width: 1920px;
+      margin: 0 auto;
+    }
+    
+    .logo {
+      font-size: 2rem;
+      font-weight: 900;
+      color: #E50914;
+      letter-spacing: -0.05em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .nav-menu {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+    
+    .nav-link {
+      color: #e5e5e5;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.3s ease;
+      cursor: pointer;
+    }
+    
+    .nav-link:hover,
+    .nav-link.active {
+      color: #fff;
+    }
+
+    /* ===== HERO SECTION ===== */
+    .hero-section {
+      position: relative;
+      height: 80vh;
+      display: flex;
+      align-items: center;
+      margin-top: 70px;
+      background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+      overflow: hidden;
+    }
+    
+    .hero-bg {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0;
+    }
+    
+    .hero-bg::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-image: url('hero-background.jpg');
+      background-size: cover;
+      background-position: center;
+      opacity: 0.3;
+      z-index: 0;
+    }
+    
+    .hero-bg::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: linear-gradient(90deg, rgba(20,20,20,0.95) 0%, rgba(20,20,20,0.7) 50%, rgba(20,20,20,0.95) 100%),
+                  linear-gradient(180deg, rgba(20,20,20,0.8) 0%, rgba(20,20,20,0.4) 50%, rgba(20,20,20,0.95) 100%);
+      z-index: 1;
+    }
+    
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 1920px;
+      margin: 0 auto;
+      padding: 0 4%;
+      width: 100%;
+    }
+    
+    .hero-title {
+      font-size: 4.5rem;
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.03em;
+    }
+    
+    .hero-subtitle {
+      font-size: 1.4rem;
+      color: #e5e5e5;
+      margin-bottom: 2rem;
+      max-width: 700px;
+      font-weight: 400;
+    }
+    
+    .hero-stats {
+      display: flex;
+      gap: 3rem;
+      margin-bottom: 2rem;
+    }
+    
+    .stat-box {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+    
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #E50914;
+    }
+    
+    .stat-label {
+      font-size: 0.85rem;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+    
+    .btn {
+      padding: 0.9rem 2rem;
+      border-radius: 4px;
+      border: none;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+    
+    .btn-primary {
+      background: #fff;
+      color: #000;
+    }
+    
+    .btn-primary:hover {
+      background: rgba(255,255,255,0.75);
+    }
+    
+    .btn-secondary {
+      background: rgba(109,109,110,0.7);
+      color: #fff;
+    }
+    
+    .btn-secondary:hover {
+      background: rgba(109,109,110,0.4);
+    }
+
+    /* ===== CONTENT SECTIONS ===== */
+    .content-section {
+      padding: 3rem 4%;
+      max-width: 1920px;
+      margin: 0 auto;
+      position: relative;
+    }
+    
+    .content-section::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      opacity: 0;
+      pointer-events: none;
+      z-index: -1;
+    }
+    
+    .content-section[data-bg]::before {
+      background-image: var(--section-bg);
+      opacity: 0.05;
+    }
+    
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+    }
+    
+    .section-title {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #e5e5e5;
+    }
+    
+    .view-all {
+      color: #e5e5e5;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: color 0.3s ease;
+    }
+    
+    .view-all:hover {
+      color: #fff;
+    }
+
+    /* ===== ACTOR CARDS ===== */
+    .actor-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1rem;
+    }
+    
+    .actor-card {
+      background: #1a1a1a;
+      border-radius: 8px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      position: relative;
+    }
+    
+    .actor-card:hover {
+      transform: scale(1.05);
+      z-index: 10;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.8);
+    }
+    
+    .actor-image {
+      width: 100%;
+      aspect-ratio: 2/3;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .actor-image::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-size: cover;
+      background-position: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .actor-image[data-bg]::before {
+      background-image: var(--bg-image);
+      opacity: 0.4;
+    }
+    
+    .actor-card:hover .actor-image::before {
+      opacity: 0.6;
+    }
+    
+    .actor-icon {
+      font-size: 5rem;
+      color: rgba(255,255,255,0.9);
+      position: relative;
+      z-index: 1;
+    }
+    
+    .actor-card:hover .actor-image {
+      transform: scale(1.1);
+    }
+    
+    .actor-info {
+      padding: 1.2rem;
+    }
+    
+    .actor-name {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+      color: #fff;
+    }
+    
+    .actor-role {
+      font-size: 0.85rem;
+      color: #999;
+      margin-bottom: 0.8rem;
+    }
+    
+    .actor-stats {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+      font-size: 0.8rem;
+    }
+    
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: #999;
+    }
+    
+    .stat-item i {
+      color: #E50914;
+    }
+    
+    .actor-dramas {
+      font-size: 0.85rem;
+      color: #b3b3b3;
+      line-height: 1.5;
+      margin-bottom: 1rem;
+    }
+    
+    .actor-links {
+      display: flex;
+      gap: 0.8rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(255,255,255,0.1);
+    }
+    
+    .social-link {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #e5e5e5;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    
+    .social-link:hover {
+      background: #E50914;
+      color: #fff;
+      transform: translateY(-3px);
+    }
+
+    /* ===== DRAMA CARDS ===== */
+    .drama-scroll {
+      display: flex;
+      gap: 1rem;
+      overflow-x: auto;
+      padding: 1rem 0;
+      scroll-behavior: smooth;
+      scrollbar-width: thin;
+      scrollbar-color: #4d4d4d #1a1a1a;
+    }
+    
+    .drama-scroll::-webkit-scrollbar {
+      height: 8px;
+    }
+    
+    .drama-scroll::-webkit-scrollbar-track {
+      background: #1a1a1a;
+    }
+    
+    .drama-scroll::-webkit-scrollbar-thumb {
+      background: #4d4d4d;
+      border-radius: 4px;
+    }
+    
+    .drama-card {
+      flex: 0 0 250px;
+      background: #1a1a1a;
+      border-radius: 6px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      position: relative;
+    }
+    
+    .drama-card:hover {
+      transform: scale(1.08);
+      z-index: 10;
+    }
+    
+    .drama-poster {
+      width: 100%;
+      aspect-ratio: 2/3;
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    
+    .drama-poster::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-size: cover;
+      background-position: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .drama-poster[data-bg]::before {
+      background-image: var(--bg-image);
+      opacity: 0.5;
+    }
+    
+    .drama-card:hover .drama-poster::before {
+      opacity: 0.7;
+    }
+    
+    .drama-icon {
+      font-size: 4rem;
+      color: rgba(255,255,255,0.9);
+    }
+    
+    .drama-rating {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(10px);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    
+    .drama-rating i {
+      color: #ffd700;
+    }
+    
+    .drama-year {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(10px);
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    
+    .drama-info {
+      padding: 1rem;
+    }
+    
+    .drama-title {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+      color: #fff;
+      line-height: 1.3;
+    }
+    
+    .drama-genre {
+      font-size: 0.8rem;
+      color: #999;
+      margin-bottom: 0.5rem;
+    }
+    
+    .drama-description {
+      font-size: 0.8rem;
+      color: #b3b3b3;
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    
+    .drama-awards {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.8rem;
+      flex-wrap: wrap;
+    }
+    
+    .award-badge {
+      background: rgba(229,9,20,0.2);
+      color: #E50914;
+      padding: 3px 8px;
+      border-radius: 3px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* ===== CATEGORY TABS ===== */
+    .category-tabs {
+      display: flex;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      overflow-x: auto;
+      padding-bottom: 0;
+    }
+    
+    .category-tab {
+      padding: 1rem 0;
+      color: #999;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      border-bottom: 3px solid transparent;
+      transition: all 0.3s ease;
+    }
+    
+    .category-tab:hover {
+      color: #e5e5e5;
+    }
+    
+    .category-tab.active {
+      color: #fff;
+      border-bottom-color: #E50914;
+    }
+    
+    .category-content {
+      display: none;
+    }
+    
+    .category-content.active {
+      display: block;
+      animation: fadeIn 0.4s ease;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ===== GRADIENT VARIATIONS ===== */
+    .gradient-1 { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+    .gradient-2 { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+    .gradient-3 { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+    .gradient-4 { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+    .gradient-5 { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+    .gradient-6 { background: linear-gradient(135deg, #30cfd0 0%, #330867 100%); }
+    .gradient-7 { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); }
+    .gradient-8 { background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); }
+    .gradient-9 { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); }
+    .gradient-10 { background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%); }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 1200px) {
+      .hero-title { font-size: 3.5rem; }
+      .hero-subtitle { font-size: 1.2rem; }
+    }
+    
+    @media (max-width: 768px) {
+      .main-header { padding: 1rem 3%; }
+      .nav-menu { gap: 1rem; }
+      .nav-link { font-size: 0.85rem; }
+      .hero-section { height: auto; min-height: 60vh; padding: 4rem 0; }
+      .hero-title { font-size: 2.5rem; }
+      .hero-subtitle { font-size: 1rem; }
+      .hero-stats { flex-wrap: wrap; gap: 1.5rem; }
+      .stat-number { font-size: 2rem; }
+      .content-section { padding: 2rem 3%; }
+      .actor-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+      .drama-card { flex: 0 0 180px; }
+    }
+    
+    @media (max-width: 480px) {
+      .logo { font-size: 1.5rem; }
+      .hero-title { font-size: 2rem; }
+      .hero-buttons { flex-direction: column; }
+      .btn { width: 100%; justify-content: center; }
+      .actor-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER -->
+  <header class="main-header" id="mainHeader">
+    <div class="header-content">
+      <div class="logo">
+        <i class="fas fa-film"></i>
+        K-DRAMA
+      </div>
+      <nav class="nav-menu">
+        <a class="nav-link active" data-section="home">Home</a>
+        <a class="nav-link" data-section="actors">Actors</a>
+        <a class="nav-link" data-section="dramas">Dramas</a>
+        <a class="nav-link" data-section="awards">Awards</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section class="hero-section">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <h1 class="hero-title">Discover Korea's<br>Finest Dramas</h1>
+      <p class="hero-subtitle">Award-winning performances from the biggest stars in Korean entertainment</p>
+      <div class="hero-stats">
+        <div class="stat-box">
+          <div class="stat-number">20+</div>
+          <div class="stat-label">Top Actors</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-number">30+</div>
+          <div class="stat-label">Hit Dramas</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-number">100+</div>
+          <div class="stat-label">Awards Won</div>
+        </div>
+      </div>
+      <div class="hero-buttons">
+        <a href="#actors" class="btn btn-primary">
+          <i class="fas fa-play"></i> Explore Now
+        </a>
+        <a href="#dramas" class="btn btn-secondary">
+          <i class="fas fa-info-circle"></i> More Info
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- TOP ACTORS SECTION -->
+  <section class="content-section" id="actors">
+    <div class="section-header">
+      <h2 class="section-title">Top K-Drama Stars</h2>
+    </div>
+    
+    <div class="category-tabs">
+      <div class="category-tab active" data-category="male">Male Actors</div>
+      <div class="category-tab" data-category="female">Female Actresses</div>
+    </div>
+
+    <!-- MALE ACTORS -->
+    <div class="category-content active" id="male">
+      <div class="actor-grid">
+        <div class="actor-card">
+          <div class="actor-image gradient-1">
+            <i class="fas fa-user-tie actor-icon"></i>
+          </div>
+          <div class="actor-info">
+            <h3 class="actor-name">Lee Min-ho</h3>
+            <p class="actor-role">Actor · Hallyu Star</p>
+            <div class="actor-stats">
+              <div class="stat-item">
+                <i class="fas fa-trophy"></i>
+                <span>15 Awards</span>
+              </div>
+              <div class="stat-item">
+                <i class="fas fa-tv"></i>
+                <span>12 Dramas</span>
+              </div>
+            </div>
+            <p class="actor-dramas">Boys Over Flowers · The Heirs · Legend of the Blue Sea · The King: Eternal Monarch · Pachinko</p>
+            <div class="actor-links">
+              <a href="https://www.instagram.com/actorleeminho/" target="_blank" class="social-link">
+                <i class="fab fa-instagram"></i>
+              </a>
+              <a href="https://www.imdb.com/name/nm2888874/" target="_blank" class="social-link">
+                <i class="fab fa-imdb"></i>
+              </a>
+              <a href="https://mydramalist.com/people/347-lee-min-ho" target="_blank" class="social-link">
+                <i class="fas fa-link"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="actor-card">
+          <div class="actor-image gradient-2">
+            <i class="fas fa-user-tie actor-icon"></i>
+          </div>
+          <div class="actor-info">
+            <h3 class="actor-name">Kim Soo-hyun</h3>
+            <p class="actor-role">Actor · Producer</p>
+            <div class="actor-stats">
+              <div class="stat-item">
+                <i class="fas fa-trophy"></i>
+                <span>20+ Awards</span>
+              </div>
+              <div class="stat-item">
+                <i class="fas fa-tv"></i>
+                <span>10 Dramas</span>
+              </div>
+            </div>
+            <p class="actor-dramas">My Love from the Star · Moon Embracing the Sun · It's Okay to Not Be Okay · Queen of Tears</p>
+            <div class="actor-links">
+              <a href="https://www.instagram.com/soohyun_k216/" target="_blank" class="social-link">
+                <i class="fab fa-instagram"></i>
+              </a>
+              <a href="https://www.imdb.com/name/nm3791692/" target="_blank" class="social-link">
+                <i class="fab fa-imdb"></i>
+              </a>
+              <a href="https://mydramalist.com/people/406-kim-soo-hyun" target="_blank" class="social-link">
+                <i class="fas fa-link"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="actor-card">
+          <div class="actor-image gradient-3">
+            <i class="fas fa-user-tie actor-icon"></i>
+          </div>
+          <div class="actor-info">
+            <h3 class="actor-name">Hyun Bin</h3>
+            <p class="actor-role">Actor · Military Veteran</p>
+            <div class="actor-stats">
+              <div class="stat-item">
+                <i class="fas fa-trophy"></i>
+                <span>18 Awards</span>
+              </div>
+              <div class="stat-item">
+                <i class="fas fa-tv"></i>
+                <span>15 Dramas</span>
+              </div>
+            </div>
+            <p class="actor-dramas">Crash Landing on You · Secret Garden · Memories of the Alhambra · My Name is Kim Sam-soon</p>
+            <div class="actor-links">
+              <a href="https://www.instagram.com/vast.ent.official/" target="_blank" class="social-link">
+                <i class="fab fa-instagram"></i>
+              </a>
+              <a href="https://www.imdb.com/name/nm1970027/" target="_blank" class="social-link">
+                <i class="fab fa-imdb"></i>
+              </a>
+              <a href="https://mydramalist.com/people/302-hyun-bin" target="_blank" class="social-link">
+                <i class="fas fa-link"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="actor-card">
+          <div class="actor-image gradient-4">
+            <i class="fas fa-user-tie actor-icon"></i>
+          </div>
+          <div class="actor-info">
+            <h3 class="actor-name">Lee Jong-suk</h3>
+            <p class="actor-role">Actor · Model</p>
+            <div class="actor-stats">
+              <div class="stat-item">
+                <i class="fas fa-trophy"></i>
+                <span>16 Awards</span>
+              </div>
+              <div class="stat-item">
+                <i class="fas fa-tv"></i>
+                <span>14 Dramas</span>
+              </div>
+            </div>
+            <p class="actor-dramas">W: Two Worlds · Pinocchio · While You Were Sleeping · Romance is a Bonus Book · Big Mouth</p>
+            <div class="actor-links">
+              <a href="https://www.instagram.com/jongsuk0206/" target="_blank" class="social-link">
+                <i class="fab fa-instagram"></i>
+              </a>
+              <a href="https://www.imdb.com/name/nm4286335/" target="_blank" class="social-link">
+                <i class="fab fa-imdb"></i>
+              </a>
+              <a href="https://mydramalist.com/people/408-lee-jong-suk" target="_blank" class="social-link">
+                <i class="fas fa-link"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="actor-card">
+          <div class="actor-image gradient-5">
+            <i class="fas fa-user-tie actor-icon"></i>
+          </div>
+          <div class="actor-info">
+            <h3 class="actor-name">Park Seo-joon</h3>
+            <p class="actor-role">Actor · Singer</p>
+            <div class="actor-stats">
+              <div class="stat-item">
+                <i class="fas fa-trophy"></i>
+                <span>14 Awards</span>
+              </div>
+              <div class="stat-item">
+                <i class="fas fa-tv"></i>
+                <span>12 Dramas</span>
+              </div>
+            </div>
+            <p class="actor-dramas">Itaewon Class · What's Wrong with Secretary Kim · Fight for My Way · Hwarang · Gyeongseong Creature</p>
+            <div class="actor-links">
+              <a href="https://www.instagram.com/bn_sj2013/" target="_blank" class="social-link">
+                <i class="fab fa-instagram"></i>
+              </a>
+              <a href="https://www.imdb.com/name/nm5432899/" target="_blank" class="social-link">
+                <i class="fab fa-imdb"></i>
+              </a>
+              <a href="https://mydramalist.com/people/3788-park-seo-joon" target="_blank" class="social-link">
+                <i class="fas fa-link"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="actor-card">
+          <div class="actor-image gradient-6">
+            <i class="fas fa-user-tie actor-icon"></i>
+          </div>
+          <div class="actor-info">
+            <h3 class="actor-name">Lee Dong-wook</h3>
+            <p class="actor-role">Actor · TV Host</p>
+            <div class="actor-stats">
+              <div class="stat-item">
+                <i class="fas fa-trophy"></i>
+                <span>12 Awards</span>
+              </div>
+              <div class="stat-item">
+                <i class="fas fa-tv"></i>
+                <span>16 Dramas</span>
+              </div>
+            </div>
+            <p class="actor-dramas">Goblin · Touch Your Heart · Tale of the Nine Tailed · Strangers from Hell · Bad and Crazy</p>
+            <div class="actor-links">
+              <a href="https://www.instagram.com/leedongwook_official/" target="_blank" class="social-link">
+                <i class="fab fa-instagram"></i>
+              </a>
+              <a href="https://www.imdb.com/name/nm1533097/" target="_blank" class="social-link">
+                <i class="fab fa-imdb"></i>
+              </a>
+              <a href="https://mydramalist.com/people/583-lee-dong-wook" target="_blank" class="social-link">
+                <i class="fas fa-link"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="actor-card">
+          <div class="actor-image gradient-7">
+            <i class="fas fa-user-tie actor-icon"></i>
+          </div>
+          <div class="actor-info">
+            <h3 class="actor-name">Song Joong-ki</h3>
+            <p class="actor-role">Actor · Producer</p>
+            <div class="actor-stats">
+              <div class="stat-item">
+                <i class="fas fa-trophy"></i>
+                <span>18 Awards</span>
+              </div>
+              <div class="stat-item">
+                <i class="fas fa-tv"></i>
+                <span>11 Dramas</span>
+              </div>
+            </div>
+            <p class="actor-dramas">Descendants of the Sun · Vincenzo · Reborn Rich · Arthdal Chronicles · My Name Is Loh Kiwan</p>
+            <div class="actor-links">
+              <a href="https://www.instagram.com/hi_songjoongki/" target="_blank" class="social-link">
+                <i class="fab fa-instagram"></i>
+              </a>
+              <a href="https://www.imdb.com/name/nm3692881/" target="_blank" class="social-link">
+                <i class="fab fa-imdb"></i>
+              </a>
+              <a href="https://mydramalist.com/people/356-song-joong-ki" target="_blank" class="social-link">
+                <i class="fas fa-link"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="actor-card">
+          <div class="actor-image gradient-8">
+            <i class="fas fa-user-tie actor-icon"></i>
+          </div>
+          <div class="actor-info">
+            <h3 class="actor-name">Ji Chang-wook</h3>
+            <p class="actor-role">Actor · Singer</p>
+            <div class="actor-stats">
+              <div class="stat-item">
+                <i class="fas fa-trophy"></i>
+                <span>13 Awards</span>
+              </div>
+              <div class="stat-item">
+                <i class="fas fa-tv"></i>
+                <span>15 Dramas</span>
+              </div>
+            </div>
+            <p class="actor-dramas">Healer · Suspicious Partner · The K2 · Lovestruck in the City · The Sound of Magic</p>
+            <div class="actor-links">
+              <a href="https://www.instagram.com/jichangwook/" target="_blank" class="social-link">
+                <i class="fab fa-instagram"></i>
+              </a>
+              <a href="https://www.imdb.com/name/nm4599144/" target="_blank" class="social-link">
+                <i class="fab fa-imdb"></i>
+              </a>
+              <a href="https://mydramalist.com/people/2990-ji-chang-wook" target="_blank" class="social-link">
+                <i class="fas fa-link"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="actor-card">
+          <div class="actor-image gradient-9">
+            <i class="fas fa-user-tie actor-icon"></i>
+          </div>
+          <div class="actor-info">
+            <h3 class="actor-name">Gong Yoo</h3>
+            <p class="actor-role">Actor · Producer</p>
+            <div class="actor-stats">
+              <div class="stat-item">
+                <i class="fas fa-trophy"></i>
+                <span>16 Awards</span>
+              </div>
+              <div class="stat-item">
+                <i class="fas fa-tv"></i>
+                <span>9 Dramas</span>
+              </div>
+            </div>
+            <p class="actor-dramas">Goblin · Coffee Prince · The Silent Sea · Squid Game S2 · Train to Busan (film)</p>
+            <div class="actor-links">
+              <a href="https://www.instagram.com/gongyoo_official/" target="_blank" class="social-link">
+                <i class="fab fa-instagram"></i>
+              </a>
+              <a href="https://www.imdb.com/name/nm2057859/" target="_blank" class="social-link">
+                <i class="fab fa-imdb"></i>
+              </a>
+              <a href="https://mydramalist.com/people/319-gong-yoo" target="_blank" class="social-link">
+                <i class="fas fa-link"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="actor-card">
+          <div class="actor-image gradient-10">
+            <i class="fas fa-user-tie actor-icon"></i>
+          </div>
+          <div class="actor-info">
+            <h3 class="actor-name">Lee Jae-wook</h3>
+            <p class="actor-role">Actor · Model</p>
+            <div class="actor-stats">
+              <div class="stat-item">
+                <i class="fas fa-trophy"></i>
+                <span>8 Awards</span>
+              </div>
+              <div class="stat-item">
+                <i class="fas fa-tv"></i>
+                <span>10 Dramas</span>
+              </div>
+            </div>
+            <p class="actor-dramas">Alchemy of Souls · Extraordinary You · Do Do Sol Sol La La Sol · The Impossible Heir</p>
+            <div class="actor-links">
+              <a href="https://www.instagram.com/leejae_wook/" target="_blank" class="social-link">
+                <i class="fab fa-instagram"></i>
+              </a>
+              <a href="https://www.imdb.com/name/nm9767699/" target="_blank" class="social-link">
+                <i class="fab fa-imdb"></i>
+              </a>
+              <a href="https://mydramalist.com/people/17229-lee-jae-wook" target="_blank" class="social-link">
+                <i class="fas fa-link"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FEMALE ACTRESSES -->
+    <div class="category-content" id="female">
+      <div class="actor-grid">
+        <div class="actor-card">
+          <div class="actor-image gradient-2">
+            <i class="fas fa-user actor-icon"></i>
+          </div>
+          <div class="actor-info">
+            <h3 class="actor-name">Kim Ji-won</h3>
+            <p class="actor-role">Actress</p>
+            <div class="actor-stats">
+              <div class="stat-item">
+                <i class="fas fa-trophy"></i>
+                <span>12 Awards</span>
+              </div>
+              <div class="stat-item">
+                <i class="fas fa-tv"></i>
+                <span>14 Dramas</span>
+              </div>
+            </div>
+            <p class="actor-dramas">Queen of Tears · Descendants of the Sun · Fight for My Way · My Liberation Notes · Lovestruck in the City</p>
+            <div class="actor-links">
+              <a href="https://www.instagram.com/geewonii/" target="_blank" class="social-link">
+                <i class="fab fa-instagram"></i>
+              </a>
+              <a href="https://www.imdb.com/name/nm5399842/" target="_blank" class="social-link">
+                <i class="fab fa-imdb"></i>
+              </a>
+              <a href="https://mydramalist.com/people/2533-kim-ji-won" target="_blank" class="social-link">
+                <i class="fas fa-link"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="actor-card">
+          <div class="actor-image gradient-5">
+            <i class="fas fa-user actor-icon"></i>
+          </div>
+          <div class="actor-info">
+            <h3 class="actor-name">Son Ye-jin</h3>
+            <p class="actor-role">Actress · Producer</p>
+            <div class="actor-stats">
+              <div class="stat-item">
+                <i class="fas fa-trophy"></i>
+                <span>25+ Awards</span>
+              </div>
+              <div class="stat-item">
+                <i class="fas fa-tv"></i>
+                <span>18 Dramas</span>
+              </div>
+            </div>
+            <p class="actor-dramas">Crash Landing on You · Something in the Rain · Personal Taste · Summer Scent · The Last Princess</p>
+            <div class="actor-links">
+              <a href="https://www.instagram.com/yejinhand/" target="_blank" class="social-link">
+                <i class="fab fa-instagram"></i>
+              </a>
+              <a href="https://www.imdb.com/name/nm1196247/" target="_blank" class="social-link">
+                <i class="fab fa-imdb"></i>
+              </a>
+              <a href="https://mydramalist.com/people/257-son-ye-jin" target="_blank" class="social-link">
+                <i class="fas fa-link"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="actor-card">
+          <div class="actor-image gradient-1">
+            <i class="fas fa-user actor-icon"></i>
+          </div>
+          <div class="actor-info">
+            <h3 class="actor-name">Park Min-young</h3>
+            <p class="actor-role">Actress</p>
+            <div class="actor-stats">
+              <div class="stat-item">
+                <i class="fas fa-trophy"></i>
+                <span>14 Awards</span>
+              </div>
+              <div class="stat-item">
+                <i class="fas fa-tv"></i>
+                <span>16 Dramas</span>
+              </div>
+            </div>
+            <p class="actor-dramas">What's Wrong with Secretary Kim · Her Private Life · Healer · City Hunter · Marry My Husband</p>
+            <div class="actor-links">
+              <a href="https://www.instagram.com/rachel_mypark/" target="_blank" class="social-link">
+                <i class="fab fa-instagram"></i>
+              </a>
+              <a href="https://www.imdb.com/name/nm2963145/" target="_blank" class="social-link">
+                <i class="fab fa-imdb"></i>
+              </a>
+              <a href="https://mydramalist.com/people/386-park-min-young" target="_blank" class="social-link">
+                <i class="fas fa-link"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="actor-card">
+          <div class="actor-image gradient-3">
+            <i class="fas fa-user actor-icon"></i>
+          </div>
+          <div class="actor-info">
+            <h3 class="actor-name">IU (Lee Ji-eun)</h3>
+            <p class="actor-role">Actress · Singer · Producer</p>
+            <div class="actor-stats">
+              <div class="stat-item">
+                <i class="fas fa-trophy"></i>
+                <span>30+ Awards</span>
+              </div>
+              <div class="stat-item">
+                <i class="fas fa-tv"></i>
+                <span>10 Dramas</span>
+              </div>
+            </div>
+            <p class="actor-dramas">My Mister · Hotel Del Luna · Moon Lovers · Dream High · My Ahjussi</p>
+            <div class="actor-links">
+              <a href="https://www.instagram.com/dlwlrma/" target="_blank" class="social-link">
+                <i class="fab fa-instagram"></i>
+              </a>
+              <a href="https://www.imdb.com/name/nm4833990/" target="_blank" class="social-link">
+                <i class="fab fa-imdb"></i>
+              </a>
+              <a href="https://mydramalist.com/people/1225-iu" target="_blank" class="social-link">
+                <i class="fas fa-link"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="actor-card">
+          <div class="actor-image gradient-4">
+            <i class="fas fa-user actor-icon"></i>
+          </div>
+          <div class="actor-info">
+            <h3 class="actor-name">Jun Ji-hyun</h3>
+            <p class="actor-role">Actress</p>
+            <div class="actor-stats">
+              <div class="stat-item">
+                <i class="fas fa-trophy"></i>
+                <span>22 Awards</span>
+              </div>
+              <div class="stat-item">
+                <i class="fas fa-tv"></i>
+                <span>12 Dramas</span>
+              </div>
+            </div>
+            <p class="actor-dramas">My Love from the Star · Legend of the Blue Sea · Jirisan · My Sassy Girl · Kingdom: Ashin of the North</p>
+            <div class="actor-links">
+              <a href="https://www.instagram.com/junjihyun_s_official/" target="_blank" class="social-link">
+                <i class="fab fa-instagram"></i>
+              </a>
+              <a href="https://www.imdb.com/name/nm0473115/" target="_blank" class="social-link">
+                <i class="fab fa-imdb"></i>
+              </a>
+              <a href="https://mydramalist.com/people/269-jun-ji-hyun" target="_blank" class="social-link">
+                <i class="fas fa-link"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="actor-card">
+          <div class="actor-image gradient-6">
+            <i class="fas fa-user actor-icon"></i>
+          </div>
+          <div class="actor-info">
+            <h3 class="actor-name">Kim Go-eun</h3>
+            <p class="actor-role">Actress</p>
+            <div class="actor-stats">
+              <div class="stat-item">
+                <i class="fas fa-trophy"></i>
+                <span>16 Awards</span>
+              </div>
+              <div class="stat-item">
+                <i class="fas fa-tv"></i>
+                <span>10 Dramas</span>
+              </div>
+            </div>
+            <p class="actor-dramas">Goblin · The King: Eternal Monarch · Little Women · Yumi's Cells · Exhuma</p>
+            <div class="actor-links">
+              <a href="https://www.instagram.com/ggonekim/" target="_blank" class="social-link">
+                <i class="fab fa-instagram"></i>
+              </a>
+              <a href="https://www.imdb.com/name/nm5721053/" target="_blank" class="social-link">
+                <i class="fab fa-imdb"></i>
+              </a>
+              <a href="https://mydramalist.com/people/5620-kim-go-eun" target="_blank" class="social-link">
+                <i class="fas fa-link"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="actor-card">
+          <div class="actor-image gradient-7">
+            <i class="fas fa-user actor-icon"></i>
+          </div>
+          <div class="actor-info">
+            <h3 class="actor-name">Bae Suzy</h3>
+            <p class="actor-role">Actress · Singer</p>
+            <div class="actor-stats">
+              <div class="stat-item">
+                <i class="fas fa-trophy"></i>
+                <span>18 Awards</span>
+              </div>
+              <div class="stat-item">
+                <i class="fas fa-tv"></i>
+                <span>11 Dramas</span>
+              </div>
+            </div>
+            <p class="actor-dramas">Start-Up · While You Were Sleeping · Vagabond · Dream High · Anna</p>
+            <div class="actor-links">
+              <a href="https://www.instagram.com/skuukzky/" target="_blank" class="social-link">
+                <i class="fab fa-instagram"></i>
+              </a>
+              <a href="https://www.imdb.com/name/nm4248344/" target="_blank" class="social-link">
+                <i class="fab fa-imdb"></i>
+              </a>
+              <a href="https://mydramalist.com/people/634-bae-suzy" target="_blank" class="social-link">
+                <i class="fas fa-link"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="actor-card">
+          <div class="actor-image gradient-8">
+            <i class="fas fa-user actor-icon"></i>
+          </div>
+          <div class="actor-info">
+            <h3 class="actor-name">Park Eun-bin</h3>
+            <p class="actor-role">Actress</p>
+            <div class="actor-stats">
+              <div class="stat-item">
+                <i class="fas fa-trophy"></i>
+                <span>15 Awards</span>
+              </div>
+              <div class="stat-item">
+                <i class="fas fa-tv"></i>
+                <span>20 Dramas</span>
+              </div>
+            </div>
+            <p class="actor-dramas">Extraordinary Attorney Woo · The King's Affection · Hot Stove League · Do You Like Brahms?</p>
+            <div class="actor-links">
+              <a href="https://www.instagram.com/eunbin_337/" target="_blank" class="social-link">
+                <i class="fab fa-instagram"></i>
+              </a>
+              <a href="https://www.imdb.com/name/nm2484113/" target="_blank" class="social-link">
+                <i class="fab fa-imdb"></i>
+              </a>
+              <a href="https://mydramalist.com/people/664-park-eun-bin" target="_blank" class="social-link">
+                <i class="fas fa-link"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="actor-card">
+          <div class="actor-image gradient-9">
+            <i class="fas fa-user actor-icon"></i>
+          </div>
+          <div class="actor-info">
+            <h3 class="actor-name">Han So-hee</h3>
+            <p class="actor-role">Actress · Model</p>
+            <div class="actor-stats">
+              <div class="stat-item">
+                <i class="fas fa-trophy"></i>
+                <span>10 Awards</span>
+              </div>
+              <div class="stat-item">
+                <i class="fas fa-tv"></i>
+                <span>8 Dramas</span>
+              </div>
+            </div>
+            <p class="actor-dramas">My Name · The World of the Married · Nevertheless · Gyeongseong Creature</p>
+            <div class="actor-links">
+              <a href="https://www.instagram.com/xeesoxee/" target="_blank" class="social-link">
+                <i class="fab fa-instagram"></i>
+              </a>
+              <a href="https://www.imdb.com/name/nm9830652/" target="_blank" class="social-link">
+                <i class="fab fa-imdb"></i>
+              </a>
+              <a href="https://mydramalist.com/people/14310-han-so-hee" target="_blank" class="social-link">
+                <i class="fas fa-link"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="actor-card">
+          <div class="actor-image gradient-10">
+            <i class="fas fa-user actor-icon"></i>
+          </div>
+          <div class="actor-info">
+            <h3 class="actor-name">Jung Ho-yeon</h3>
+            <p class="actor-role">Actress · Model</p>
+            <div class="actor-stats">
+              <div class="stat-item">
+                <i class="fas fa-trophy"></i>
+                <span>8 Awards</span>
+              </div>
+              <div class="stat-item">
+                <i class="fas fa-tv"></i>
+                <span>2 Dramas</span>
+              </div>
+            </div>
+            <p class="actor-dramas">Squid Game · Squid Game Season 2 · SAG Award Winner · Emmy Nominee</p>
+            <div class="actor-links">
+              <a href="https://www.instagram.com/hoooooyeony/" target="_blank" class="social-link">
+                <i class="fab fa-instagram"></i>
+              </a>
+              <a href="https://www.imdb.com/name/nm8512519/" target="_blank" class="social-link">
+                <i class="fab fa-imdb"></i>
+              </a>
+              <a href="https://mydramalist.com/people/31561-jung-ho-yeon" target="_blank" class="social-link">
+                <i class="fas fa-link"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AWARD-WINNING DRAMAS -->
+  <section class="content-section" id="dramas">
+    <div class="section-header">
+      <h2 class="section-title">Award-Winning Dramas</h2>
+    </div>
+    
+    <div class="drama-scroll">
+      <div class="drama-card">
+        <div class="drama-poster gradient-1">
+          <i class="fas fa-tv drama-icon"></i>
+          <div class="drama-rating">
+            <i class="fas fa-star"></i> 9.2
+          </div>
+          <div class="drama-year">2024</div>
+        </div>
+        <div class="drama-info">
+          <h3 class="drama-title">Queen of Tears</h3>
+          <p class="drama-genre">Romance · Drama</p>
+          <p class="drama-description">A miraculous love story of a married couple overcoming a crisis.</p>
+          <div class="drama-awards">
+            <div class="award-badge">
+              <i class="fas fa-trophy"></i> Baeksang
+            </div>
+            <div class="award-badge">
+              <i class="fas fa-award"></i> Best Drama
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="drama-card">
+        <div class="drama-poster gradient-2">
+          <i class="fas fa-tv drama-icon"></i>
+          <div class="drama-rating">
+            <i class="fas fa-star"></i> 9.5
+          </div>
+          <div class="drama-year">2019-2020</div>
+        </div>
+        <div class="drama-info">
+          <h3 class="drama-title">Crash Landing on You</h3>
+          <p class="drama-genre">Romance · Comedy · Drama</p>
+          <p class="drama-description">A South Korean heiress crash lands in North Korea and meets an army officer.</p>
+          <div class="drama-awards">
+            <div class="award-badge">
+              <i class="fas fa-trophy"></i> Baeksang
+            </div>
+            <div class="award-badge">
+              <i class="fas fa-award"></i> #1 Netflix
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="drama-card">
+        <div class="drama-poster gradient-3">
+          <i class="fas fa-tv drama-icon"></i>
+          <div class="drama-rating">
+            <i class="fas fa-star"></i> 9.1
+          </div>
+          <div class="drama-year">2016-2017</div>
+        </div>
+        <div class="drama-info">
+          <h3 class="drama-title">Goblin (Guardian: The Lonely and Great God)</h3>
+          <p class="drama-genre">Fantasy · Romance · Drama</p>
+          <p class="drama-description">An immortal goblin searches for his bride to end his cursed life.</p>
+          <div class="drama-awards">
+            <div class="award-badge">
+              <i class="fas fa-trophy"></i> Baeksang
+            </div>
+            <div class="award-badge">
+              <i class="fas fa-award"></i> Daesang
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="drama-card">
+        <div class="drama-poster gradient-4">
+          <i class="fas fa-tv drama-icon"></i>
+          <div class="drama-rating">
+            <i class="fas fa-star"></i> 8.9
+          </div>
+          <div class="drama-year">2021</div>
+        </div>
+        <div class="drama-info">
+          <h3 class="drama-title">Squid Game</h3>
+          <p class="drama-genre">Thriller · Drama</p>
+          <p class="drama-description">Desperate players compete in deadly children's games for prize money.</p>
+          <div class="drama-awards">
+            <div class="award-badge">
+              <i class="fas fa-trophy"></i> Emmy
+            </div>
+            <div class="award-badge">
+              <i class="fas fa-award"></i> SAG Award
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="drama-card">
+        <div class="drama-poster gradient-5">
+          <i class="fas fa-tv drama-icon"></i>
+          <div class="drama-rating">
+            <i class="fas fa-star"></i> 9.3
+          </div>
+          <div class="drama-year">2022</div>
+        </div>
+        <div class="drama-info">
+          <h3 class="drama-title">Extraordinary Attorney Woo</h3>
+          <p class="drama-genre">Legal · Drama · Comedy</p>
+          <p class="drama-description">A brilliant attorney on the autism spectrum navigates law and life.</p>
+          <div class="drama-awards">
+            <div class="award-badge">
+              <i class="fas fa-trophy"></i> Baeksang
+            </div>
+            <div class="award-badge">
+              <i class="fas fa-award"></i> Best Actress
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="drama-card">
+        <div class="drama-poster gradient-6">
+          <i class="fas fa-tv drama-icon"></i>
+          <div class="drama-rating">
+            <i class="fas fa-star"></i> 9.0
+          </div>
+          <div class="drama-year">2021</div>
+        </div>
+        <div class="drama-info">
+          <h3 class="drama-title">Vincenzo</h3>
+          <p class="drama-genre">Crime · Comedy · Drama</p>
+          <p class="drama-description">An Italian mafia lawyer returns to Korea and fights against corruption.</p>
+          <div class="drama-awards">
+            <div class="award-badge">
+              <i class="fas fa-trophy"></i> Baeksang
+            </div>
+            <div class="award-badge">
+              <i class="fas fa-award"></i> Popularity
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="drama-card">
+        <div class="drama-poster gradient-7">
+          <i class="fas fa-tv drama-icon"></i>
+          <div class="drama-rating">
+            <i class="fas fa-star"></i> 9.4
+          </div>
+          <div class="drama-year">2020</div>
+        </div>
+        <div class="drama-info">
+          <h3 class="drama-title">It's Okay to Not Be Okay</h3>
+          <p class="drama-genre">Romance · Drama · Psychological</p>
+          <p class="drama-description">A caretaker and a children's book author heal each other's emotional wounds.</p>
+          <div class="drama-awards">
+            <div class="award-badge">
+              <i class="fas fa-trophy"></i> Baeksang
+            </div>
+            <div class="award-badge">
+              <i class="fas fa-award"></i> Art Direction
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="drama-card">
+        <div class="drama-poster gradient-8">
+          <i class="fas fa-tv drama-icon"></i>
+          <div class="drama-rating">
+            <i class="fas fa-star"></i> 8.8
+          </div>
+          <div class="drama-year">2020</div>
+        </div>
+        <div class="drama-info">
+          <h3 class="drama-title">Itaewon Class</h3>
+          <p class="drama-genre">Drama · Business</p>
+          <p class="drama-description">An ex-convict opens a bar and seeks revenge on a food corporation CEO.</p>
+          <div class="drama-awards">
+            <div class="award-badge">
+              <i class="fas fa-trophy"></i> Baeksang
+            </div>
+            <div class="award-badge">
+              <i class="fas fa-award"></i> Nominee
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="drama-card">
+        <div class="drama-poster gradient-9">
+          <i class="fas fa-tv drama-icon"></i>
+          <div class="drama-rating">
+            <i class="fas fa-star"></i> 9.1
+          </div>
+          <div class="drama-year">2018</div>
+        </div>
+        <div class="drama-info">
+          <h3 class="drama-title">My Mister (My Ahjussi)</h3>
+          <p class="drama-genre">Drama · Slice of Life</p>
+          <p class="drama-description">An engineer and a temp worker form an unlikely healing friendship.</p>
+          <div class="drama-awards">
+            <div class="award-badge">
+              <i class="fas fa-trophy"></i> Baeksang
+            </div>
+            <div class="award-badge">
+              <i class="fas fa-award"></i> Best Drama
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="drama-card">
+        <div class="drama-poster gradient-10">
+          <i class="fas fa-tv drama-icon"></i>
+          <div class="drama-rating">
+            <i class="fas fa-star"></i> 9.2
+          </div>
+          <div class="drama-year">2024</div>
+        </div>
+        <div class="drama-info">
+          <h3 class="drama-title">Lovely Runner</h3>
+          <p class="drama-genre">Romance · Time Travel · Fantasy</p>
+          <p class="drama-description">A fan travels back in time to save her favorite idol from tragedy.</p>
+          <div class="drama-awards">
+            <div class="award-badge">
+              <i class="fas fa-trophy"></i> TBA
+            </div>
+            <div class="award-badge">
+              <i class="fas fa-award"></i> Hit Drama
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MOST AWARDED DRAMAS -->
+  <section class="content-section" id="awards">
+    <div class="section-header">
+      <h2 class="section-title">Most Awarded Performances</h2>
+    </div>
+    
+    <div class="drama-scroll">
+      <div class="drama-card">
+        <div class="drama-poster gradient-2">
+          <i class="fas fa-trophy drama-icon"></i>
+          <div class="drama-rating">
+            <i class="fas fa-star"></i> 9.5
+          </div>
+          <div class="drama-year">2016</div>
+        </div>
+        <div class="drama-info">
+          <h3 class="drama-title">Descendants of the Sun</h3>
+          <p class="drama-genre">Romance · Action · Drama</p>
+          <p class="drama-description">A soldier and a doctor fall in love in a war-torn country.</p>
+          <div class="drama-awards">
+            <div class="award-badge">
+              <i class="fas fa-trophy"></i> 15+ Awards
+            </div>
+            <div class="award-badge">
+              <i class="fas fa-award"></i> Baeksang
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="drama-card">
+        <div class="drama-poster gradient-5">
+          <i class="fas fa-trophy drama-icon"></i>
+          <div class="drama-rating">
+            <i class="fas fa-star"></i> 9.3
+          </div>
+          <div class="drama-year">2022</div>
+        </div>
+        <div class="drama-info">
+          <h3 class="drama-title">Twenty-Five Twenty-One</h3>
+          <p class="drama-genre">Romance · Coming of Age · Sports</p>
+          <p class="drama-description">Two young people find love during the IMF crisis of the late 1990s.</p>
+          <div class="drama-awards">
+            <div class="award-badge">
+              <i class="fas fa-trophy"></i> 8 Awards
+            </div>
+            <div class="award-badge">
+              <i class="fas fa-award"></i> Baeksang
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="drama-card">
+        <div class="drama-poster gradient-1">
+          <i class="fas fa-trophy drama-icon"></i>
+          <div class="drama-rating">
+            <i class="fas fa-star"></i> 9.0
+          </div>
+          <div class="drama-year">2023</div>
+        </div>
+        <div class="drama-info">
+          <h3 class="drama-title">The Glory</h3>
+          <p class="drama-genre">Thriller · Drama · Revenge</p>
+          <p class="drama-description">A woman plots revenge against her childhood bullies.</p>
+          <div class="drama-awards">
+            <div class="award-badge">
+              <i class="fas fa-trophy"></i> 10 Awards
+            </div>
+            <div class="award-badge">
+              <i class="fas fa-award"></i> Netflix Hit
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="drama-card">
+        <div class="drama-poster gradient-4">
+          <i class="fas fa-trophy drama-icon"></i>
+          <div class="drama-rating">
+            <i class="fas fa-star"></i> 9.1
+          </div>
+          <div class="drama-year">2021</div>
+        </div>
+        <div class="drama-info">
+          <h3 class="drama-title">Hometown Cha-Cha-Cha</h3>
+          <p class="drama-genre">Romance · Comedy · Slice of Life</p>
+          <p class="drama-description">A dentist moves to a seaside village and meets a handyman.</p>
+          <div class="drama-awards">
+            <div class="award-badge">
+              <i class="fas fa-trophy"></i> 6 Awards
+            </div>
+            <div class="award-badge">
+              <i class="fas fa-award"></i> Popularity
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="drama-card">
+        <div class="drama-poster gradient-6">
+          <i class="fas fa-trophy drama-icon"></i>
+          <div class="drama-rating">
+            <i class="fas fa-star"></i> 9.2
+          </div>
+          <div class="drama-year">2023</div>
+        </div>
+        <div class="drama-info">
+          <h3 class="drama-title">Alchemy of Souls</h3>
+          <p class="drama-genre">Fantasy · Romance · Historical</p>
+          <p class="drama-description">A powerful sorceress and a nobleman team up in a magical world.</p>
+          <div class="drama-awards">
+            <div class="award-badge">
+              <i class="fas fa-trophy"></i> 7 Awards
+            </div>
+            <div class="award-badge">
+              <i class="fas fa-award"></i> Baeksang
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="drama-card">
+        <div class="drama-poster gradient-3">
+          <i class="fas fa-trophy drama-icon"></i>
+          <div class="drama-rating">
+            <i class="fas fa-star"></i> 8.7
+          </div>
+          <div class="drama-year">2020-2022</div>
+        </div>
+        <div class="drama-info">
+          <h3 class="drama-title">The King: Eternal Monarch</h3>
+          <p class="drama-genre">Fantasy · Romance · Sci-Fi</p>
+          <p class="drama-description">A king discovers a parallel universe and falls for a detective.</p>
+          <div class="drama-awards">
+            <div class="award-badge">
+              <i class="fas fa-trophy"></i> 5 Awards
+            </div>
+            <div class="award-badge">
+              <i class="fas fa-award"></i> SBS Drama
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="drama-card">
+        <div class="drama-poster gradient-7">
+          <i class="fas fa-trophy drama-icon"></i>
+          <div class="drama-rating">
+            <i class="fas fa-star"></i> 9.0
+          </div>
+          <div class="drama-year">2022</div>
+        </div>
+        <div class="drama-info">
+          <h3 class="drama-title">Our Blues</h3>
+          <p class="drama-genre">Drama · Slice of Life · Anthology</p>
+          <p class="drama-description">Interconnected stories of diverse characters living on Jeju Island.</p>
+          <div class="drama-awards">
+            <div class="award-badge">
+              <i class="fas fa-trophy"></i> 8 Awards
+            </div>
+            <div class="award-badge">
+              <i class="fas fa-award"></i> Ensemble
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="drama-card">
+        <div class="drama-poster gradient-8">
+          <i class="fas fa-trophy drama-icon"></i>
+          <div class="drama-rating">
+            <i class="fas fa-star"></i> 8.9
+          </div>
+          <div class="drama-year">2022</div>
+        </div>
+        <div class="drama-info">
+          <h3 class="drama-title">Little Women</h3>
+          <p class="drama-genre">Thriller · Drama · Mystery</p>
+          <p class="drama-description">Three sisters become entangled in a conspiracy involving the rich.</p>
+          <div class="drama-awards">
+            <div class="award-badge">
+              <i class="fas fa-trophy"></i> 6 Awards
+            </div>
+            <div class="award-badge">
+              <i class="fas fa-award"></i> Baeksang
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // Header scroll effect
+    window.addEventListener('scroll', () => {
+      const header = document.getElementById('mainHeader');
+      if (window.scrollY > 50) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    });
+
+    // Navigation links
+    document.querySelectorAll('.nav-link').forEach(link => {
+      link.addEventListener('click', function() {
+        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+        this.classList.add('active');
+        
+        const section = this.getAttribute('data-section');
+        if (section !== 'home') {
+          const element = document.getElementById(section);
+          if (element) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        } else {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      });
+    });
+
+    // Category tabs
+    document.querySelectorAll('.category-tab').forEach(tab => {
+      tab.addEventListener('click', function() {
+        const category = this.getAttribute('data-category');
+        
+        // Update active tab
+        document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+        
+        // Update active content
+        document.querySelectorAll('.category-content').forEach(c => c.classList.remove('active'));
+        document.getElementById(category).classList.add('active');
+      });
+    });
+
+    // Smooth scroll for hero buttons
+    document.querySelectorAll('.hero-buttons a').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href').substring(1);
+        const element = document.getElementById(targetId);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+    
+    // Dynamic background image handler
+    // Apply background images from data-bg attributes
+    document.querySelectorAll('[data-bg]').forEach(element => {
+      const bgUrl = element.getAttribute('data-bg');
+      if (bgUrl) {
+        if (element.classList.contains('content-section')) {
+          element.style.setProperty('--section-bg', `url('${bgUrl}')`);
+        } else {
+          element.style.setProperty('--bg-image', `url('${bgUrl}')`);
+        }
+      }
+    });
+  </script>
+</body>
+</html>

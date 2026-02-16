@@ -1,0 +1,2256 @@
+Here is the enhanced HTML code. The social media icon buttons (Spotify, Instagram, YouTube) now feature a beautiful glowing effect that pulses gently, making them stand out beautifully against the dark theme.
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LOOP · Premium Music Collection · Glow Icons</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0a0a0f;
+      color: #fff;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* ===== ENHANCED BACKGROUND SYSTEM ===== */
+    .dynamic-bg {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: -2;
+      background: radial-gradient(circle at 20% 50%, rgba(255,0,110,0.15), transparent 50%),
+                  radial-gradient(circle at 80% 80%, rgba(58,134,255,0.15), transparent 50%),
+                  radial-gradient(circle at 40% 20%, rgba(131,56,236,0.15), transparent 50%);
+      transition: opacity 0.6s ease;
+    }
+    
+    .color-glaze {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: -1;
+      background: radial-gradient(circle at 30% 30%, rgba(255,0,110,0.25), rgba(58,134,255,0.25), rgba(131,56,236,0.25));
+      transition: background 0.4s ease;
+      pointer-events: none;
+      mix-blend-mode: overlay;
+    }
+    
+    .grain {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: -1;
+      background-image: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noise"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="1" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noise)" opacity="0.12"/%3E%3C/svg%3E');
+      opacity: 0.2;
+      pointer-events: none;
+    }
+
+    /* ===== HEADER ===== */
+    .nav-header {
+      position: fixed;
+      top: 0; width: 100%;
+      display: flex; align-items: center;
+      padding: 1.2rem 6%;
+      z-index: 100;
+      background: rgba(10, 10, 15, 0.85);
+      backdrop-filter: blur(20px) saturate(180%);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 4px 30px rgba(0,0,0,0.3);
+    }
+    
+    .logo {
+      font-size: 1.8rem; 
+      font-weight: 700;
+      background: linear-gradient(135deg, #fff 0%, #e0d0ff 50%, #c0b0ff 100%);
+      -webkit-background-clip: text; 
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-right: 4rem;
+      display: flex; 
+      align-items: center; 
+      gap: 0.6rem;
+      letter-spacing: 0.02em;
+    }
+    
+    .logo i { 
+      color: #c0b0ff;
+      -webkit-text-fill-color: #c0b0ff;
+      filter: drop-shadow(0 0 8px rgba(192, 176, 255, 0.5));
+    }
+    
+    .music-tabs { 
+      display: flex; 
+      gap: 2.5rem; 
+      flex-wrap: wrap; 
+    }
+    
+    .tab-btn {
+      background: transparent; 
+      border: none;
+      color: rgba(220,220,250,0.65);
+      font-size: 0.95rem; 
+      font-weight: 600;
+      padding: 0.6rem 0; 
+      cursor: pointer;
+      text-transform: uppercase; 
+      letter-spacing: 0.05em;
+      display: flex; 
+      align-items: center; 
+      gap: 8px;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    
+    .tab-btn::after {
+      content: ''; 
+      position: absolute; 
+      bottom: -2px; 
+      left: 0;
+      width: 0; 
+      height: 3px; 
+      background: linear-gradient(90deg, #fff, rgba(255,255,255,0.6));
+      transition: width 0.3s ease;
+      border-radius: 2px;
+    }
+    
+    .tab-btn:hover { 
+      color: white;
+      transform: translateY(-2px);
+    }
+    
+    .tab-btn.active { 
+      color: white;
+      text-shadow: 0 0 20px rgba(255,255,255,0.4);
+    }
+    
+    .tab-btn.active::after { 
+      width: 100%; 
+    }
+
+    /* ===== PANELS ===== */
+    .music-panel {
+      position: relative;
+      width: 100%; 
+      min-height: 100vh;
+      padding: 8rem 6% 5rem;
+      display: none;
+      opacity: 0;
+    }
+    
+    .music-panel.active-panel {
+      display: block;
+      animation: fadeUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+    
+    @keyframes fadeUp {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ===== ARTIST HEADER ===== */
+    .artist-header {
+      display: flex; 
+      align-items: center; 
+      gap: 2.5rem;
+      margin-bottom: 3rem; 
+      flex-wrap: wrap;
+      padding: 2rem;
+      background: rgba(20, 20, 30, 0.4);
+      border-radius: 28px;
+      border: 1px solid rgba(255,255,255,0.08);
+      backdrop-filter: blur(10px);
+    }
+    
+    .artist-avatar {
+      width: 110px; 
+      height: 110px; 
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      font-weight: 700;
+      border: 3px solid rgba(255,255,255,0.25);
+      transition: all 0.3s ease;
+      cursor: pointer;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .artist-avatar::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      opacity: 0.2;
+      z-index: -1;
+    }
+    
+    .artist-avatar i {
+      position: relative;
+      z-index: 1;
+    }
+    
+    .artist-avatar:hover { 
+      transform: scale(1.05) rotate(5deg);
+      border-color: rgba(255,255,255,0.5);
+      box-shadow: 0 12px 48px rgba(0,0,0,0.6);
+    }
+    
+    .artist-info h1 {
+      font-size: 3rem; 
+      font-weight: 800;
+      background: linear-gradient(135deg, #fff 0%, #e0d0ff 100%);
+      -webkit-background-clip: text; 
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.2;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.02em;
+    }
+    
+    .artist-desc { 
+      color: rgba(255,255,255,0.6); 
+      font-size: 1rem;
+      font-weight: 500;
+    }
+    
+    .artist-stats {
+      display: flex;
+      gap: 2rem;
+      margin-top: 1rem;
+      flex-wrap: wrap;
+    }
+    
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+    
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #fff;
+    }
+    
+    .stat-label {
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.5);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* ===== MEMBER CARDS ===== */
+    .member-sub { 
+      margin: 3rem 0 2rem; 
+    }
+    
+    .member-sub h2 {
+      font-size: 1.8rem; 
+      font-weight: 700;
+      border-left: 5px solid #ffb86b;
+      padding-left: 1.5rem; 
+      margin-bottom: 2rem;
+      color: rgba(255,255,255,0.95);
+      letter-spacing: -0.01em;
+    }
+    
+    .member-grid {
+      display: grid; 
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.8rem;
+    }
+    
+    .member-card {
+      background: rgba(25,25,35,0.6);
+      backdrop-filter: blur(12px);
+      border-radius: 28px; 
+      padding: 2rem 1.5rem;
+      border: 1px solid rgba(255,255,255,0.08);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex; 
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .member-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 100%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    
+    .member-card:hover {
+      transform: translateY(-8px);
+      border-color: rgba(255,255,255,0.2);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+    
+    .member-card:hover::before {
+      opacity: 1;
+    }
+    
+    .member-icon {
+      width: 110px; 
+      height: 110px; 
+      border-radius: 50%;
+      margin: 0 auto 1.5rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      font-weight: 700;
+      border: 3px solid rgba(255,215,150,0.6);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .member-icon::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      opacity: 0.15;
+      z-index: 0;
+    }
+    
+    .member-icon-content {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.2rem;
+    }
+    
+    .member-icon i {
+      font-size: 2rem;
+    }
+    
+    .member-icon-initials {
+      font-size: 1.8rem;
+      font-weight: 800;
+      line-height: 1;
+    }
+    
+    .member-icon:hover { 
+      transform: scale(1.08) rotate(-5deg);
+      border-color: rgba(255,215,150,0.9);
+      box-shadow: 0 8px 32px rgba(255,215,150,0.3);
+    }
+    
+    .member-name { 
+      font-size: 1.4rem; 
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 0.4rem;
+    }
+    
+    .member-role { 
+      color: #ffb86b; 
+      font-size: 0.9rem; 
+      font-weight: 600; 
+      margin-bottom: 1rem;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    .member-bio { 
+      color: rgba(255,255,255,0.7); 
+      font-size: 0.9rem; 
+      line-height: 1.6; 
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+    
+    /* ===== GLOWING SOCIAL ICONS ===== */
+    .social-links {
+      display: flex; 
+      gap: 1.2rem; 
+      margin-top: auto;
+      font-size: 1.2rem;
+      justify-content: center;
+    }
+    
+    .social-links a {
+      color: rgba(255,255,255,0.9);
+      transition: all 0.3s ease;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.1);
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    /* Instagram glow */
+    .social-links a[href*="instagram"] {
+      background: linear-gradient(45deg, #f09433, #d62976, #962fbf, #4f5bd5);
+      box-shadow: 0 0 15px rgba(225, 48, 108, 0.6);
+      animation: pulseGlow 2s infinite;
+    }
+    
+    /* Spotify glow */
+    .social-links a[href*="spotify"] {
+      background: #1DB954;
+      box-shadow: 0 0 20px rgba(29, 185, 84, 0.7);
+      animation: pulseGlow 2s infinite 0.3s;
+    }
+    
+    /* YouTube glow */
+    .social-links a[href*="youtube"] {
+      background: #FF0000;
+      box-shadow: 0 0 20px rgba(255, 0, 0, 0.7);
+      animation: pulseGlow 2s infinite 0.6s;
+    }
+    
+    /* Generic glow for any other social links */
+    .social-links a {
+      box-shadow: 0 0 15px currentColor;
+    }
+    
+    @keyframes pulseGlow {
+      0% { box-shadow: 0 0 15px currentColor; transform: scale(1); }
+      50% { box-shadow: 0 0 30px currentColor, 0 0 20px currentColor; transform: scale(1.05); }
+      100% { box-shadow: 0 0 15px currentColor; transform: scale(1); }
+    }
+    
+    .social-links a:hover { 
+      transform: scale(1.15) translateY(-3px);
+      filter: brightness(1.2);
+      animation: none;
+      box-shadow: 0 0 40px currentColor, 0 0 30px currentColor;
+    }
+
+    /* ===== SONG CARDS ===== */
+    .music-grid {
+      display: grid; 
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1.5rem; 
+      margin: 2.5rem 0;
+    }
+    
+    .song-card {
+      background: rgba(25,25,35,0.5);
+      backdrop-filter: blur(10px);
+      border-radius: 22px; 
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.08);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      cursor: pointer;
+    }
+    
+    .song-card:hover { 
+      transform: translateY(-6px) scale(1.02);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.5);
+      border-color: rgba(255,255,255,0.15);
+    }
+    
+    .card-img-container {
+      width: 100%; 
+      aspect-ratio: 1/1;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    
+    .card-img-container::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      opacity: 0.2;
+    }
+    
+    .song-icon {
+      position: relative;
+      z-index: 1;
+      font-size: 4rem;
+      transition: transform 0.3s ease;
+    }
+    
+    .song-card:hover .song-icon {
+      transform: scale(1.1) rotate(5deg);
+    }
+    
+    .star-rating {
+      position: absolute; 
+      top: 10px; 
+      right: 10px;
+      background: rgba(0,0,0,0.75); 
+      backdrop-filter: blur(8px);
+      padding: 4px 10px; 
+      border-radius: 20px;
+      color: #ffd966; 
+      font-size: 0.75rem; 
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      z-index: 2;
+    }
+    
+    .card-body { 
+      padding: 1.2rem 1rem; 
+    }
+    
+    .song-title { 
+      font-size: 1.1rem; 
+      font-weight: 700; 
+      margin-bottom: 0.4rem;
+      line-height: 1.3;
+    }
+    
+    .song-album { 
+      color: rgba(255,255,255,0.6); 
+      font-size: 0.8rem; 
+      margin-bottom: 0.8rem;
+      font-weight: 500;
+    }
+    
+    .song-links { 
+      display: flex; 
+      gap: 0.6rem;
+      flex-wrap: wrap;
+    }
+    
+    .song-link {
+      color: white; 
+      background: rgba(255,255,255,0.12);
+      padding: 6px 14px; 
+      border-radius: 20px;
+      text-decoration: none; 
+      font-size: 0.75rem;
+      display: inline-flex; 
+      align-items: center; 
+      gap: 5px;
+      transition: all 0.3s ease;
+      font-weight: 600;
+    }
+    
+    .song-link:hover { 
+      background: rgba(255,255,255,0.25);
+      transform: translateY(-2px);
+    }
+    
+    .song-link.spotify { background: rgba(30, 215, 96, 0.2); }
+    .song-link.spotify:hover { background: rgba(30, 215, 96, 0.4); box-shadow: 0 0 15px #1DB954; }
+    
+    .song-link.youtube { background: rgba(255, 0, 0, 0.2); }
+    .song-link.youtube:hover { background: rgba(255, 0, 0, 0.4); box-shadow: 0 0 15px #FF0000; }
+
+    /* ===== LOADING ===== */
+    .loading-overlay {
+      position: fixed; 
+      top: 0; 
+      left: 0; 
+      width: 100%; 
+      height: 100%;
+      z-index: 1000; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center;
+      background: rgba(10, 10, 15, 0.95); 
+      opacity: 0; 
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+    
+    .loading-overlay.active { 
+      opacity: 1; 
+      visibility: visible; 
+    }
+    
+    .spinner { 
+      width: 48px; 
+      height: 48px; 
+      border: 3px solid rgba(255,255,255,0.15); 
+      border-top-color: white; 
+      border-radius: 50%; 
+      animation: spin 0.8s linear infinite; 
+    }
+    
+    @keyframes spin { 
+      to { transform: rotate(360deg); } 
+    }
+
+    .reveal { 
+      opacity: 0; 
+      transform: translateY(25px); 
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1); 
+    }
+    
+    .reveal.active-reveal { 
+      opacity: 1; 
+      transform: translateY(0); 
+    }
+    
+    .section-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin: 3rem 0 2rem;
+      color: rgba(255,255,255,0.95);
+      letter-spacing: -0.01em;
+    }
+
+    /* Gradient backgrounds for icons */
+    .gradient-kpop { background: linear-gradient(135deg, #ff006e 0%, #8338ec 100%); }
+    .gradient-bts { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+    .gradient-bp { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+    .gradient-rap { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); }
+    .gradient-bruno { background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%); }
+    .gradient-sabrina { background: linear-gradient(135deg, #fccb90 0%, #d57eeb 100%); }
+    
+    /* Song card gradients */
+    .song-gradient-1 { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+    .song-gradient-2 { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+    .song-gradient-3 { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+    .song-gradient-4 { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+    .song-gradient-5 { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+    .song-gradient-6 { background: linear-gradient(135deg, #30cfd0 0%, #330867 100%); }
+    .song-gradient-7 { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); }
+    .song-gradient-8 { background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); }
+
+    @media (max-width: 900px) {
+      .nav-header { 
+        flex-direction: column; 
+        align-items: flex-start; 
+        gap: 1rem;
+        padding: 1rem 5%;
+      }
+      
+      .logo { margin-right: 0; margin-bottom: 0.5rem; }
+      .music-tabs { gap: 1.5rem; }
+      .artist-info h1 { font-size: 2.2rem; }
+      .music-panel { padding: 7rem 5% 4rem; }
+      .artist-header { padding: 1.5rem; }
+      .member-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+      .music-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+    }
+    
+    @media (max-width: 600px) {
+      .artist-avatar { width: 90px; height: 90px; font-size: 2.5rem; }
+      .artist-info h1 { font-size: 1.8rem; }
+      .member-grid { grid-template-columns: 1fr; }
+      .music-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+    }
+  </style>
+</head>
+<body>
+  <div class="dynamic-bg" id="dynamicBg"></div>
+  <div class="color-glaze" id="colorGlaze"></div>
+  <div class="grain"></div>
+
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="spinner"></div>
+  </div>
+
+  <div class="nav-header">
+    <span class="logo"><i class="fas fa-headphones"></i> LOOP</span>
+    <div class="music-tabs">
+      <button class="tab-btn active" data-artist="kpop">
+        <i class="fas fa-heart"></i> K-POP
+      </button>
+      <button class="tab-btn" data-artist="rap">
+        <i class="fas fa-microphone"></i> RAP QUEENS
+      </button>
+      <button class="tab-btn" data-artist="bruno">
+        <i class="fas fa-star"></i> BRUNO MARS
+      </button>
+      <button class="tab-btn" data-artist="sabrina">
+        <i class="fas fa-crown"></i> SABRINA
+      </button>
+    </div>
+  </div>
+
+  <!-- ========== K-POP PANEL ========== -->
+  <div id="panel-kpop" class="music-panel active-panel">
+    <div class="artist-header reveal">
+      <div class="artist-avatar gradient-kpop">
+        <i class="fas fa-heart"></i>
+      </div>
+      <div class="artist-info">
+        <h1>K-POP NATION</h1>
+        <div class="artist-desc">The biggest hits from BTS, BLACKPINK, IVE & aespa</div>
+        <div class="artist-stats">
+          <div class="stat-item">
+            <div class="stat-value">12</div>
+            <div class="stat-label">Songs</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">4</div>
+            <div class="stat-label">Groups</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">5B+</div>
+            <div class="stat-label">Total Views</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BTS Members -->
+    <div class="member-sub reveal">
+      <h2>BTS (방탄소년단)</h2>
+      <div class="member-grid">
+        <div class="member-card">
+          <div class="member-icon gradient-bts">
+            <div class="member-icon-content">
+              <div class="member-icon-initials">RM</div>
+            </div>
+          </div>
+          <div class="member-name">RM (Kim Namjoon)</div>
+          <div class="member-role">Leader · Main Rapper</div>
+          <div class="member-bio">IQ 148 · Fluent in English · Former underground rapper · Solo albums: Indigo, Right Place Wrong Person</div>
+          <div class="social-links">
+            <a href="https://instagram.com/rkive" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+            <a href="https://open.spotify.com/artist/2auC28zjQyVTsiZKNgPRGs" target="_blank" rel="noopener noreferrer"><i class="fab fa-spotify"></i></a>
+            <a href="https://youtube.com/@rkive" target="_blank" rel="noopener noreferrer"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+        
+        <div class="member-card">
+          <div class="member-icon gradient-bts">
+            <div class="member-icon-content">
+              <div class="member-icon-initials">JIN</div>
+            </div>
+          </div>
+          <div class="member-name">Jin (Kim Seokjin)</div>
+          <div class="member-role">Vocalist · Visual</div>
+          <div class="member-bio">Actor · Chef · Solo hit: The Astronaut · Discharged from military service 2024</div>
+          <div class="social-links">
+            <a href="https://instagram.com/jin" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+            <a href="https://open.spotify.com/artist/5Nty6ZCwbJoyu6nCHHKRz3" target="_blank" rel="noopener noreferrer"><i class="fab fa-spotify"></i></a>
+            <a href="https://youtube.com/@BTS" target="_blank" rel="noopener noreferrer"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+        
+        <div class="member-card">
+          <div class="member-icon gradient-bts">
+            <div class="member-icon-content">
+              <i class="fas fa-fire"></i>
+              <div class="member-icon-initials" style="font-size: 1.2rem;">SUGA</div>
+            </div>
+          </div>
+          <div class="member-name">Suga (Min Yoongi)</div>
+          <div class="member-role">Lead Rapper · Producer</div>
+          <div class="member-bio">AgustD · Produced 100+ songs · Grammy nomination · NBA partnership</div>
+          <div class="social-links">
+            <a href="https://instagram.com/agustd" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+            <a href="https://open.spotify.com/artist/0ebNdVaOfp6N0oZ1guIvq" target="_blank" rel="noopener noreferrer"><i class="fab fa-spotify"></i></a>
+            <a href="https://youtube.com/@BTS" target="_blank" rel="noopener noreferrer"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+        
+        <div class="member-card">
+          <div class="member-icon gradient-bts">
+            <div class="member-icon-content">
+              <i class="fas fa-sun"></i>
+              <div class="member-icon-initials" style="font-size: 1.4rem;">JH</div>
+            </div>
+          </div>
+          <div class="member-name">J-Hope (Jung Hoseok)</div>
+          <div class="member-role">Main Dancer · Rapper</div>
+          <div class="member-bio">Choreographer · Solo: Jack In The Box, Hope World · Fashion icon</div>
+          <div class="social-links">
+            <a href="https://instagram.com/uarmyhope" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+            <a href="https://open.spotify.com/artist/0b1sIQumIAsNbqAoIClSpy" target="_blank" rel="noopener noreferrer"><i class="fab fa-spotify"></i></a>
+            <a href="https://youtube.com/@BTS" target="_blank" rel="noopener noreferrer"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+        
+        <div class="member-card">
+          <div class="member-icon gradient-bts">
+            <div class="member-icon-content">
+              <div class="member-icon-initials">JM</div>
+            </div>
+          </div>
+          <div class="member-name">Jimin (Park Jimin)</div>
+          <div class="member-role">Lead Vocalist · Main Dancer</div>
+          <div class="member-bio">Contemporary dancer · Solo: FACE, MUSE · Billboard Hot 100 #1</div>
+          <div class="social-links">
+            <a href="https://instagram.com/j.m" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+            <a href="https://open.spotify.com/artist/1oSPZhvZMIrWW5I41kPkkY" target="_blank" rel="noopener noreferrer"><i class="fab fa-spotify"></i></a>
+            <a href="https://youtube.com/@BTS" target="_blank" rel="noopener noreferrer"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+        
+        <div class="member-card">
+          <div class="member-icon gradient-bts">
+            <div class="member-icon-content">
+              <i class="fas fa-camera"></i>
+              <div class="member-icon-initials" style="font-size: 1.8rem;">V</div>
+            </div>
+          </div>
+          <div class="member-name">V (Kim Taehyung)</div>
+          <div class="member-role">Vocalist · Visual</div>
+          <div class="member-bio">Actor · Photographer · Solo: Layover · Celine ambassador</div>
+          <div class="social-links">
+            <a href="https://instagram.com/thv" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+            <a href="https://open.spotify.com/artist/3JsHnjpbhfSwgeRpX8RwUZ" target="_blank" rel="noopener noreferrer"><i class="fab fa-spotify"></i></a>
+            <a href="https://youtube.com/@BTS" target="_blank" rel="noopener noreferrer"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+        
+        <div class="member-card">
+          <div class="member-icon gradient-bts">
+            <div class="member-icon-content">
+              <i class="fas fa-crown"></i>
+              <div class="member-icon-initials" style="font-size: 1.4rem;">JK</div>
+            </div>
+          </div>
+          <div class="member-name">Jungkook (Jeon Jungkook)</div>
+          <div class="member-role">Main Vocalist · Center · Maknae</div>
+          <div class="member-bio">Golden Maknae · Solo: GOLDEN · First Korean soloist Billboard Hot 100 #1</div>
+          <div class="social-links">
+            <a href="https://instagram.com/jungkook.97" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+            <a href="https://open.spotify.com/artist/6HaGTQPmzraVmaVxvz6EUc" target="_blank" rel="noopener noreferrer"><i class="fab fa-spotify"></i></a>
+            <a href="https://youtube.com/@BTS" target="_blank" rel="noopener noreferrer"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BLACKPINK Members -->
+    <div class="member-sub reveal">
+      <h2>BLACKPINK (블랙핑크)</h2>
+      <div class="member-grid">
+        <div class="member-card">
+          <div class="member-icon gradient-bp">
+            <div class="member-icon-content">
+              <i class="fas fa-gem"></i>
+              <div class="member-icon-initials" style="font-size: 1.4rem;">JS</div>
+            </div>
+          </div>
+          <div class="member-name">Jisoo (Kim Jisoo)</div>
+          <div class="member-role">Lead Vocalist · Visual</div>
+          <div class="member-bio">Actress · Solo: ME · Dior ambassador · Drama: Snowdrop</div>
+          <div class="social-links">
+            <a href="https://instagram.com/sooyaaa__" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+            <a href="https://open.spotify.com/artist/4yGCdd4QCRFABb5RybdcHf" target="_blank" rel="noopener noreferrer"><i class="fab fa-spotify"></i></a>
+            <a href="https://youtube.com/@BLACKPINK" target="_blank" rel="noopener noreferrer"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+        
+        <div class="member-card">
+          <div class="member-icon gradient-bp">
+            <div class="member-icon-content">
+              <i class="fas fa-star"></i>
+              <div class="member-icon-initials" style="font-size: 1.4rem;">JN</div>
+            </div>
+          </div>
+          <div class="member-name">Jennie (Jennie Kim)</div>
+          <div class="member-role">Main Rapper · Lead Vocalist</div>
+          <div class="member-bio">Solo: SOLO, The Idol OST · Chanel ambassador · Fashion icon</div>
+          <div class="social-links">
+            <a href="https://instagram.com/jennierubyjane" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+            <a href="https://open.spotify.com/artist/250b0Wlc5Vk0CoUsaCY84M" target="_blank" rel="noopener noreferrer"><i class="fab fa-spotify"></i></a>
+            <a href="https://youtube.com/@BLACKPINK" target="_blank" rel="noopener noreferrer"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+        
+        <div class="member-card">
+          <div class="member-icon gradient-bp">
+            <div class="member-icon-content">
+              <i class="fas fa-rose"></i>
+              <div class="member-icon-initials" style="font-size: 1.4rem;">RS</div>
+            </div>
+          </div>
+          <div class="member-name">Rosé (Park Chaeyoung)</div>
+          <div class="member-role">Main Vocalist · Lead Dancer</div>
+          <div class="member-bio">Solo: rosie · APT. with Bruno Mars · Saint Laurent ambassador</div>
+          <div class="social-links">
+            <a href="https://instagram.com/roses_are_rosie" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+            <a href="https://open.spotify.com/artist/3eVa5w3URK5duf6eyVDbu9" target="_blank" rel="noopener noreferrer"><i class="fab fa-spotify"></i></a>
+            <a href="https://youtube.com/@BLACKPINK" target="_blank" rel="noopener noreferrer"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+        
+        <div class="member-card">
+          <div class="member-icon gradient-bp">
+            <div class="member-icon-content">
+              <i class="fas fa-bolt"></i>
+              <div class="member-icon-initials" style="font-size: 1.8rem;">L</div>
+            </div>
+          </div>
+          <div class="member-name">Lisa (Lalisa Manobal)</div>
+          <div class="member-role">Main Dancer · Lead Rapper · Maknae</div>
+          <div class="member-bio">Thai rapper · Solo: LALISA, ROCKSTAR · Celine ambassador · Most followed K-pop idol</div>
+          <div class="social-links">
+            <a href="https://instagram.com/lalalalisa_m" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+            <a href="https://open.spotify.com/artist/5L1lO4eRHmJ7a0Q6csE5cT" target="_blank" rel="noopener noreferrer"><i class="fab fa-spotify"></i></a>
+            <a href="https://youtube.com/@BLACKPINK" target="_blank" rel="noopener noreferrer"><i class="fab fa-youtube"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- K-POP SONGS -->
+    <h2 class="section-title reveal">Essential K-Pop Hits</h2>
+    <div class="music-grid reveal">
+      <div class="song-card">
+        <div class="card-img-container song-gradient-1">
+          <i class="fas fa-bomb song-icon"></i>
+          <div class="star-rating"><i class="fas fa-star"></i> 4.9</div>
+        </div>
+        <div class="card-body">
+          <div class="song-title">Dynamite</div>
+          <div class="song-album">BTS · BE</div>
+          <div class="song-links">
+            <a href="https://youtu.be/gdZLi9oWNZg" target="_blank" rel="noopener noreferrer" class="song-link youtube">
+              <i class="fab fa-youtube"></i> Watch
+            </a>
+            <a href="https://open.spotify.com/track/5QDLhrAOJJdNAmCTJ8xMyW" target="_blank" rel="noopener noreferrer" class="song-link spotify">
+              <i class="fab fa-spotify"></i> Play
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="song-card">
+        <div class="card-img-container song-gradient-2">
+          <i class="fas fa-fire song-icon"></i>
+          <div class="star-rating"><i class="fas fa-star"></i> 4.8</div>
+        </div>
+        <div class="card-body">
+          <div class="song-title">How You Like That</div>
+          <div class="song-album">BLACKPINK · THE ALBUM</div>
+          <div class="song-links">
+            <a href="https://youtu.be/ioNng23DkIM" target="_blank" rel="noopener noreferrer" class="song-link youtube">
+              <i class="fab fa-youtube"></i> Watch
+            </a>
+            <a href="https://open.spotify.com/track/4SFknyjLcyTLxU4ghFJVMe" target="_blank" rel="noopener noreferrer" class="song-link spotify">
+              <i class="fab fa-spotify"></i> Play
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="song-card">
+        <div class="card-img-container song-gradient-3">
+          <i class="fas fa-water song-icon"></i>
+          <div class="star-rating"><i class="fas fa-star"></i> 4.9</div>
+        </div>
+        <div class="card-body">
+          <div class="song-title">LOVE DIVE</div>
+          <div class="song-album">IVE</div>
+          <div class="song-links">
+            <a href="https://youtu.be/Y8JFxS1Hlz4" target="_blank" rel="noopener noreferrer" class="song-link youtube">
+              <i class="fab fa-youtube"></i> Watch
+            </a>
+            <a href="https://open.spotify.com/track/0Q5VnK2DYzRyfqQRJuUtvi" target="_blank" rel="noopener noreferrer" class="song-link spotify">
+              <i class="fab fa-spotify"></i> Play
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="song-card">
+        <div class="card-img-container song-gradient-4">
+          <i class="fas fa-rocket song-icon"></i>
+          <div class="star-rating"><i class="fas fa-star"></i> 4.7</div>
+        </div>
+        <div class="card-body">
+          <div class="song-title">Next Level</div>
+          <div class="song-album">aespa</div>
+          <div class="song-links">
+            <a href="https://youtu.be/4TWR90KJl84" target="_blank" rel="noopener noreferrer" class="song-link youtube">
+              <i class="fab fa-youtube"></i> Watch
+            </a>
+            <a href="https://open.spotify.com/track/2zrhoHKcd6kzOQrWgKBGqr" target="_blank" rel="noopener noreferrer" class="song-link spotify">
+              <i class="fab fa-spotify"></i> Play
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="song-card">
+        <div class="card-img-container song-gradient-5">
+          <i class="fas fa-butter song-icon"></i>
+          <div class="star-rating"><i class="fas fa-star"></i> 4.9</div>
+        </div>
+        <div class="card-body">
+          <div class="song-title">Butter</div>
+          <div class="song-album">BTS</div>
+          <div class="song-links">
+            <a href="https://youtu.be/WMweEpGlu_U" target="_blank" rel="noopener noreferrer" class="song-link youtube">
+              <i class="fab fa-youtube"></i> Watch
+            </a>
+            <a href="https://open.spotify.com/track/1mWdTewIgB3gtBM3TOSFhB" target="_blank" rel="noopener noreferrer" class="song-link spotify">
+              <i class="fab fa-spotify"></i> Play
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="song-card">
+        <div class="card-img-container song-gradient-6">
+          <i class="fas fa-flask-poison song-icon"></i>
+          <div class="star-rating"><i class="fas fa-star"></i> 4.8</div>
+        </div>
+        <div class="card-body">
+          <div class="song-title">Pink Venom</div>
+          <div class="song-album">BLACKPINK · BORN PINK</div>
+          <div class="song-links">
+            <a href="https://youtu.be/gQlMMD8auMs" target="_blank" rel="noopener noreferrer" class="song-link youtube">
+              <i class="fab fa-youtube"></i> Watch
+            </a>
+            <a href="https://open.spotify.com/track/7gRFDGEzF9UkBV233yv2dc" target="_blank" rel="noopener noreferrer" class="song-link spotify">
+              <i class="fab fa-spotify"></i> Play
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="song-card">
+        <div class="card-img-container song-gradient-7">
+          <i class="fas fa-hands song-icon"></i>
+          <div class="star-rating"><i class="fas fa-star"></i> 4.8</div>
+        </div>
+        <div class="card-body">
+          <div class="song-title">Permission to Dance</div>
+          <div class="song-album">BTS</div>
+          <div class="song-links">
+            <a href="https://youtu.be/CuklIb9d3fI" target="_blank" rel="noopener noreferrer" class="song-link youtube">
+              <i class="fab fa-youtube"></i> Watch
+            </a>
+            <a href="https://open.spotify.com/track/30wpXZANv2vQJAQZzyDT84" target="_blank" rel="noopener noreferrer" class="song-link spotify">
+              <i class="fab fa-spotify"></i> Play
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="song-card">
+        <div class="card-img-container song-gradient-8">
+          <i class="fas fa-heart-broken song-icon"></i>
+          <div class="star-rating"><i class="fas fa-star"></i> 4.9</div>
+        </div>
+        <div class="card-body">
+          <div class="song-title">Kill This Love</div>
+          <div class="song-album">BLACKPINK</div>
+          <div class="song-links">
+            <a href="https://youtu.be/2S24-y0Ij3Y" target="_blank" rel="noopener noreferrer" class="song-link youtube">
+              <i class="fab fa-youtube"></i> Watch
+            </a>
+            <a href="https://open.spotify.com/track/6hvFrHNmIR2eVWJEPK7Wvw" target="_blank" rel="noopener noreferrer" class="song-link spotify">
+              <i class="fab fa-spotify"></i> Play
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="song-card">
+        <div class="card-img-container song-gradient-1">
+          <i class="fas fa-thumbs-up song-icon"></i>
+          <div class="star-rating"><i class="fas fa-star"></i> 4.7</div>
+        </div>
+        <div class="card-body">
+          <div class="song-title">After LIKE</div>
+          <div class="song-album">IVE</div>
+          <div class="song-links">
+            <a href="https://youtu.be/F0B7HDiY-10" target="_blank" rel="noopener noreferrer" class="song-link youtube">
+              <i class="fab fa-youtube"></i> Watch
+            </a>
+            <a href="https://open.spotify.com/track/7nv1uMDLDOFANTYOcZvp3K" target="_blank" rel="noopener noreferrer" class="song-link spotify">
+              <i class="fab fa-spotify"></i> Play
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="song-card">
+        <div class="card-img-container song-gradient-2">
+          <i class="fas fa-pepper-hot song-icon"></i>
+          <div class="star-rating"><i class="fas fa-star"></i> 4.8</div>
+        </div>
+        <div class="card-body">
+          <div class="song-title">Spicy</div>
+          <div class="song-album">aespa · MY WORLD</div>
+          <div class="song-links">
+            <a href="https://youtu.be/Os_heh8vPfs" target="_blank" rel="noopener noreferrer" class="song-link youtube">
+              <i class="fab fa-youtube"></i> Watch
+            </a>
+            <a href="https://open.spotify.com/track/6YvXTnNQAW2fM3fJ4cRQgm" target="_blank" rel="noopener noreferrer" class="song-link spotify">
+              <i class="fab fa-spotify"></i> Play
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="song-card">
+        <div class="card-img-container song-gradient-3">
+          <i class="fas fa-mask song-icon"></i>
+          <div class="star-rating"><i class="fas fa-star"></i> 4.9</div>
+        </div>
+        <div class="card-body">
+          <div class="song-title">Fake Love</div>
+          <div class="song-album">BTS · LOVE YOURSELF</div>
+          <div class="song-links">
+            <a href="https://youtu.be/7C2z4GqqS5E" target="_blank" rel="noopener noreferrer" class="song-link youtube">
+              <i class="fab fa-youtube"></i> Watch
+            </a>
+            <a href="https://open.spotify.com/track/2DJZmzZLa3vYqYtiP0NXQT" target="_blank" rel="noopener noreferrer" class="song-link spotify">
+              <i class="fab fa-spotify"></i> Play
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="song-card">
+        <div class="card-img-container song-gradient-4">
+          <i class="fas fa-heart-pulse song-icon"></i>
+          <div class="star-rating"><i class="fas fa-star"></i> 4.8</div>
+        </div>
+        <div class="card-body">
+          <div class="song-title">Lovesick Girls</div>
+          <div class="song-album">BLACKPINK · THE ALBUM</div>
+          <div class="song-links">
+            <a href="https://youtu.be/dyRsYk0LyA8" target="_blank" rel="noopener noreferrer" class="song-link youtube">
+              <i class="fab fa-youtube"></i> Watch
+            </a>
+            <a href="https://open.spotify.com/track/4Ws314Ylb27BVsvlTY88Vr" target="_blank" rel="noopener noreferrer" class="song-link spotify">
+              <i class="fab fa-spotify"></i> Play
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== RAP QUEENS PANEL ========== -->
+  <div id="panel-rap" class="music-panel">
+    <div class="artist-header reveal">
+      <div class="artist-avatar gradient-rap">
+        <i class="fas fa-microphone"></i>
+      </div>
+      <div class="artist-info">
+        <h1>RAP QUEENS</h1>
+        <div class="artist-desc">The most influential female rappers of the generation</div>
+        <div class="artist-stats">
+          <div class="stat-item">
+            <div class="stat-value">10</div>
+            <div class="stat-label">Artists</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">15</div>
+            <div class="stat-label">Grammys</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">$500M+</div>
+            <div class="stat-label">Net Worth</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Female Rappers Grid -->
+    <div class="member-grid reveal">
+      <div class="member-card">
+        <div class="member-icon gradient-rap">
+          <div class="member-icon-content">
+            <i class="fas fa-crown"></i>
+            <div class="member-icon-initials" style="font-size: 1.4rem;">NM</div>
+          </div>
+        </div>
+        <div class="member-name">Nicki Minaj</div>
+        <div class="member-role">Queen of Rap</div>
+        <div class="member-bio">10 Billboard #1s · 100+ Hot 100 entries · Pink Friday series · Net worth $150M · Most awarded female rapper in history</div>
+        <div class="social-links">
+          <a href="https://instagram.com/nickiminaj" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+          <a href="https://open.spotify.com/artist/0hCNtLu0JehylgoiP8L4Gh" target="_blank" rel="noopener noreferrer"><i class="fab fa-spotify"></i></a>
+          <a href="https://youtube.com/@NickiMinaj" target="_blank" rel="noopener noreferrer"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+      
+      <div class="member-card">
+        <div class="member-icon gradient-rap">
+          <div class="member-icon-content">
+            <i class="fas fa-trophy"></i>
+            <div class="member-icon-initials" style="font-size: 1.4rem;">CB</div>
+          </div>
+        </div>
+        <div class="member-name">Cardi B</div>
+        <div class="member-role">Grammy Winner</div>
+        <div class="member-bio">Bodak Yellow · Invasion of Privacy Grammy · First female rapper to win Best Rap Album · Net worth $80M</div>
+        <div class="social-links">
+          <a href="https://instagram.com/iamcardib" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+          <a href="https://open.spotify.com/artist/4kYSro6naA4h99UJvo89HB" target="_blank" rel="noopener noreferrer"><i class="fab fa-spotify"></i></a>
+          <a href="https://youtube.com/@iamcardib" target="_blank" rel="noopener noreferrer"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+      
+      <div class="member-card">
+        <div class="member-icon gradient-rap">
+          <div class="member-icon-content">
+            <i class="fas fa-horse"></i>
+            <div class="member-icon-initials" style="font-size: 1.2rem;">MTS</div>
+          </div>
+        </div>
+        <div class="member-name">Megan Thee Stallion</div>
+        <div class="member-role">Hot Girl Coach</div>
+        <div class="member-bio">3 Grammys · Savage remix with Beyoncé · Time 100 · Hot Girl Summer pioneer · First female rapper SNL musical guest in 2019</div>
+        <div class="social-links">
+          <a href="https://instagram.com/theestallion" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+          <a href="https://open.spotify.com/artist/181bsRPaVXVlUKXrxwZfHK" target="_blank" rel="noopener noreferrer"><i class="fab fa-spotify"></i></a>
+          <a href="https://youtube.com/@MeganTheeStallion" target="_blank" rel="noopener noreferrer"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+      
+      <div class="member-card">
+        <div class="member-icon gradient-rap">
+          <div class="member-icon-content">
+            <i class="fas fa-cat"></i>
+            <div class="member-icon-initials" style="font-size: 1.4rem;">DC</div>
+          </div>
+        </div>
+        <div class="member-name">Doja Cat</div>
+        <div class="member-role">Rapper / Singer / Producer</div>
+        <div class="member-bio">Planet Her · Say So · Woman · 3 Grammys · Viral TikTok sensation · Multi-instrumentalist</div>
+        <div class="social-links">
+          <a href="https://instagram.com/dojacat" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+          <a href="https://open.spotify.com/artist/5cj0lLjcoR7YOSnhnX0Po5" target="_blank" rel="noopener noreferrer"><i class="fab fa-spotify"></i></a>
+          <a href="https://youtube.com/@DojaCat" target="_blank" rel="noopener noreferrer"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+      
+      <div class="member-card">
+        <div class="member-icon gradient-rap">
+          <div class="member-icon-content">
+            <i class="fas fa-bolt"></i>
+            <div class="member-icon-initials" style="font-size: 1.8rem;">L</div>
+          </div>
+        </div>
+        <div class="member-name">Latto</div>
+        <div class="member-role">Atlanta Trap Queen</div>
+        <div class="member-bio">Big Energy · 777 · Winner of The Rap Game · First woman to win XXL Freshman · 2x BET Hip Hop Awards</div>
+        <div class="social-links">
+          <a href="https://instagram.com/latto" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+          <a href="https://open.spotify.com/artist/3MdXrJWsbVzdn6fe5JYkSQ" target="_blank" rel="noopener noreferrer"><i class="fab fa-spotify"></i></a>
+          <a href="https://youtube.com/@LattoVEVO" target="_blank" rel="noopener noreferrer"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+      
+      <div class="member-card">
+        <div class="member-icon gradient-rap">
+          <div class="member-icon-content">
+            <i class="fas fa-city"></i>
+            <div class="member-icon-initials" style="font-size: 1.4rem;">CG</div>
+          </div>
+        </div>
+        <div class="member-name">City Girls</div>
+        <div class="member-role">Miami Duo</div>
+        <div class="member-bio">JT & Yung Miami · Act Up · Twerkulator · Quality Control Records · Caresha Please podcast</div>
+        <div class="social-links">
+          <a href="https://instagram.com/citygirls" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+          <a href="https://open.spotify.com/artist/37hAfseJWi0G3Scife12Il" target="_blank" rel="noopener noreferrer"><i class="fab fa-spotify"></i></a>
+          <a href="https://youtube.com/@CityGirlsVEVO" target="_blank" rel="noopener noreferrer"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+      
+      <div class="member-card">
+        <div class="member-icon gradient-rap">
+          <div class="member-icon-content">
+            <i class="fas fa-snowflake"></i>
+            <div class="member-icon-initials" style="font-size: 1.8rem;">S</div>
+          </div>
+        </div>
+        <div class="member-name">Saweetie</div>
+        <div class="member-role">Icy Girl</div>
+        <div class="member-bio">Icy Grl · My Type · Best Friend · Multi-platinum · USC Communications grad · Former model</div>
+        <div class="social-links">
+          <a href="https://instagram.com/saweetie" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+          <a href="https://open.spotify.com/artist/6cK3NBO6uP7hh0oyuVFlgl" target="_blank" rel="noopener noreferrer"><i class="fab fa-spotify"></i></a>
+          <a href="https://youtube.com/@SaweetieVEVO" target="_blank" rel="noopener noreferrer"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+      
+      <div class="member-card">
+        <div class="member-icon gradient-rap">
+          <div class="member-icon-content">
+            <i class="fas fa-music"></i>
+            <div class="member-icon-initials" style="font-size: 1.4rem;">FM</div>
+          </div>
+        </div>
+        <div class="member-name">Flo Milli</div>
+        <div class="member-role">Mobile, AL</div>
+        <div class="member-bio">Beef FloMix · In The Party · Never Lose Me · Ho, why is you here? · TikTok viral sensation</div>
+        <div class="social-links">
+          <a href="https://instagram.com/flomilli" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+          <a href="https://open.spotify.com/artist/08PvCOlef4xdOr20jFSTPd" target="_blank" rel="noopener noreferrer"><i class="fab fa-spotify"></i></a>
+          <a href="https://youtube.com/@FloMilliVEVO" target="_blank" rel="noopener noreferrer"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+      
+      <div class="member-card">
+        <div class="member-icon gradient-rap">
+          <div class="member-icon-content">
+            <i class="fas fa-icicles"></i>
+            <div class="member-icon-initials" style="font-size: 1.4rem;">IS</div>
+          </div>
+        </div>
+        <div class="member-name">Ice Spice</div>
+        <div class="member-role">Bronx Baddie</div>
+        <div class="member-bio">Munch · Boy's a Liar Pt. 2 · 2 Grammy noms · XXL Freshman 2023 · Dunkin' Donuts collab</div>
+        <div class="social-links">
+          <a href="https://instagram.com/icespice" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+          <a href="https://open.spotify.com/artist/3ZZwu1P5xXzrKJpIAkVxwb" target="_blank" rel="noopener noreferrer"><i class="fab fa-spotify"></i></a>
+          <a href="https://youtube.com/@IceSpiceVEVO" target="_blank" rel="noopener noreferrer"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+      
+      <div class="member-card">
+        <div class="member-icon gradient-rap">
+          <div class="member-icon-content">
+            <i class="fas fa-gamepad"></i>
+            <div class="member-icon-initials" style="font-size: 1.4rem;">CL</div>
+          </div>
+        </div>
+        <div class="member-name">Coi Leray</div>
+        <div class="member-role">Trendsetter</div>
+        <div class="member-bio">Players · No More Parties · Billboard Hot 100 top 10 · Daughter of Benzino · MTV VMA winner</div>
+        <div class="social-links">
+          <a href="https://instagram.com/coileray" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+          <a href="https://open.spotify.com/artist/6DPvY6GqobTcyGqUnQZuRx" target="_blank" rel="noopener noreferrer"><i class="fab fa-spotify"></i></a>
+          <a href="https://youtube.com/@CoiLerayVEVO" target="_blank" rel="noopener noreferrer"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+    </div>
+
+    <!-- RAP SONGS -->
+    <h2 class="section-title reveal">Essential Rap Tracks</h2>
+    <div class="music-grid reveal">
+      <div class="song-card">
+        <div class="card-img-container song-gradient-5">
+          <i class="fas fa-rocket song-icon"></i>
+          <div class="star-rating"><i class="fas fa-star"></i> 4.9</div>
+        </div>
+        <div class="card-body">
+          <div class="song-title">Super Bass</div>
+          <div class="song-album">Nicki Minaj · Pink Friday</div>
+          <div class="song-links">
+            <a href="https://youtu.be/4JipHEz53sU" target="_blank" rel="noopener noreferrer" class="song-link youtube">
+              <i class="fab fa-youtube"></i> Watch
+            </a>
+            <a href="https://open.spotify.com/track/1M8K1aReNaSoQvD8fVBNgf" target="_blank" rel="noopener noreferrer" class="song-link spotify">
+              <i class="fab fa-spotify"></i> Play
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="song-card">
+        <div class="card-img-container song-gradient-6">
+          <i class="fas fa-gem song-icon"></i>
+          <div class="star-rating"><i class="fas fa-star"></i> 4.8</div>
+        </div>
+        <div class="card-body">
+          <div class="song-title">Bodak Yellow</div>
+          <div class="song-album">Cardi B</div>
+          <div class="song-links">
+            <a href="https://youtu.be/PEGccV-NOm8" target="_blank" rel="noopener noreferrer" class="song-link youtube">
+              <i class="fab fa-youtube"></i> Watch
+            </a>
+            <a href="https://open.spotify.com/track/6Gm70jtZNcvSXh3gT2sRlJ" target="_blank" rel="noopener noreferrer" class="song-link spotify">
+              <i class="fab fa-spotify"></i> Play
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="song-card">
+        <div class="card-img-container song-gradient-7">
+          <i class="fas fa-bolt song-icon"></i>
+          <div class="star-rating"><i class="fas fa-star"></i> 4.8</div>
+        </div>
+        <div class="card-body">
+          <div class="song-title">Savage</div>
+          <div class="song-album">Megan Thee Stallion</div>
+          <div class="song-links">
+            <a href="https://youtu.be/EOxj2ROIxok" target="_blank" rel="noopener noreferrer" class="song-link youtube">
+              <i class="fab fa-youtube"></i> Watch
+            </a>
+            <a href="https://open.spotify.com/track/01OSGMAFY1JIoPiVMCDEgW" target="_blank" rel="noopener noreferrer" class="song-link spotify">
+              <i class="fab fa-spotify"></i> Play
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="song-card">
+        <div class="card-img-container song-gradient-8">
+          <i class="fas fa-venus song-icon"></i>
+          <div class="star-rating"><i class="fas fa-star"></i> 4.7</div>
+        </div>
+        <div class="card-body">
+          <div class="song-title">Woman</div>
+          <div class="song-album">Doja Cat · Planet Her</div>
+          <div class="song-links">
+            <a href="https://youtu.be/Yw6u6YkTgQ4" target="_blank" rel="noopener noreferrer" class="song-link youtube">
+              <i class="fab fa-youtube"></i> Watch
+            </a>
+            <a href="https://open.spotify.com/track/6Uj1ctrBOjOas8xZXGqKk4" target="_blank" rel="noopener noreferrer" class="song-link spotify">
+              <i class="fab fa-spotify"></i> Play
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="song-card">
+        <div class="card-img-container song-gradient-1">
+          <i class="fas fa-dragon song-icon"></i>
+          <div class="star-rating"><i class="fas fa-star"></i> 4.8</div>
+        </div>
+        <div class="card-body">
+          <div class="song-title">Chun-Li</div>
+          <div class="song-album">Nicki Minaj</div>
+          <div class="song-links">
+            <a href="https://youtu.be/Wpm07-BGJnE" target="_blank" rel="noopener noreferrer" class="song-link youtube">
+              <i class="fab fa-youtube"></i> Watch
+            </a>
+            <a href="https://open.spotify.com/track/6IKWr4YwObVFhEGhQU6WMQ" target="_blank" rel="noopener noreferrer" class="song-link spotify">
+              <i class="fab fa-spotify"></i> Play
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="song-card">
+        <div class="card-img-container song-gradient-2">
+          <i class="fas fa-fire-flame-curved song-icon"></i>
+          <div class="star-rating"><i class="fas fa-star"></i> 4.9</div>
+        </div>
+        <div class="card-body">
+          <div class="song-title">WAP</div>
+          <div class="song-album">Cardi B ft. Megan</div>
+          <div class="song-links">
+            <a href="https://youtu.be/hsm4poTWjMs" target="_blank" rel="noopener noreferrer" class="song-link youtube">
+              <i class="fab fa-youtube"></i> Watch
+            </a>
+            <a href="https://open.spotify.com/track/4Oun2ylbjFKMPTiaSbbCih" target="_blank" rel="noopener noreferrer" class="song-link spotify">
+              <i class="fab fa-spotify"></i> Play
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="song-card">
+        <div class="card-img-container song-gradient-3">
+          <i class="fas fa-dumbbell song-icon"></i>
+          <div class="star-rating"><i class="fas fa-star"></i> 4.7</div>
+        </div>
+        <div class="card-body">
+          <div class="song-title">Body</div>
+          <div class="song-album">Megan Thee Stallion</div>
+          <div class="song-links">
+            <a href="https://youtu.be/BEThNOYYHvI" target="_blank" rel="noopener noreferrer" class="song-link youtube">
+              <i class="fab fa-youtube"></i> Watch
+            </a>
+            <a href="https://open.spotify.com/track/5kG0yONqU0m17HI5TwkJm0" target="_blank" rel="noopener noreferrer" class="song-link spotify">
+              <i class="fab fa-spotify"></i> Play
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="song-card">
+        <div class="card-img-container song-gradient-4">
+          <i class="fas fa-comments song-icon"></i>
+          <div class="star-rating"><i class="fas fa-star"></i> 4.8</div>
+        </div>
+        <div class="card-body">
+          <div class="song-title">Say So</div>
+          <div class="song-album">Doja Cat · Hot Pink</div>
+          <div class="song-links">
+            <a href="https://youtu.be/pok8H_KF1FA" target="_blank" rel="noopener noreferrer" class="song-link youtube">
+              <i class="fab fa-youtube"></i> Watch
+            </a>
+            <a href="https://open.spotify.com/track/3Dv1eDb0MEgF93GpLXlucZ" target="_blank" rel="noopener noreferrer" class="song-link spotify">
+              <i class="fab fa-spotify"></i> Play
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="song-card">
+        <div class="card-img-container song-gradient-5">
+          <i class="fas fa-battery-full song-icon"></i>
+          <div class="star-rating"><i class="fas fa-star"></i> 4.6</div>
+        </div>
+        <div class="card-body">
+          <div class="song-title">Big Energy</div>
+          <div class="song-album">Latto · 777</div>
+          <div class="song-links">
+            <a href="https://youtu.be/0fYL_qybif8" target="_blank" rel="noopener noreferrer" class="song-link youtube">
+              <i class="fab fa-youtube"></i> Watch
+            </a>
+            <a href="https://open.spotify.com/track/6w76KgGYiuSM2nFmv67FeT" target="_blank" rel="noopener noreferrer" class="song-link spotify">
+              <i class="fab fa-spotify"></i> Play
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="song-card">
+        <div class="card-img-container song-gradient-6">
+          <i class="fas fa-music song-icon"></i>
+          <div class="star-rating"><i class="fas fa-star"></i> 4.5</div>
+        </div>
+        <div class="card-body">
+          <div class="song-title">Twerkulator</div>
+          <div class="song-album">City Girls</div>
+          <div class="song-links">
+            <a href="https://youtu.be/GqPjMZ9_uo8" target="_blank" rel="noopener noreferrer" class="song-link youtube">
+              <i class="fab fa-youtube"></i> Watch
+            </a>
+            <a href="https://open.spotify.com/track/6Wuv5TRQJqDVsyXyRGAd1Y" target="_blank" rel="noopener noreferrer" class="song-link spotify">
+              <i class="fab fa-spotify"></i> Play
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="song-card">
+        <div class="card-img-container song-gradient-7">
+          <i class="fas fa-heart song-icon"></i>
+          <div class="star-rating"><i class="fas fa-star"></i> 4.7</div>
+        </div>
+        <div class="card-body">
+          <div class="song-title">My Type</div>
+          <div class="song-album">Saweetie · ICY</div>
+          <div class="song-links">
+            <a href="https://youtu.be/pjH6gVSpgec" target="_blank" rel="noopener noreferrer" class="song-link youtube">
+              <i class="fab fa-youtube"></i> Watch
+            </a>
+            <a href="https://open.spotify.com/track/1wKPYQu8zfxwPe4WCg4HXL" target="_blank" rel="noopener noreferrer" class="song-link spotify">
+              <i class="fab fa-spotify"></i> Play
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="song-card">
+        <div class="card-img-container song-gradient-8">
+          <i class="fas fa-infinity song-icon"></i>
+          <div class="star-rating"><i class="fas fa-star"></i> 4.6</div>
+        </div>
+        <div class="card-body">
+          <div class="song-title">Never Lose Me</div>
+          <div class="song-album">Flo Milli</div>
+          <div class="song-links">
+            <a href="https://youtu.be/qzfSnaSxL0Q" target="_blank" rel="noopener noreferrer" class="song-link youtube">
+              <i class="fab fa-youtube"></i> Watch
+            </a>
+            <a href="https://open.spotify.com/track/3rI8fhXdFRWz9Q9t4vQOtI" target="_blank" rel="noopener noreferrer" class="song-link spotify">
+              <i class="fab fa-spotify"></i> Play
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="song-card">
+        <div class="card-img-container song-gradient-1">
+          <i class="fas fa-utensils song-icon"></i>
+          <div class="star-rating"><i class="fas fa-star"></i> 4.7</div>
+        </div>
+        <div class="card-body">
+          <div class="song-title">Munch</div>
+          <div class="song-album">Ice Spice</div>
+          <div class="song-links">
+            <a href="https://youtu.be/daxGhfuTJpI" target="_blank" rel="noopener noreferrer" class="song-link youtube">
+              <i class="fab fa-youtube"></i> Watch
+            </a>
+            <a href="https://open.spotify.com/track/4GiCWJhA0p7LLdM78DdtRA" target="_blank" rel="noopener noreferrer" class="song-link spotify">
+              <i class="fab fa-spotify"></i> Play
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="song-card">
+        <div class="card-img-container song-gradient-2">
+          <i class="fas fa-gamepad song-icon"></i>
+          <div class="star-rating"><i class="fas fa-star"></i> 4.5</div>
+        </div>
+        <div class="card-body">
+          <div class="song-title">Players</div>
+          <div class="song-album">Coi Leray</div>
+          <div class="song-links">
+            <a href="https://youtu.be/J00nt3DZ-44" target="_blank" rel="noopener noreferrer" class="song-link youtube">
+              <i class="fab fa-youtube"></i> Watch
+            </a>
+            <a href="https://open.spotify.com/track/7n1vMFhFWqLZMBvdalhQR9" target="_blank" rel="noopener noreferrer" class="song-link spotify">
+              <i class="fab fa-spotify"></i> Play
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="song-card">
+        <div class="card-img-container song-gradient-3">
+          <i class="fas fa-shuttle-space song-icon"></i>
+          <div class="star-rating"><i class="fas fa-star"></i> 4.8</div>
+        </div>
+        <div class="card-body">
+          <div class="song-title">Starships</div>
+          <div class="song-album">Nicki Minaj · Pink Friday</div>
+          <div class="song-links">
+            <a href="https://youtu.be/SeIJmciN8mo" target="_blank" rel="noopener noreferrer" class="song-link youtube">
+              <i class="fab fa-youtube"></i> Watch
+            </a>
+            <a href="https://open.spotify.com/track/5UKJvH53E1u7G03MSFV3N3" target="_blank" rel="noopener noreferrer" class="song-link spotify">
+              <i class="fab fa-spotify"></i> Play
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== BRUNO MARS PANEL ========== -->
+  <div id="panel-bruno" class="music-panel">
+    <div class="artist-header reveal">
+      <div class="artist-avatar gradient-bruno">
+        <i class="fas fa-star"></i>
+      </div>
+      <div class="artist-info">
+        <h1>BRUNO MARS</h1>
+        <div class="artist-desc">15 Grammy Awards · 8 #1 Billboard hits · Over 200 million records sold</div>
+        <div class="artist-stats">
+          <div class="stat-item">
+            <div class="stat-value">15</div>
+            <div class="stat-label">Grammys</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">8</div>
+            <div class="stat-label">Billboard #1s</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">200M+</div>
+            <div class="stat-label">Records Sold</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="member-grid reveal">
+      <div class="member-card">
+        <div class="member-icon gradient-bruno">
+          <div class="member-icon-content">
+            <i class="fas fa-microphone-lines"></i>
+            <div class="member-icon-initials" style="font-size: 1.4rem;">BM</div>
+          </div>
+        </div>
+        <div class="member-name">Bruno Mars</div>
+        <div class="member-role">Singer · Producer · Performer</div>
+        <div class="member-bio">Peter Gene Hernandez · Multi-instrumentalist · Silk Sonic with Anderson .Paak · Super Bowl halftime performer (2014, 2016)</div>
+        <div class="social-links">
+          <a href="https://instagram.com/brunomars" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+          <a href="https://open.spotify.com/artist/0du5cEVh5yTK9QJze8zA0C" target="_blank" rel="noopener noreferrer"><i class="fab fa-spotify"></i></a>
+          <a href="https://youtube.com/@BrunoMars" target="_blank" rel="noopener noreferrer"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="section-title reveal">Greatest Hits</h2>
+    <div class="music-grid reveal">
+      <div class="song-card">
+        <div class="card-img-container song-gradient-5">
+          <i class="fas fa-guitar song-icon"></i>
+          <div class="star-rating"><i class="fas fa-star"></i> 5.0</div>
+        </div>
+        <div class="card-body">
+          <div class="song-title">Uptown Funk</div>
+          <div class="song-album">ft. Mark Ronson</div>
+          <div class="song-links">
+            <a href="https://youtu.be/OPf0YbXqDm0" target="_blank" rel="noopener noreferrer" class="song-link youtube">
+              <i class="fab fa-youtube"></i> Watch
+            </a>
+            <a href="https://open.spotify.com/track/32OlwWuMpZ6b0aN2RZOeMS" target="_blank" rel="noopener noreferrer" class="song-link spotify">
+              <i class="fab fa-spotify"></i> Play
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="song-card">
+        <div class="card-img-container song-gradient-6">
+          <i class="fas fa-ring song-icon"></i>
+          <div class="star-rating"><i class="fas fa-star"></i> 4.9</div>
+        </div>
+        <div class="card-body">
+          <div class="song-title">24K Magic</div>
+          <div class="song-album">24K Magic</div>
+          <div class="song-links">
+            <a href="https://youtu.be/UqyT8IEBkvY" target="_blank" rel="noopener noreferrer" class="song-link youtube">
+              <i class="fab fa-youtube"></i> Watch
+            </a>
+            <a href="https://open.spotify.com/track/6b8Be6ljOzmkOmFslEb23P" target="_blank" rel="noopener noreferrer" class="song-link spotify">
+              <i class="fab fa-spotify"></i> Play
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="song-card">
+        <div class="card-img-container song-gradient-7">
+          <i class="fas fa-door-open song-icon"></i>
+          <div class="star-rating"><i class="fas fa-star"></i> 5.0</div>
+        </div>
+        <div class="card-body">
+          <div class="song-title">Leave The Door Open</div>
+          <div class="song-album">Silk Sonic</div>
+          <div class="song-links">
+            <a href="https://youtu.be/adLGHcj_fmA" target="_blank" rel="noopener noreferrer" class="song-link youtube">
+              <i class="fab fa-youtube"></i> Watch
+            </a>
+            <a href="https://open.spotify.com/track/7MAibcTli4IisCtbHKrGMh" target="_blank" rel="noopener noreferrer" class="song-link spotify">
+              <i class="fab fa-spotify"></i> Play
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="song-card">
+        <div class="card-img-container song-gradient-8">
+          <i class="fas fa-thumbs-up song-icon"></i>
+          <div class="star-rating"><i class="fas fa-star"></i> 4.9</div>
+        </div>
+        <div class="card-body">
+          <div class="song-title">That's What I Like</div>
+          <div class="song-album">24K Magic</div>
+          <div class="song-links">
+            <a href="https://youtu.be/PMivT7MJ41M" target="_blank" rel="noopener noreferrer" class="song-link youtube">
+              <i class="fab fa-youtube"></i> Watch
+            </a>
+            <a href="https://open.spotify.com/track/0KKkJNfGyhkQ5aFogxQAPU" target="_blank" rel="noopener noreferrer" class="song-link spotify">
+              <i class="fab fa-spotify"></i> Play
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="song-card">
+        <div class="card-img-container song-gradient-1">
+          <i class="fas fa-heart song-icon"></i>
+          <div class="star-rating"><i class="fas fa-star"></i> 5.0</div>
+        </div>
+        <div class="card-body">
+          <div class="song-title">Just The Way You Are</div>
+          <div class="song-album">Doo-Wops & Hooligans</div>
+          <div class="song-links">
+            <a href="https://youtu.be/LjhCEhWiKXk" target="_blank" rel="noopener noreferrer" class="song-link youtube">
+              <i class="fab fa-youtube"></i> Watch
+            </a>
+            <a href="https://open.spotify.com/track/0nJW01T7XtvILxQgC5J7Wh" target="_blank" rel="noopener noreferrer" class="song-link spotify">
+              <i class="fab fa-spotify"></i> Play
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="song-card">
+        <div class="card-img-container song-gradient-2">
+          <i class="fas fa-bomb song-icon"></i>
+          <div class="star-rating"><i class="fas fa-star"></i> 4.8</div>
+        </div>
+        <div class="card-body">
+          <div class="song-title">Grenade</div>
+          <div class="song-album">Doo-Wops & Hooligans</div>
+          <div class="song-links">
+            <a href="https://youtu.be/SR6iYWJxHqs" target="_blank" rel="noopener noreferrer" class="song-link youtube">
+              <i class="fab fa-youtube"></i> Watch
+            </a>
+            <a href="https://open.spotify.com/track/4eP5zZXq1vlbyzEe39bY3T" target="_blank" rel="noopener noreferrer" class="song-link spotify">
+              <i class="fab fa-spotify"></i> Play
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="song-card">
+        <div class="card-img-container song-gradient-3">
+          <i class="fas fa-lock song-icon"></i>
+          <div class="star-rating"><i class="fas fa-star"></i> 4.9</div>
+        </div>
+        <div class="card-body">
+          <div class="song-title">Locked Out of Heaven</div>
+          <div class="song-album">Unorthodox Jukebox</div>
+          <div class="song-links">
+            <a href="https://youtu.be/e-fA-gBCkj0" target="_blank" rel="noopener noreferrer" class="song-link youtube">
+              <i class="fab fa-youtube"></i> Watch
+            </a>
+            <a href="https://open.spotify.com/track/0LQqBvJzfuRJ8m8pPhZfKs" target="_blank" rel="noopener noreferrer" class="song-link spotify">
+              <i class="fab fa-spotify"></i> Play
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="song-card">
+        <div class="card-img-container song-gradient-4">
+          <i class="fas fa-clock-rotate-left song-icon"></i>
+          <div class="star-rating"><i class="fas fa-star"></i> 4.7</div>
+        </div>
+        <div class="card-body">
+          <div class="song-title">When I Was Your Man</div>
+          <div class="song-album">Unorthodox Jukebox</div>
+          <div class="song-links">
+            <a href="https://youtu.be/ekzHIouo8Q4" target="_blank" rel="noopener noreferrer" class="song-link youtube">
+              <i class="fab fa-youtube"></i> Watch
+            </a>
+            <a href="https://open.spotify.com/track/0nrRP2bk19rLc0oskG3Fja" target="_blank" rel="noopener noreferrer" class="song-link spotify">
+              <i class="fab fa-spotify"></i> Play
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="song-card">
+        <div class="card-img-container song-gradient-5">
+          <i class="fas fa-bed song-icon"></i>
+          <div class="star-rating"><i class="fas fa-star"></i> 4.8</div>
+        </div>
+        <div class="card-body">
+          <div class="song-title">The Lazy Song</div>
+          <div class="song-album">Doo-Wops & Hooligans</div>
+          <div class="song-links">
+            <a href="https://youtu.be/fLexgOxsZu0" target="_blank" rel="noopener noreferrer" class="song-link youtube">
+              <i class="fab fa-youtube"></i> Watch
+            </a>
+            <a href="https://open.spotify.com/track/5c4H8VCtWZe5T1caYzTgdq" target="_blank" rel="noopener noreferrer" class="song-link spotify">
+              <i class="fab fa-spotify"></i> Play
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="song-card">
+        <div class="card-img-container song-gradient-6">
+          <i class="fas fa-chest song-icon"></i>
+          <div class="star-rating"><i class="fas fa-star"></i> 4.9</div>
+        </div>
+        <div class="card-body">
+          <div class="song-title">Treasure</div>
+          <div class="song-album">Unorthodox Jukebox</div>
+          <div class="song-links">
+            <a href="https://youtu.be/nPvuNsRccVw" target="_blank" rel="noopener noreferrer" class="song-link youtube">
+              <i class="fab fa-youtube"></i> Watch
+            </a>
+            <a href="https://open.spotify.com/track/55h7vJchibLdUkxdlX3fK7" target="_blank" rel="noopener noreferrer" class="song-link spotify">
+              <i class="fab fa-spotify"></i> Play
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="song-card">
+        <div class="card-img-container song-gradient-7">
+          <i class="fas fa-smoking song-icon"></i>
+          <div class="star-rating"><i class="fas fa-star"></i> 4.8</div>
+        </div>
+        <div class="card-body">
+          <div class="song-title">Smokin Out The Window</div>
+          <div class="song-album">Silk Sonic</div>
+          <div class="song-links">
+            <a href="https://youtu.be/cQPbbPkBHRc" target="_blank" rel="noopener noreferrer" class="song-link youtube">
+              <i class="fab fa-youtube"></i> Watch
+            </a>
+            <a href="https://open.spotify.com/track/1q62LkSc2BLxBLvfhkxZtr" target="_blank" rel="noopener noreferrer" class="song-link spotify">
+              <i class="fab fa-spotify"></i> Play
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="song-card">
+        <div class="card-img-container song-gradient-8">
+          <i class="fas fa-sparkles song-icon"></i>
+          <div class="star-rating"><i class="fas fa-star"></i> 4.7</div>
+        </div>
+        <div class="card-body">
+          <div class="song-title">Finesse (Remix)</div>
+          <div class="song-album">ft. Cardi B</div>
+          <div class="song-links">
+            <a href="https://youtu.be/LsoLEjrDogU" target="_blank" rel="noopener noreferrer" class="song-link youtube">
+              <i class="fab fa-youtube"></i> Watch
+            </a>
+            <a href="https://open.spotify.com/track/3Vo4wInECJQuz9BIBMOu8i" target="_blank" rel="noopener noreferrer" class="song-link spotify">
+              <i class="fab fa-spotify"></i> Play
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== SABRINA CARPENTER PANEL ========== -->
+  <div id="panel-sabrina" class="music-panel">
+    <div class="artist-header reveal">
+      <div class="artist-avatar gradient-sabrina">
+        <i class="fas fa-crown"></i>
+      </div>
+      <div class="artist-info">
+        <h1>SABRINA CARPENTER</h1>
+        <div class="artist-desc">Pop sensation · Actress · 6 studio albums · Emails I Can't Send era</div>
+        <div class="artist-stats">
+          <div class="stat-item">
+            <div class="stat-value">6</div>
+            <div class="stat-label">Albums</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">30+</div>
+            <div class="stat-label">Hit Songs</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value">20M+</div>
+            <div class="stat-label">Monthly Listeners</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="member-grid reveal">
+      <div class="member-card">
+        <div class="member-icon gradient-sabrina">
+          <div class="member-icon-content">
+            <i class="fas fa-music"></i>
+            <div class="member-icon-initials" style="font-size: 1.4rem;">SC</div>
+          </div>
+        </div>
+        <div class="member-name">Sabrina Carpenter</div>
+        <div class="member-role">Singer · Actress · Songwriter</div>
+        <div class="member-bio">Girl Meets World actress · Short n' Sweet album · Emails I Can't Send Tour · Former Disney star turned pop icon</div>
+        <div class="social-links">
+          <a href="https://instagram.com/sabrinacarpenter" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+          <a href="https://open.spotify.com/artist/74KM79TiuVKeVCqs8QtB0B" target="_blank" rel="noopener noreferrer"><i class="fab fa-spotify"></i></a>
+          <a href="https://youtube.com/@SabrinaCarpenter" target="_blank" rel="noopener noreferrer"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="section-title reveal">Top Tracks</h2>
+    <div class="music-grid reveal">
+      <div class="song-card">
+        <div class="card-img-container song-gradient-1">
+          <i class="fas fa-brain song-icon"></i>
+          <div class="star-rating"><i class="fas fa-star"></i> 4.9</div>
+        </div>
+        <div class="card-body">
+          <div class="song-title">Nonsense</div>
+          <div class="song-album">Emails I Can't Send</div>
+          <div class="song-links">
+            <a href="https://youtu.be/1I6G0A3fB4M" target="_blank" rel="noopener noreferrer" class="song-link youtube">
+              <i class="fab fa-youtube"></i> Watch
+            </a>
+            <a href="https://open.spotify.com/track/5odlY52u43F5BjByhxg7wg" target="_blank" rel="noopener noreferrer" class="song-link spotify">
+              <i class="fab fa-spotify"></i> Play
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="song-card">
+        <div class="card-img-container song-gradient-2">
+          <i class="fas fa-feather song-icon"></i>
+          <div class="star-rating"><i class="fas fa-star"></i> 4.8</div>
+        </div>
+        <div class="card-body">
+          <div class="song-title">Feather</div>
+          <div class="song-album">Emails I Can't Send</div>
+          <div class="song-links">
+            <a href="https://youtu.be/4p2QbA8n_3Y" target="_blank" rel="noopener noreferrer" class="song-link youtube">
+              <i class="fab fa-youtube"></i> Watch
+            </a>
+            <a href="https://open.spotify.com/track/4rDbp1vnvEZfJw60xtzZCE" target="_blank" rel="noopener noreferrer" class="song-link spotify">
+              <i class="fab fa-spotify"></i> Play
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="song-card">
+        <div class="card-img-container song-gradient-3">
+          <i class="fas fa-user-check song-icon"></i>
+          <div class="star-rating"><i class="fas fa-star"></i> 4.7</div>
+        </div>
+        <div class="card-body">
+          <div class="song-title">Because I Liked A Boy</div>
+          <div class="song-album">Emails I Can't Send</div>
+          <div class="song-links">
+            <a href="https://youtu.be/YQgNtE1f5qQ" target="_blank" rel="noopener noreferrer" class="song-link youtube">
+              <i class="fab fa-youtube"></i> Watch
+            </a>
+            <a href="https://open.spotify.com/track/7kJNwgEtQeVCr5TSaYEPMu" target="_blank" rel="noopener noreferrer" class="song-link spotify">
+              <i class="fab fa-spotify"></i> Play
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="song-card">
+        <div class="card-img-container song-gradient-4">
+          <i class="fas fa-hand song-icon"></i>
+          <div class="star-rating"><i class="fas fa-star"></i> 4.8</div>
+        </div>
+        <div class="card-body">
+          <div class="song-title">Skin</div>
+          <div class="song-album">Single</div>
+          <div class="song-links">
+            <a href="https://youtu.be/cs8KPuHKdP0" target="_blank" rel="noopener noreferrer" class="song-link youtube">
+              <i class="fab fa-youtube"></i> Watch
+            </a>
+            <a href="https://open.spotify.com/track/66Vm9dTj3D6kRLo7U1u4sJ" target="_blank" rel="noopener noreferrer" class="song-link spotify">
+              <i class="fab fa-spotify"></i> Play
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="song-card">
+        <div class="card-img-container song-gradient-5">
+          <i class="fas fa-envelope song-icon"></i>
+          <div class="star-rating"><i class="fas fa-star"></i> 4.9</div>
+        </div>
+        <div class="card-body">
+          <div class="song-title">Emails I Can't Send</div>
+          <div class="song-album">Emails I Can't Send</div>
+          <div class="song-links">
+            <a href="https://youtu.be/ZwGpFc0YlGo" target="_blank" rel="noopener noreferrer" class="song-link youtube">
+              <i class="fab fa-youtube"></i> Watch
+            </a>
+            <a href="https://open.spotify.com/track/1kNlKTHJmtFJ1CVVJMKjvE" target="_blank" rel="noopener noreferrer" class="song-link spotify">
+              <i class="fab fa-spotify"></i> Play
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="song-card">
+        <div class="card-img-container song-gradient-6">
+          <i class="fas fa-snake song-icon"></i>
+          <div class="star-rating"><i class="fas fa-star"></i> 4.7</div>
+        </div>
+        <div class="card-body">
+          <div class="song-title">Vicious</div>
+          <div class="song-album">Emails I Can't Send</div>
+          <div class="song-links">
+            <a href="https://youtu.be/OJVtaR7Z99U" target="_blank" rel="noopener noreferrer" class="song-link youtube">
+              <i class="fab fa-youtube"></i> Watch
+            </a>
+            <a href="https://open.spotify.com/track/6TbFnVXKRCCNXnHV64vNMt" target="_blank" rel="noopener noreferrer" class="song-link spotify">
+              <i class="fab fa-spotify"></i> Play
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="song-card">
+        <div class="card-img-container song-gradient-7">
+          <i class="fas fa-book-open song-icon"></i>
+          <div class="star-rating"><i class="fas fa-star"></i> 4.8</div>
+        </div>
+        <div class="card-body">
+          <div class="song-title">Read your Mind</div>
+          <div class="song-album">Emails I Can't Send</div>
+          <div class="song-links">
+            <a href="https://youtu.be/wjTruCvnmkI" target="_blank" rel="noopener noreferrer" class="song-link youtube">
+              <i class="fab fa-youtube"></i> Watch
+            </a>
+            <a href="https://open.spotify.com/track/6GBqF3GCuVYnG7CQw4OWqX" target="_blank" rel="noopener noreferrer" class="song-link spotify">
+              <i class="fab fa-spotify"></i> Play
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="song-card">
+        <div class="card-img-container song-gradient-8">
+          <i class="fas fa-check-double song-icon"></i>
+          <div class="star-rating"><i class="fas fa-star"></i> 4.6</div>
+        </div>
+        <div class="card-body">
+          <div class="song-title">Already Over</div>
+          <div class="song-album">Emails I Can't Send</div>
+          <div class="song-links">
+            <a href="https://youtu.be/_tUJ9PAk2iE" target="_blank" rel="noopener noreferrer" class="song-link youtube">
+              <i class="fab fa-youtube"></i> Watch
+            </a>
+            <a href="https://open.spotify.com/track/3qK5bvgHgDSwyOrR33qmNI" target="_blank" rel="noopener noreferrer" class="song-link spotify">
+              <i class="fab fa-spotify"></i> Play
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="song-card">
+        <div class="card-img-container song-gradient-1">
+          <i class="fas fa-mug-hot song-icon"></i>
+          <div class="star-rating"><i class="fas fa-star"></i> 4.9</div>
+        </div>
+        <div class="card-body">
+          <div class="song-title">Espresso</div>
+          <div class="song-album">Short n' Sweet</div>
+          <div class="song-links">
+            <a href="https://youtu.be/eVli-tstM5E" target="_blank" rel="noopener noreferrer" class="song-link youtube">
+              <i class="fab fa-youtube"></i> Watch
+            </a>
+            <a href="https://open.spotify.com/track/2qSkIjg1o9h3YT9RAgYN75" target="_blank" rel="noopener noreferrer" class="song-link spotify">
+              <i class="fab fa-spotify"></i> Play
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="song-card">
+        <div class="card-img-container song-gradient-2">
+          <i class="fas fa-heart-circle-check song-icon"></i>
+          <div class="star-rating"><i class="fas fa-star"></i> 5.0</div>
+        </div>
+        <div class="card-body">
+          <div class="song-title">Please Please Please</div>
+          <div class="song-album">Short n' Sweet</div>
+          <div class="song-links">
+            <a href="https://youtu.be/YBdJZomB3zg" target="_blank" rel="noopener noreferrer" class="song-link youtube">
+              <i class="fab fa-youtube"></i> Watch
+            </a>
+            <a href="https://open.spotify.com/track/5N3hjp1WNayUPZrA8kJmJP" target="_blank" rel="noopener noreferrer" class="song-link spotify">
+              <i class="fab fa-spotify"></i> Play
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="song-card">
+        <div class="card-img-container song-gradient-3">
+          <i class="fas fa-lemon song-icon"></i>
+          <div class="star-rating"><i class="fas fa-star"></i> 4.8</div>
+        </div>
+        <div class="card-body">
+          <div class="song-title">Taste</div>
+          <div class="song-album">Short n' Sweet</div>
+          <div class="song-links">
+            <a href="https://youtu.be/kPa7bsKwL-c" target="_blank" rel="noopener noreferrer" class="song-link youtube">
+              <i class="fab fa-youtube"></i> Watch
+            </a>
+            <a href="https://open.spotify.com/track/5G2f63n7IPVPPjfNIGih7Q" target="_blank" rel="noopener noreferrer" class="song-link spotify">
+              <i class="fab fa-spotify"></i> Play
+            </a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="song-card">
+        <div class="card-img-container song-gradient-4">
+          <i class="fas fa-gavel song-icon"></i>
+          <div class="star-rating"><i class="fas fa-star"></i> 4.7</div>
+        </div>
+        <div class="card-body">
+          <div class="song-title">Sue Me</div>
+          <div class="song-album">Singular: Act I</div>
+          <div class="song-links">
+            <a href="https://youtu.be/6OOwcFiR7aY" target="_blank" rel="noopener noreferrer" class="song-link youtube">
+              <i class="fab fa-youtube"></i> Watch
+            </a>
+            <a href="https://open.spotify.com/track/7hR05FZXCDKxPpL8xwckBy" target="_blank" rel="noopener noreferrer" class="song-link spotify">
+              <i class="fab fa-spotify"></i> Play
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      const colorGlaze = document.getElementById('colorGlaze');
+      const loading = document.getElementById('loadingOverlay');
+      const panels = {
+        kpop: document.getElementById('panel-kpop'),
+        rap: document.getElementById('panel-rap'),
+        bruno: document.getElementById('panel-bruno'),
+        sabrina: document.getElementById('panel-sabrina')
+      };
+      const tabs = {
+        kpop: document.querySelector('[data-artist="kpop"]'),
+        rap: document.querySelector('[data-artist="rap"]'),
+        bruno: document.querySelector('[data-artist="bruno"]'),
+        sabrina: document.querySelector('[data-artist="sabrina"]')
+      };
+
+      const artistColors = {
+        kpop: 'radial-gradient(circle at 30% 30%, rgba(255,0,110,0.3), rgba(58,134,255,0.3), rgba(131,56,236,0.3))',
+        rap: 'radial-gradient(circle at 70% 20%, rgba(157,78,221,0.35), rgba(241,91,181,0.35), rgba(0,187,249,0.35))',
+        bruno: 'radial-gradient(circle at 40% 60%, rgba(249,199,79,0.35), rgba(249,132,74,0.35), rgba(249,65,68,0.35))',
+        sabrina: 'radial-gradient(circle at 60% 40%, rgba(255,153,200,0.35), rgba(162,214,249,0.35), rgba(244,172,183,0.35))'
+      };
+
+      function setArtist(artist) {
+        colorGlaze.style.background = artistColors[artist];
+      }
+
+      function activateArtist(artist) {
+        loading.classList.add('active');
+        setTimeout(() => {
+          Object.values(panels).forEach(p => p.classList.remove('active-panel'));
+          panels[artist].classList.add('active-panel');
+          Object.values(tabs).forEach(t => t.classList.remove('active'));
+          tabs[artist].classList.add('active');
+          setArtist(artist);
+          loading.classList.remove('active');
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }, 300);
+      }
+
+      // Tab hover effects
+      Object.keys(tabs).forEach(artist => {
+        tabs[artist].addEventListener('mouseenter', () => {
+          colorGlaze.style.background = artistColors[artist];
+        });
+        
+        tabs[artist].addEventListener('mouseleave', () => {
+          const active = document.querySelector('.tab-btn.active').dataset.artist;
+          colorGlaze.style.background = artistColors[active];
+        });
+        
+        tabs[artist].addEventListener('click', () => activateArtist(artist));
+      });
+
+      // Reveal animation on scroll
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            e.target.classList.add('active-reveal');
+          }
+        });
+      }, { threshold: 0.15 });
+      
+      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+      // Initialize
+      setArtist('kpop');
+    })();
+  </script>
+</body>
+</html>
+```
